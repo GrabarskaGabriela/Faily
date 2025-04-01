@@ -1,0 +1,56 @@
+# Laravel
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# Docker
+.docker/data
+.env.docker
+
+# Systemy operacyjne
+.DS_Store
+Thumbs.db
+
+# PHP
+/bootstrap/cache/*.php
+/.phpstorm.meta.php
+/_ide_helper.php
+/_ide_helper_models.php
+
+# Kompilowane pliki CSS i JS (jeśli używasz Vite)
+/public/css
+/public/js
+
+# Lokalne bazy danych
+*.sqlite
+*.sqlite-journal
+
+# Pliki logów
+*.log
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Lokalne pliki konfiguracyjne
+phpcs.xml
+phpunit.xml
+.phpcs-cache
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Pliki cache
+.cache/

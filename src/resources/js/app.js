@@ -1,0 +1,8 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/app.css'
+import { createApp } from 'vue';
+import ExampleComponent from './components/ExampleComponent.vue';
+
+const app = createApp({});
+app.component('example-component', ExampleComponent);
+app.mount('#app');

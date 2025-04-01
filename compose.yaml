@@ -1,0 +1,71 @@
+networks:
+    faily-dev:
+        driver: bridge
+volumes:
+    faily-postgres-data:
+        name: faily-postgres-data
+    faily-redis-data:
+        name: faily-redis-data
+services:
+    app:
+        build:
+            context: ./environment/dev/app
+            dockerfile: Dockerfile
+            args:
+                - INSTALL_XDEBUG=${DOCKER_INSTALL_XDEBUG:-true}
+                - USER_ID=${DOCKER_HOST_USER_ID:-1000}
+        container_name: faily-app-dev
+        working_dir: /application
+        volumes:
+            - ./environment/dev/app/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./environment/dev/app/php.ini:/usr/local/etc/php/conf.d/zzz-overrides.ini:ro
+            - ./environment/dev/app/php-fpm.conf:/usr/local/etc/php-fpm.d/zzz-overrides.conf:ro
+            - ./environment/dev/app/supervisord.conf:/etc/supervisor/custom-supervisord.conf:ro
+            - ./src:/application
+        ports:
+            - ${DOCKER_APP_HOST_PORT:-63851}:80
+            - "5173:5173"
+        networks:
+            - faily-dev
+        restart: unless-stopped
+        depends_on:
+            database:
+                condition: service_healthy
+    database:
+        image: postgres:17-alpine
+        container_name: faily-db-dev
+        environment:
+            - POSTGRES_USER=example_user
+            - POSTGRES_PASSWORD=example_password
+            - POSTGRES_DB=example_db
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready --dbname example_db --username example_user"]
+            interval: 3s
+            timeout: 3s
+            retries: 5
+        ports:
+            - ${DOCKER_DATABASE_HOST_PORT:-63853}:5432
+        volumes:
+            - faily-postgres-data:/var/lib/postgresql/data
+        networks:
+            - faily-dev
+        restart: unless-stopped
+    mailpit:
+      image: axllent/mailpit:v1.24.0
+      container_name: faily-mailpit-dev
+      ports:
+        - ${DOCKER_MAILPIT_DASHBOARD_HOST_PORT:-63854}:8025
+        - "1025:1025"  # Port SMTP dla mailpit
+      networks:
+        - faily-dev
+      restart: unless-stopped
+    redis:
+        image: redis:7.4-alpine
+        container_name: faily-redis-dev
+        ports:
+            - ${DOCKER_REDIS_HOST_PORT:-63852}:6379
+        volumes:
+            - faily-redis-data:/data
+        networks:
+            - faily-dev
+        restart: unless-stopped
