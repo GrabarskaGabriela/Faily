@@ -1,0 +1,31 @@
+body{
+    background: url("includes/tlo.jpg") rgb(0,0,0,0.3);
+    background-blend-mode: multiply;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+.btn
+{
+    background-color: #b99062;
+}
+main {
+    flex-grow: 1;
+}
+
+
+footer {
+    background-color: #845f48;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+@media(max-width: 991px)
+{
+    .sidebar
+    {
+        background-color: rgb(255,255,255,0.15) ;
+        backdrop-filter: blur(10px);
+    }
+}

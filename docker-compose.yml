@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  webserver:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/var/www/html
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: homeiq
+      MYSQL_USER: homeiquser
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
