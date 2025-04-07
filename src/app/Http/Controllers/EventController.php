@@ -46,12 +46,12 @@ class EventController extends Controller
            'has_ride_sharing' => 'boolean',
         ]);
 
-        $validated['user_id'] == Auth::id();
+        $validated['user_id'] = Auth::id();
 
         $event = new Event($validated);
 
         if ($request->has_ride_sharing) {
-            return redirect()->route('riders.create', ['event_id' => $event->id])
+            return redirect()->route('rides.create', ['event_id' => $event->id])
                 ->with('success', 'Event created successfully. Now add transit information.');
         }
 
