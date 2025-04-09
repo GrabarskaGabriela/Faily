@@ -24,7 +24,7 @@
                             <input type="password" class="form-control" id="password" name="password" placeholder="Wprowadź hasło" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <a onclick="location.href='rejestracja'">Przypomnij hasło</a>
+                            <button class="btn btn-primary" type="button" onclick="location.href='przypomnij_haslo'">Przypomnij hasło</button>
                             <button class="btn btn-primary" type="button" onclick="location.href='rejestracja'">Zaloguj się</button>
                         </div>
                     </form>
