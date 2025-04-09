@@ -3,23 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel + Vue + Bootstrap</title>
+    <title>Faily</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="#">My App</a>
-            </div>
-        </nav>
-        
-        <div class="container mt-3">
-            <h1>
-                To jest statyczny nagłówek HTML
-            </h1>
-            <example-component></example-component>
+<body class="d-flex flex-column min-vh-100">
+@include('includes.navbar')
+<div id="app" class="flex-grow-1">
+    <main class="d-flex flex-column">
+        <div class="map-container flex-grow-1">
+            <leaflet-map :center="[51.2101, 16.1619]" :zoom="7"></leaflet-map>
         </div>
-    </div>
+    </main>
+</div>
+@include('includes.footer')
 </body>
 </html>

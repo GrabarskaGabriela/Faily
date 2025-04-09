@@ -6,9 +6,38 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
-
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+Route::get('/dodawanie_wydarzen', function () {
+    return view('dodawanie_wydarzen');
+});
+Route::get('/logowanie', function () {
+    return view('logowanie');
+});
+Route::get('/konto', function () {
+    return view('konto');
+});
+Route::get('/lista_wydarzen', function () {
+    return view('lista_wydarzen');
+});
+Route::get('/main', function () {
+    return view('main');
+});
+Route::get('/przypomnij_haslo', function () {
+    return view('przypomnij_haslo');
+});
+Route::get('/rejestracja', function () {
+    return view('rejestracja');
+});
+Route::get('/ustawienia', function () {
+    return view('ustawienia');
+});
+Route::get('/wydarzenie', function () {
+    return view('wydarzenie');
 });
 
 Route::get('/dashboard', function () {

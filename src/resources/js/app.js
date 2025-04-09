@@ -1,7 +1,17 @@
-import './bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/app.css';
+import 'leaflet/dist/leaflet.css';
 
-import Alpine from 'alpinejs';
+// Najpierw zaimportuj Bootstrap JS
+import 'bootstrap';
 
-window.Alpine = Alpine;
+// Dopiero potem Vue
+import { createApp } from 'vue';
+import ExampleComponent from './components/ExampleComponent.vue';
+import LeafletMap from './components/LeafletMap.vue';
+import 'leaflet/dist/leaflet.css';
 
-Alpine.start();
+const app = createApp({});
+app.component('example-component', ExampleComponent);
+app.component('leaflet-map', LeafletMap);
+app.mount('#app');
