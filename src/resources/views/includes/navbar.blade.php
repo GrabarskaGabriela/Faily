@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
             <!-- Logo + napis -->
-            <a class="navbar-brand fs-3 text-white" href="#" style="text-decoration: none;">
+            <a class="navbar-brand fs-3 text-white" href="{{ url('/') }}" style="text-decoration: none;">
                 <img src="{{ asset('images/includes/logo.png') }}" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
                 Faily
             </a>
@@ -12,43 +12,48 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav justify-content-center align-items-center fs-4 flex-grow-1 pe-3">
                     <li class="nav-item mx-2">
-                        <button class="btn btn-outline-light me-2" type="button" onclick="location.href='welcome'">Mapa eventów</button>
+                        <a class="btn btn-outline-light me-2" href="{{ url('/welcome') }}">Mapa eventów</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <button class="btn btn-outline-light me-2" type="button" onclick="location.href='lista_wydarzen'">Posty</button>
+                        <a class="btn btn-outline-light me-2" href="{{ url('/lista_wydarzen') }}">Posty</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <button class="btn btn-outline-light me-2" type="button" onclick="location.href='wystawianie_oferty.php'">Guziczek bez nazwy</button>
+                        <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <button class="btn btn-outline-light me-2" type="button" onclick="location.href='wystawianie_oferty.php'">Guziczek bez nazwy</button>
+                        <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <button class="btn btn-outline-light me-2" type="button" onclick="location.href='wydarzenie'">Dodaj ogłoszenie</button>
+                        <a class="btn btn-outline-light me-2" href="{{ url('/wydarzenie') }}">Dodaj ogłoszenie</a>
                     </li>
                 </ul>
                 <div class="d-flex flex-lg-row justify-content-center align-items-center gap-3">
-                    <?php if(isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in']): ?>
+                    @auth
                         <!-- Dla zalogowanego użytkownika - menu konta -->
-                    <div class="dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Moje konto
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="konto.php">Przejdź do konta</a></li>
-                            <li><a class="dropdown-item" href="ogloszenia.php">Moje ogłoszenia</a></li>
-                            <li><a class="dropdown-item" href="pomoc.php">Pomoc</a></li>
-                            <li><a class="dropdown-item" href="ustawienia.php">Ustawienia</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout.php">Wyloguj się</a></li>
-                        </ul>
-                    </div>
-                    <?php else: ?>
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Moje konto
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url('/konto') }}">Przejdź do konta</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/ogloszenia') }}">Moje ogłoszenia</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/pomoc') }}">Pomoc</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/ustawienia') }}">Ustawienia</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">Wyloguj się</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
                         <!-- Dla niezalogowanego użytkownika - tylko przycisk logowania -->
-                    <button class="btn btn-outline-light" type="button" onclick="location.href='logowanie'">
-                        Zaloguj się
-                    </button>
-                    <?php endif; ?>
+                        <a href="{{ route('login') }}" class="btn btn-outline-light">
+                            Zaloguj się
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
