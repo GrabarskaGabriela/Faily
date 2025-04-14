@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg bg-dark">
+    <nav class="navbar navbar-expand-lg bg-transparent">
         <div class="container-fluid">
             <!-- Logo + napis -->
             <a class="navbar-brand fs-3 text-white" href="{{ url('/') }}" style="text-decoration: none;">
@@ -24,7 +24,7 @@
                             <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
+                            <a class="btn btn-outline-light me-2" href="{{ url('/about') }}">Twórcy</a>
                         </li>
                     </ul>
 
@@ -57,7 +57,6 @@
                         </a>
                     @endauth
                 </div>
-        </div>
         </div>
     </nav>
 </header>

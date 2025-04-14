@@ -34,6 +34,9 @@ Route::get('/event', function () {
 Route::get('/mapa', function () {
     return view('mapa');
 });
+Route::get('/about', function () {
+    return view('about');
+});
 Route::middleware(['auth'])->group(function () {
     // Profil użytkownika
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');

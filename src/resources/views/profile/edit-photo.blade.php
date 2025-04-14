@@ -8,6 +8,7 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
+<main class="container flex-grow-1 my-5">
 <div>
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -53,6 +54,7 @@
         </div>
     </div>
 </div>
+</main>
 @include('includes.footer')
 </body>
 </html>
