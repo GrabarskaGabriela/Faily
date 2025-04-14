@@ -8,7 +8,7 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
-<div class="bg-light">
+<div>
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">

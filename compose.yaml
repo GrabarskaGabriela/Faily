@@ -6,7 +6,6 @@ volumes:
         name: faily-postgres-data
     faily-redis-data:
         name: faily-redis-data
-
 services:
     app:
         build:
@@ -32,16 +31,15 @@ services:
         depends_on:
             database:
                 condition: service_healthy
-
     database:
         image: postgres:17-alpine
         container_name: faily-db-dev
         environment:
-            - POSTGRES_USER=example_user
-            - POSTGRES_PASSWORD=example_password
-            - POSTGRES_DB=example_db
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_DB=${DB_DATABASE}
         healthcheck:
-            test: [ "CMD-SHELL", "pg_isready --dbname example_db --username example_user"]
+            test: [ "CMD-SHELL", "pg_isready --dbname=${DB_DATABASE} --username=${DB_USERNAME} "]
             interval: 3s
             timeout: 3s
             retries: 5
@@ -52,17 +50,15 @@ services:
         networks:
             - faily-dev
         restart: unless-stopped
-
     mailpit:
-      image: axllent/mailpit:v1.24.0
-      container_name: faily-mailpit-dev
-      ports:
-        - ${DOCKER_MAILPIT_DASHBOARD_HOST_PORT:-63854}:8025
-        - "1025:1025"  # Port SMTP dla mailpit
-      networks:
-        - faily-dev
-      restart: unless-stopped
-
+        image: axllent/mailpit:v1.24.0
+        container_name: faily-mailpit-dev
+        ports:
+            - ${DOCKER_MAILPIT_DASHBOARD_HOST_PORT:-63854}:8025
+            - "1025:1025"  # Port SMTP dla mailpit
+        networks:
+            - faily-dev
+        restart: unless-stopped
     redis:
         image: redis:7.4-alpine
         container_name: faily-redis-dev

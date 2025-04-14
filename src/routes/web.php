@@ -36,7 +36,7 @@ Route::get('/mapa', function () {
 });
 Route::middleware(['auth'])->group(function () {
     // Profil użytkownika
-    Route::get('/profile/dashboard', function () {return view('profile.dashboard');                                                                     })->name('profile.dashboard');
+    Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

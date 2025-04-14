@@ -8,25 +8,29 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
-<div class="bg-light">
+<div>
     <div class="container py-5">
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="profile-header position-relative mb-4">
                     <div class="position-absolute top-0 end-0 p-3">
-                        <button class="btn btn-light"><i class="fas fa-edit me-2"></i>edytuj zdjęcie</button>
+                        <a href="{{ route('profile.edit-photo') }}" class="btn btn-dark">
+                            <i class="fas fa-edit me-2"></i>Edytuj zdjęcie
+                        </a>
                     </div>
                 </div>
-                <div class="text-center">
+                <div class="text-center text-white">
                     <div class="position-relative d-inline-block">
-                        <img src="zdjecie1.png" class="rounded-circle profile-pic" alt="Zdjęcie profilowe">
+                        @if(Auth::user()->photo_path)
+                            <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
+                                 class="rounded-circle profile-pic" alt="Zdjęcie profilowe" width="300" height="300">
+                        @else
+                            <img src="{{ asset('images/includes/default_avatar.png') }}"
+                                 class="rounded-circle profile-pic" alt="Zdjęcie profilowe" width="300" height="300">
+                        @endif
                     </div>
-                    <h3 class="mt-3 mb-1">Imie Nazwisko</h3>
-                    <p class="text-muted mb-3">x lat</p>
-                    <div class="d-flex justify-content-center gap-2 mb-4">
-                        <button class="btn btn-outline-primary"><i class="fas fa-envelope me-2"></i>Napisz</button>
-                        <button class="btn btn-primary"><i class="fas fa-user-plus me-2"></i>Zadzwon</button>
-                    </div>
+                    <h3 class="mt-3 mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
+                    <p class="mb-3">{{ Auth::user()->age }} lat</p>
                 </div>
             </div>
 
@@ -41,23 +45,28 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label">Imie</label>
-                                                <input type="text" class="form-control" value="Tęczowy">
+                                                <input type="text" class="form-control"
+                                                       value="{{ Auth::user()->first_name }} ">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Nazwisko</label>
-                                                <input type="text" class="form-control" value="Rafałek">
+                                                <input type="text" class="form-control"
+                                                       value="{{ Auth::user()->last_name }} ">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Email</label>
-                                                <input type="email" class="form-control" value="rafal.trzaskowski@gmail.lgbt">
+                                                <input type="email" class="form-control"
+                                                       value="{{ Auth::user()->email }} ">
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label">numer telefonu</label>
-                                                <input type="tel" class="form-control" value="213 769 420">
+                                                <label class="form-label">Numer telefonu</label>
+                                                <input type="tel" class="form-control"
+                                                       value="{{ Auth::user()->phone }} ">
                                             </div>
                                             <div class="col-12">
                                                 <label class="form-label">O mnie</label>
-                                                <textarea class="form-control" rows="4">I love bbc</textarea>
+                                                <textarea class="form-control"
+                                                          rows="4">{{ Auth::user()->description }} </textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +93,8 @@
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
                                                             <h6 class="mb-1">Powiadomienia email</h6>
-                                                            <p class="text-muted mb-0 small">Dostawaj powiadomienia o wydarzeniach w Twojej okolicy</p>
+                                                            <p class="text-muted mb-0 small">Dostawaj powiadomienia o
+                                                                wydarzeniach w Twojej okolicy</p>
                                                         </div>
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input" type="checkbox" checked>
@@ -110,7 +120,6 @@
                                             <p class="text-muted small mb-0">2 godziny temu</p>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>

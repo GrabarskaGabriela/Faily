@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-lg bg-transparent">
+    <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
             <!-- Logo + napis -->
             <a class="navbar-brand fs-3 text-white" href="{{ url('/') }}" style="text-decoration: none;">
@@ -38,7 +38,7 @@
                             <li><a class="dropdown-item" href="{{ url('/account') }}">Przejdź do konta</a></li>
                             <li><a class="dropdown-item" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
                             <li><a class="dropdown-item" href="{{ url('/help') }}">Pomoc</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/profile/dashboard') }}">Ustawienia</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/profile.dashboard') }}">Ustawienia</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
