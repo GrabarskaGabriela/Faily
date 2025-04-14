@@ -28,6 +28,11 @@ class User extends Authenticatable
         'phone',
         'description',
         'photo_path',
+        'photo_updated_at',
+        'password_updated_at',
+        'last_login_at',
+        'two_factor_enabled',
+        'email_notifications',
     ];
 
     /**
@@ -45,13 +50,15 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'photo_updated_at' => 'datetime',
+        'password_updated_at' => 'datetime',
+        'last_login_at' => 'datetime',
+        'two_factor_enabled' => 'boolean',
+        'email_notifications' => 'boolean',
+    ];
 
     public function events()
     {

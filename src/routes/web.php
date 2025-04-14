@@ -9,45 +9,42 @@ use App\Http\Controllers\RideRequestController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/welcome', function () {
-    return view('welcome');
+Route::get('/add_event', function () {
+    return view('add_event');
 });
-Route::get('/dodawanie_wydarzen', function () {
-    return view('dodawanie_wydarzen');
+Route::get('/account', function () {
+    return view('account');
 });
-Route::get('/logowanie', function () {
-    return view('logowanie');
-});
-Route::get('/konto', function () {
-    return view('konto');
-});
-Route::get('/lista_wydarzen', function () {
-    return view('lista_wydarzen');
+Route::get('/event_list', function () {
+    return view('event_list');
 });
 Route::get('/main', function () {
     return view('main');
 });
-Route::get('/przypomnij_haslo', function () {
-    return view('przypomnij_haslo');
+Route::get('/password_reminder', function () {
+    return view('password_reminder');
 });
-Route::get('/rejestracja', function () {
-    return view('rejestracja');
+Route::get('/settings', function () {
+    return view('settings');
 });
-Route::get('/ustawienia', function () {
-    return view('ustawienia');
-});
-Route::get('/wydarzenie', function () {
-    return view('wydarzenie');
+Route::get('/event', function () {
+    return view('event');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('/mapa', function () {
+    return view('mapa');
+});
+Route::middleware(['auth'])->group(function () {
+    // Profil użytkownika
+    Route::get('/profile/dashboard', function () {return view('profile.dashboard');                                                                     })->name('profile.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+    Route::post('/profile/toggle-2fa', [ProfileController::class, 'toggle2FA'])->name('profile.toggle-2fa');
+    Route::post('/profile/toggle-notifications', [ProfileController::class, 'toggleNotifications'])->name('profile.toggle-notifications');
 });
 
 Route::resource('events', EventController::class);

@@ -6,7 +6,10 @@ import path from 'path';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                path.resolve(__dirname, 'resources/css/app.css'), // pełna ścieżka do pliku
+                path.resolve(__dirname, 'resources/js/app.js')   // pełna ścieżka do pliku
+            ],
             refresh: true,
         }),
         vue({
@@ -20,8 +23,8 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': '/resources',
-            'vue': 'vue/dist/vue.esm-bundler.js'
+            '@': path.resolve(__dirname, 'resources'), // Poprawiona pełna ścieżka
+            'vue': 'vue/dist/vue.esm-bundler.js',
         },
     },
 });

@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/app.css';
-import 'leaflet/dist/leaflet.css';
 
 // Najpierw zaimportuj Bootstrap JS
 import 'bootstrap';

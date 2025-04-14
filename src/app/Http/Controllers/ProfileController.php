@@ -2,62 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function show()
+    {
+        $user = Auth::user();
+        return view('profile.show', compact('user'));
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'phone' => 'nullable|string|max:20',
+            'age' => 'nullable|integer|min:1|max:120',
+            'description' => 'nullable|string',
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('profile.show')->with('success', 'Profil został zaktualizowany.');
+    }
+    public function edit(Request $request): View  // Poprawiona deklaracja
     {
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function editPhoto()
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        if ($request->hasFile('avatar')) {
-            if ($request->user()->avatar) {
-                Storage::delete('public/avatars/' . basename($request->user()->avatar));
-            }
-
-            $avatarPath = $request->file('avatar')->store('public/avatars');
-            $request->user()->avatar = Storage::url($avatarPath);
-        }
-
-        if ($request->has('preferred_language')) {
-            $request->user()->language  = $request->preferred_language;
-        }
-
-        if ($request->has('theme')) {
-            $request->user()->theme = $request->theme;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return view('profile.edit-photo', ['user' => Auth::user()]);
     }
 
-    /**
-     * Delete the user's account.
-     */
+    public function updatePhoto(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'photo' => 'required|image|max:2048', // max 2MB
+        ]);
+
+        // Usuń stare zdjęcie jeśli istnieje
+        if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
+            Storage::disk('public')->delete($user->photo_path);
+        }
+
+        // Zapisz nowe zdjęcie
+        $photoPath = $request->file('photo')->store('profile-photos', 'public');
+
+        $user->update([
+            'photo_path' => $photoPath,
+            'photo_updated_at' => now(),
+        ]);
+
+        return redirect()->route('profile.show')->with('success', 'Zdjęcie profilowe zostało zaktualizowane.');
+    }
+
+    public function toggle2FA(Request $request)
+    {
+        $user = Auth::user();
+        $user->two_factor_enabled = $request->input('value');
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function toggleNotifications(Request $request)
+    {
+        $user = Auth::user();
+        $user->email_notifications = $request->input('value');
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -65,10 +93,6 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
-        if ($user->avatar) {
-            Storage::delete('public/avatars/' . basename($user->avatar));
-        }
 
         Auth::logout();
 
@@ -79,4 +103,5 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
 }

@@ -15,7 +15,7 @@
       <div class="row">
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -26,7 +26,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -37,7 +37,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -51,7 +51,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -62,7 +62,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -73,43 +73,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
-            <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">Tytuł wydarzenia</h5>
-            <p class="card-text">Miasto, ulica, nr.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
-            <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">Tytuł wydarzenia</h5>
-            <p class="card-text">Miasto, ulica, nr.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
-            <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">Tytuł wydarzenia</h5>
-            <p class="card-text">Miasto, ulica, nr.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -123,7 +87,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -134,7 +98,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -145,7 +109,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -159,7 +123,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -170,7 +134,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
             <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">
@@ -181,7 +145,43 @@
       </div>
       <div class="col-md-4">
         <div class="card text-black" style="background-color: rgb(0, 140, 255);">
-          <a href="wydarzenie.blade.php">
+          <a href="event.blade.php">
+            <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">Tytuł wydarzenia</h5>
+            <p class="card-text">Miasto, ulica, nr.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
+          <a href="event.blade.php">
+            <img src="zdjecie1.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">Tytuł wydarzenia</h5>
+            <p class="card-text">Miasto, ulica, nr.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
+          <a href="event.blade.php">
+            <img src="zdjecie2.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">Tytuł wydarzenia</h5>
+            <p class="card-text">Miasto, ulica, nr.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-black" style="background-color: rgb(0, 140, 255);">
+          <a href="event.blade.php">
             <img src="zdjecie3.png" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Tytuł wydarzenia">
           </a>
           <div class="card-body">

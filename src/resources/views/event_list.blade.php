@@ -8,15 +8,15 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
-  <div class="container mt-5">
+  <div class="container mt-5 text-white">
     <section class="mb-5">
       <h3 class="mb-4">Na te wydarzenia się zapisałeś:</h3>
       <div class="row">
 
         <div class="col-md-4 mb-4">
           <div class="card h-100 custom-card-bg">
-            <a href="wydarzenie.blade.php">
-              <img src="zdjecie1.png" class="card-img-top event-img" alt="Tytuł wydarzenia">
+            <a href="event.blade.php">
+                <img src="{{ asset('images/includes/zdjecie1.png') }}" class="card-img-top event-img" alt="Tytuł wydarzenia">
             </a>
             <div class="card-body">
               <h5 class="card-title">Tytuł wydarzenia</h5>
@@ -32,8 +32,8 @@
       <div class="row">
         <div class="col-md-4 mb-4">
           <div class="card h-100 custom-card-bg">
-            <a href="wydarzenie.blade.php">
-              <img src="zdjecie3.png" class="card-img-top event-img" alt="Tytuł wydarzenia">
+            <a href="event.blade.php">
+                <img src="{{ asset('images/includes/zdjecie1.png') }}" class="card-img-top event-img" alt="Tytuł wydarzenia">
             </a>
             <div class="card-body">
               <h5 class="card-title">Kolejne wydarzenie</h5>
@@ -43,8 +43,8 @@
         </div>
         <div class="col-md-4 mb-4">
           <div class="card h-100 custom-card-bg">
-            <a href="wydarzenie.blade.php">
-              <img src="zdjecie1.png" class="card-img-top event-img" alt="Tytuł wydarzenia">
+            <a href="event.blade.php">
+                <img src="{{ asset('images/includes/zdjecie1.png') }}" class="card-img-top event-img" alt="Tytuł wydarzenia">
             </a>
             <div class="card-body">
               <h5 class="card-title">Jeszcze jedno wydarzenie</h5>
