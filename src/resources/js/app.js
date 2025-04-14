@@ -1,5 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 import '../css/app.css';
+import 'leaflet/dist/leaflet.css';
+
 
 // Najpierw zaimportuj Bootstrap JS
 import 'bootstrap';
@@ -11,6 +14,5 @@ import LeafletMap from './components/LeafletMap.vue';
 import 'leaflet/dist/leaflet.css';
 
 const app = createApp({});
-app.component('example-component', ExampleComponent);
 app.component('leaflet-map', LeafletMap);
 app.mount('#app');

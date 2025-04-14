@@ -9,24 +9,31 @@ use App\Http\Controllers\RideRequestController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/add_event', function () {
     return view('add_event');
 });
+
 Route::get('/account', function () {
     return view('account');
 });
+
 Route::get('/event_list', function () {
     return view('event_list');
 });
+
 Route::get('/main', function () {
     return view('main');
 });
+
 Route::get('/password_reminder', function () {
     return view('password_reminder');
 });
+
 Route::get('/settings', function () {
     return view('settings');
 });
+
 Route::get('/event', function () {
     return view('event');
 });
@@ -34,6 +41,7 @@ Route::get('/event', function () {
 Route::get('/mapa', function () {
     return view('mapa');
 });
+
 Route::middleware(['auth'])->group(function () {
     // Profil użytkownika
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');

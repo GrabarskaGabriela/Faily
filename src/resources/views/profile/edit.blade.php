@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edycja profilu - Homeiq</title>
+    <title>Edycja profilu</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,7 +12,7 @@
 
 <main class="container flex-grow-1 my-5">
     <div class="row">
-        @include('includes.profile_menu')
+        {{-- @include('includes.profile_menu') --}}
         <!-- Główna zawartość -->
         <div class="col-md-9">
             <!-- Sekcja danych osobowych -->
@@ -28,6 +28,21 @@
                             'verified' => $verified ?? false,
                         ])
                     </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-4">
+                <div class="position-relative d-inline-block">
+                    @if($user->photo_path)
+                        <img src="{{ asset('storage/' . $user->photo_path) }}" class="rounded-circle profile-pic img-fluid" alt="Zdjęcie profilowe" style="width: 150px; height: 150px; object-fit: cover;">
+                    @else
+                        <img src="{{ asset('images/default-avatar.png') }}" class="rounded-circle profile-pic img-fluid" alt="Domyślne zdjęcie profilowe" style="width: 150px; height: 150px; object-fit: cover;">
+                    @endif
+                </div>
+                <div class="mt-2">
+                    <a href="{{ route('profile.edit-photo') }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-camera me-1"></i> Zmień zdjęcie
+                    </a>
                 </div>
             </div>
 

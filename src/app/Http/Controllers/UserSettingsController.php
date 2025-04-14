@@ -22,7 +22,6 @@ class UserSettingsController extends Controller
         return view('user.settings', compact('user'));
     }
 
-
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -36,7 +35,7 @@ class UserSettingsController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'preferred_language' => 'required|in:pl,en',
             'theme' => 'required|in:light,dark',
             'current_password' => 'nullable|required_with:password|string',
@@ -45,29 +44,74 @@ class UserSettingsController extends Controller
 
         if ($request->filled('current_password')) {
             if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'The current password is incorrect.']);
+                return back()->withErrors(['current_password' => 'Aktualne hasło jest niepoprawne.']);
             }
 
             $user->password = Hash::make($validated['password']);
+            $user->password_updated_at = now();
         }
 
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                Storage::delete('public/avatars/' . basename($user->avatar));
+        if ($request->hasFile('photo')) {
+            if ($user->photo_path) {
+                Storage::delete($user->photo_path);
             }
 
-            $avatarPath = $request->file('avatar')->store('public/avatars');
-            $user->avatar = Storage::url($avatarPath);
+            $photoPath = $request->file('photo')->store('profile-photos', 'public');
+            $user->photo_path = $photoPath;
+            $user->photo_updated_at = now();
         }
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-        $user->preferred_language = $validated['preferred_language'];
-        $user->theme = $validated['theme'];
+
+        // Sprawdź, czy te pola istnieją w bazie danych po migracjach
+        if (isset($validated['preferred_language'])) {
+            $user->language = $validated['preferred_language']; // Używamy 'language' zamiast 'preferred_language' zgodnie z migracją
+        }
+
+        if (isset($validated['theme'])) {
+            $user->theme = $validated['theme'];
+        }
+
         $user->save();
 
         return redirect()->route('user.settings.edit')
-            ->with('success', 'Settings have been updated!');
+            ->with('success', 'Ustawienia zostały zaktualizowane!');
+    }
+
+    public function editPhoto()
+    {
+        $user = Auth::user();
+        return view('edit-photo', compact('user'));
+    }
+
+    /**
+     * Aktualizuj zdjęcie profilowe użytkownika.
+     */
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('photo')) {
+            if ($user->photo_path) {
+                Storage::disk('public')->delete($user->photo_path);
+            }
+
+            $path = $request->file('photo')->store('profile-photos', 'public');
+
+            $user->photo_path = $path;
+            $user->photo_updated_at = now();
+            $user->save();
+
+            return redirect()->route('user.settings.edit')
+                ->with('succes', 'Photo updated');
+        }
+
+        return back()->with('error', 'Photo not updated');
     }
 
     public function showDeleteForm()
@@ -84,11 +128,11 @@ class UserSettingsController extends Controller
         $user = Auth::user();
 
         if (!Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['password' => 'Incorrect password.']);
+            return back()->withErrors(['password' => 'Niepoprawne hasło.']);
         }
 
-        if ($user->avatar) {
-            Storage::delete('public/avatars/' . basename($user->avatar));
+        if ($user->photo_path) {
+            Storage::delete($user->photo_path);
         }
 
         Auth::logout();
@@ -96,6 +140,6 @@ class UserSettingsController extends Controller
         $user->delete();
 
         return redirect()->route('welcome')
-            ->with('success', 'Your account has been deleted!.');
+            ->with('success', 'Twoje konto zostało usunięte!');
     }
 }

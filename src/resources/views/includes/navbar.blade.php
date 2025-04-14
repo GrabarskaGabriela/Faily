@@ -38,7 +38,7 @@
                             <li><a class="dropdown-item" href="{{ url('/account') }}">Przejdź do konta</a></li>
                             <li><a class="dropdown-item" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
                             <li><a class="dropdown-item" href="{{ url('/help') }}">Pomoc</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/profile.dashboard') }}">Ustawienia</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.dashboard') }}">Ustawienia</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

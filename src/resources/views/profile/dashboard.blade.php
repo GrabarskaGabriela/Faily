@@ -12,7 +12,7 @@
 
 <main class="container flex-grow-1 my-5">
     <div class="row">
-        @include('includes.profile_menu')
+        {{-- @include('includes.profile_menu') --}}
         <!-- Główna zawartość -->
         <div class="col-md-9">
             <div class="card shadow-sm mb-4">
@@ -111,6 +111,26 @@
                                         <i class="fas fa-plus me-2"></i> Dodaj wydarzenie
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- jest problem dlatego takie chwilwe roziwązanie -->
+                    <div class="card shadow-sm border-danger">
+                        <div class="card-header bg-white text-danger text-center">
+                            <h4 class="mb-0">
+                                <a href="{{ route('profile.edit') }}">
+                                    Edytuj Profil
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="card-body d-flex justify-content-center">
+                            <div class="w-100" style="max-width: 600px;">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    Chwilowe rozwiązanie bo nie ma pliku do "include('includes.profile_menu')". proszę o rozwiązanie.
+                                </div>
+                                @include('profile.partials.delete-user-form')
                             </div>
                         </div>
                     </div>

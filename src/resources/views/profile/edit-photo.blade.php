@@ -44,9 +44,10 @@
 
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Zapisz zdjęcie</button>
-                                <a href="{{ route('profile.show') }}" class="btn btn-outline-secondary">Anuluj</a>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary">Anuluj</a>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
