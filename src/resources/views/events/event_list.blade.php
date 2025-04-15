@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container mt-4">
-        <h1>Lista wydarzeń</h1>
+        <h1>Moje wydarzenia</h1>
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -38,17 +38,30 @@
                             </div>
                             <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($event->date)->format('d.m.Y H:i') }}</p>
                             <p><strong>Lokalizacja:</strong> {{ $event->location_name }}</p>
+
+                            <!-- Dodaj informację o przejazdach -->
+                            @if($event->has_ride_sharing)
+                                <p>
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-car-front"></i> Dostępne przejazdy
+                                    </span>
+                                </p>
+                            @endif
+
                             <p class="text-truncate">{{ Str::limit($event->description, 100) }}</p>
                         </div>
                         <div class="card-footer">
-                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary w-100">Zobacz szczegóły</a>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary">Zobacz szczegóły</a>
+                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary">Edytuj</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
                     <div class="alert alert-info">
-                        Brak wydarzeń do wyświetlenia.
+                        Nie utworzyłeś jeszcze żadnych wydarzeń.
                     </div>
                 </div>
             @endforelse

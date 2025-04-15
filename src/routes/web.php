@@ -45,13 +45,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('rides', RideController::class)->names('rides');
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
 
-    Route::get('/my-events', function () {
+    Route::get('/my_events', function () {
         $events = App\Models\Event::with(['user', 'photos'])
             ->where('user_id', auth()->id())
             ->latest()
             ->paginate(9);
 
-        return view('events.list', compact('events'));
+        return view('events.event_list', compact('events'));
     })->name('my.events');
 
 });

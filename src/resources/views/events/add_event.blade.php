@@ -116,6 +116,47 @@
                     <label class="form-check-label" for="has_ride_sharing">Włącz współdzielenie przejazdów</label>
                 </div>
 
+                <div id="ride-sharing-form" style="display: none;" class="mt-4 mb-4 p-3 border rounded bg-light">
+                    <h4>Szczegóły przejazdu</h4>
+
+                    <div class="mb-3">
+                        <label for="vehicle_description" class="form-label">Opis pojazdu</label>
+                        <input type="text" class="form-control" id="vehicle_description" name="vehicle_description" placeholder="np. Czerwony Ford Focus">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="avalible_seats" class="form-label">Dostępna liczba miejsc</label>
+                        <input type="number" class="form-control" id="avalible_seats" name="avalible_seats" min="1" value="1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="meeting_location_name" class="form-label">Nazwa miejsca spotkania</label>
+                        <input type="text" class="form-control" id="meeting_location_name" name="meeting_location_name" placeholder="np. Parking przy galerii">
+                    </div>
+
+                    <div class="mb-3">
+                        <h5>Lokalizacja miejsca spotkania</h5>
+
+                        <!-- Pole wyszukiwania -->
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="search-meeting-address" placeholder="Wyszukaj adres miejsca spotkania">
+                            <button class="btn btn-outline-secondary" type="button" id="search-meeting-button">Wyszukaj</button>
+                        </div>
+
+                        <!-- Kontener mapy dla miejsca spotkania -->
+                        <div id="meeting-map-container" style="height: 300px !important; width: 100%; border: 1px solid #ccc; margin-bottom: 15px;"></div>
+
+                        <!-- Wyświetlanie współrzędnych miejsca spotkania -->
+                        <div class="coordinate-display">
+                            Wybrana lokalizacja spotkania: <strong id="meeting-coordinates-text">52.069000, 19.480000</strong>
+                        </div>
+                    </div>
+
+                    <!-- Ukryte pola na współrzędne miejsca spotkania -->
+                    <input type="hidden" id="meeting_latitude" name="meeting_latitude" value="52.069">
+                    <input type="hidden" id="meeting_longitude" name="meeting_longitude" value="19.480">
+                </div>
+
                 <button type="submit" class="btn btn-primary btn-lg" id="submit-button">Dodaj ogłoszenie do oferty</button>
             </form>
         </div>
@@ -123,7 +164,7 @@
     @include('includes.footer')
 </div>
 
-<!-- Funkcje pomocnicze -->
+<!-- Istniejący skrypt zmodyfikowany o obsługę formularza przejazdów -->
 <script>
     // Funkcja dla listy plików
     function updateFileList() {
@@ -322,6 +363,150 @@
         }, 100);
 
         console.log('Mapa zainicjalizowana bezpośrednio przez Leaflet');
+
+        // KOD DODANY DO OBSŁUGI FORMULARZA PRZEJAZDÓW
+
+        // Pobranie referencji do checkboxa
+        const rideShareCheckbox = document.getElementById('has_ride_sharing');
+        const rideShareForm = document.getElementById('ride-sharing-form');
+
+        // Funkcja pokazująca/ukrywająca formularz przejazdów
+        function toggleRideShareForm() {
+            if(rideShareCheckbox && rideShareForm) {
+                if(rideShareCheckbox.checked) {
+                    rideShareForm.style.display = 'block';
+                    initMeetingMap(); // Inicjalizacja mapy miejsca spotkania
+                } else {
+                    rideShareForm.style.display = 'none';
+                }
+            }
+        }
+
+        // Nasłuchiwanie zmiany stanu checkboxa
+        if(rideShareCheckbox) {
+            rideShareCheckbox.addEventListener('change', toggleRideShareForm);
+
+            // Inicjalizacja stanu formularza przy ładowaniu strony
+            toggleRideShareForm();
+        }
+
+        // Funkcja inicjalizująca mapę miejsca spotkania
+        function initMeetingMap() {
+            console.log('Inicjalizacja mapy miejsca spotkania...');
+
+            const mapContainer = document.getElementById('meeting-map-container');
+            if (!mapContainer) return;
+
+            const latitudeInput = document.getElementById('meeting_latitude');
+            const longitudeInput = document.getElementById('meeting_longitude');
+            const locationNameInput = document.getElementById('meeting_location_name');
+            const searchInput = document.getElementById('search-meeting-address');
+            const searchButton = document.getElementById('search-meeting-button');
+            const coordinatesText = document.getElementById('meeting-coordinates-text');
+
+            // Sprawdzenie, czy mapa już istnieje
+            if (mapContainer._leaflet_id) {
+                console.log('Mapa miejsca spotkania już istnieje, odświeżam...');
+                return;
+            }
+
+            // Początkowe współrzędne
+            const initialLat = parseFloat(latitudeInput.value) || 52.069;
+            const initialLng = parseFloat(longitudeInput.value) || 19.480;
+
+            // Inicjalizacja mapy
+            const meetingMap = L.map('meeting-map-container').setView([initialLat, initialLng], 6);
+
+            // Dodanie warstwy kafelków
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(meetingMap);
+
+            // Dodanie markera
+            const marker = L.marker([initialLat, initialLng], {
+                draggable: true
+            }).addTo(meetingMap);
+
+            // Funkcja aktualizująca współrzędne
+            function updateMeetingCoordinates(lat, lng) {
+                latitudeInput.value = lat;
+                longitudeInput.value = lng;
+                coordinatesText.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+                // Reverse geocoding
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.display_name) {
+                            const locationName = data.display_name.split(',').slice(0, 3).join(', ');
+                            locationNameInput.value = locationName;
+                        }
+                    })
+                    .catch(error => console.error('Błąd geokodowania miejsca spotkania:', error));
+            }
+
+            // Obsługa zdarzeń
+            marker.on('dragend', function() {
+                const position = marker.getLatLng();
+                updateMeetingCoordinates(position.lat, position.lng);
+            });
+
+            meetingMap.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                updateMeetingCoordinates(e.latlng.lat, e.latlng.lng);
+            });
+
+            // Funkcja wyszukiwania lokalizacji
+            function searchMeetingLocation() {
+                const query = searchInput.value;
+                if (!query) return;
+
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            const location = data[0];
+                            const lat = parseFloat(location.lat);
+                            const lng = parseFloat(location.lon);
+
+                            meetingMap.setView([lat, lng], 16);
+                            marker.setLatLng([lat, lng]);
+                            updateMeetingCoordinates(lat, lng);
+                        } else {
+                            alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Błąd wyszukiwania miejsca spotkania:', error);
+                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                    });
+            }
+
+            // Obsługa wyszukiwania
+            if (searchButton) {
+                searchButton.addEventListener('click', searchMeetingLocation);
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        searchMeetingLocation();
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            // Po inicjalizacji wymuszamy przerysowanie mapy
+            setTimeout(() => {
+                if (meetingMap) {
+                    meetingMap.invalidateSize();
+                    console.log('Mapa miejsca spotkania przerysowana');
+                }
+            }, 100);
+
+            console.log('Mapa miejsca spotkania zainicjalizowana');
+        }
     });
 
     // Ukryj sugestie po kliknięciu poza polem wyszukiwania
@@ -366,5 +551,6 @@
         }, 1000);
     });
 </script>
+
 </body>
 </html>
