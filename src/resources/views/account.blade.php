@@ -39,13 +39,10 @@
                                         <h5 class="mb-4">Informacje</h5>
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label class="form-label">Imie</label>
-                                                <p class="border rounded p-2">{{ Auth::user()->name }}</p>
+                                                <label class="form-label">Imie i nazwisko</label>
+                                                <p class="border rounded p-2">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} ps. '{{ Auth::user()->name }}'</p>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Nazwisko</label>
-                                                <p class="border rounded p-2">{{ Auth::user()->last_name }}</p>
-                                            </div>
+
                                             <div class="col-md-6">
                                                 <label class="form-label">Email</label>
                                                 <p class="border rounded p-2">{{ Auth::user()->email }}</p>

@@ -12,9 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->integer('age')->nullable();
+            $table->string('phone')->nullable();
+            $table->text('description')->nullable();
+            $table->string('photo_path')->nullable();
             $table->string('language')->default('pl');
-            $table->string('theme')->default('light');
+            $table->string('theme')->default('dark');
+
+            #może się kiedyś przyda
+            $table->boolean('two_factor_enabled')->default(false)->nullable();
+            $table->boolean('email_notifications')->default(true)->nullable();
+            $table->timestamp('photo_updated_at')->nullable();
+            $table->timestamp('password_updated_at')->nullable();
 
         });
     }
@@ -25,7 +36,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['avatar', 'language', 'theme']);
+            $table->dropColumn([
+                'first_name',
+                'last_name',
+                'age',
+                'phone',
+                'description',
+                'photo_path',
+                'language',
+                'theme',
+                'two_factor_enabled',
+                'email_notifications',
+                'photo_updated_at',
+                'password_updated_at',
+            ]);
         });
     }
 };
