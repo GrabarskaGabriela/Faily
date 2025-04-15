@@ -19,8 +19,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::with('user')->latest()->paginate(10);
-        return view('events.index', compact('events'));
+        $events = Event::with(['user', 'photos'])->latest()->paginate(9);
+        return view('events.event_list', compact('events'));
     }
 
     /**
@@ -44,12 +44,24 @@ class EventController extends Controller
             'longitude' =>  'required|numeric',
             'location_name' => 'required|string|max:255',
             'has_ride_sharing' => 'boolean',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $validated['user_id'] = Auth::id();
 
-        $event = new Event($validated);
-        $event->save(); // Dodaj tę linię, aby zapisać wydarzenie w bazie danych
+        $event = Event::create($validated);
+
+        // Obsługa przesyłania zdjęć
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('event_photos', 'public');
+                $event->photos()->create([
+                    'path' => $path,
+                    'filename' => $photo->getClientOriginalName()
+                ]);
+            }
+        }
 
         if ($request->has_ride_sharing) {
             return redirect()->route('rides.create', ['event_id' => $event->id])
@@ -59,13 +71,12 @@ class EventController extends Controller
         return redirect()->route('events.show', $event)
             ->with('success', 'Event created successfully.');
     }
-
     /**
      * Display the specified resource.
      */
     public function show(Event $event)
     {
-        $event->load(['user', 'rides.driver', 'rides.requests']);
+        $event->load(['user', 'rides.driver', 'rides.requests', 'photos']);
         return view('events.show', compact('event'));
     }
 

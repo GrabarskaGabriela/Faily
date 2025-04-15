@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -18,24 +19,12 @@ Route::get('/account', function () {
     return view('account');
 });
 
-Route::get('/event_list', function () {
-    return view('event_list');
-});
-
 Route::get('/main', function () {
     return view('main');
 });
 
 Route::get('/password_reminder', function () {
     return view('password_reminder');
-});
-
-Route::get('/settings', function () {
-    return view('settings');
-});
-
-Route::get('/event', function () {
-    return view('event');
 });
 
 Route::get('/mapa', function () {
@@ -51,13 +40,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
-    Route::post('/profile/toggle-2fa', [ProfileController::class, 'toggle2FA'])->name('profile.toggle-2fa');
-    Route::post('/profile/toggle-notifications', [ProfileController::class, 'toggleNotifications'])->name('profile.toggle-notifications');
+
+    Route::resource('events', EventController::class)->names('events');
+    Route::resource('rides', RideController::class)->names('rides');
+    Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
+
+    Route::get('/my-events', function () {
+        $events = App\Models\Event::with(['user', 'photos'])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(9);
+
+        return view('events.list', compact('events'));
+    })->name('my.events');
+
 });
 
-Route::resource('events', EventController::class);
-Route::resource('rides', RideController::class);
-Route::resource('ride-requests', RideRequestController::class);
 
 
 require __DIR__.'/auth.php';

@@ -25,4 +25,9 @@ class Event extends Model
     {
         return $this->hasMany(Ride::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }

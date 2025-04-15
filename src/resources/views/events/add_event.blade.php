@@ -4,14 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Faily - dodaj wydarzenie</title>
-    <link rel="preload" as="style" href="http://localhost:63851/build/assets/app-BQbJ1PT2.css" />
-    <link rel="preload" as="style" href="http://localhost:63851/build/assets/app-2d6iL-bg.css" />
-    <link rel="modulepreload" href="http://localhost:63851/build/assets/app-BgZqGepO.js" />
-    <link rel="stylesheet" href="http://localhost:63851/build/assets/app-BQbJ1PT2.css" />
-    <link rel="stylesheet" href="http://localhost:63851/build/assets/app-2d6iL-bg.css" />
-    <script type="module" src="http://localhost:63851/build/assets/app-BgZqGepO.js"></script>
 
-    <!-- Dodajemy bezpośrednio Leaflet -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -56,67 +51,13 @@
 </head>
 <body class="bg-main">
 <div class="page-container" id="app">
-    <header>
-        <nav class="navbar navbar-expand-lg bg-dark">
-            <div class="container-fluid">
-                <!-- Logo + napis -->
-                <a class="navbar-brand fs-3 text-white" href="http://localhost:63851" style="text-decoration: none;">
-                    <img src="http://localhost:63851/images/includes/logo.png" alt="Logo" width="50" height="50"
-                         class="d-inline-block align-text-top">
-                    Faily
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
-                        aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse  align-content-center" id="navbarTogglerDemo02">
-                    <ul class="navbar-nav justify-content-center align-items-center fs-4 flex-grow-1 pe-3">
-                        <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="http://localhost:63851/mapa">Mapa eventów</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="http://localhost:63851/event_list">Posty</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
-                        </li>
-                    </ul>
-
-                    <a class="btn btn-outline-light me-2" href="http://localhost:63851/add_event">Dodaj ogłoszenie</a>
-                    <div class="dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Moje konto
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="http://localhost:63851/account">Przejdź do konta</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:63851/my_events">Moje ogłoszenia</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:63851/help">Pomoc</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:63851/profile/dashboard">Ustawienia</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <form method="POST" action="http://localhost:63851/logout">
-                                    <input type="hidden" name="_token" value="jCDwTlOUFuKYI2QAqRCvZgCyfBnHvt2WisQgrdXd" autocomplete="off">
-                                    <button type="submit" class="dropdown-item">Wyloguj się</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    @include('includes.navbar')
     <main>
         <div class="container mt-5">
             <h2>Dodaj wydarzenie</h2>
 
-            <form action="http://localhost:63851/events" method="POST" enctype="multipart/form-data" id="event-form">
-                <input type="hidden" name="_token" value="jCDwTlOUFuKYI2QAqRCvZgCyfBnHvt2WisQgrdXd" autocomplete="off">
+            <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" id="event-form">
+                @csrf
 
                 <div class="mb-3">
                     <label for="title" class="form-label">Tytuł wydarzenia</label>
@@ -179,9 +120,7 @@
             </form>
         </div>
     </main>
-    <footer class="bg-dark text-white text-center py-3">
-        © 2025 Find an Idiot Like You!
-    </footer>
+    @include('includes.footer')
 </div>
 
 <!-- Funkcje pomocnicze -->

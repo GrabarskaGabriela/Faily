@@ -13,7 +13,6 @@
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="profile-header position-relative mb-4">
-                    <!-- Usunięto przycisk edycji zdjęcia -->
                 </div>
                 <div class="text-center text-white">
                     <div class="position-relative d-inline-block">

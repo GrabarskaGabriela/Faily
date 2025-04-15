@@ -35,7 +35,6 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->dropColumn(['latitude', 'longitude']);
-            // Przywracamy poprzedni stan
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
         });
