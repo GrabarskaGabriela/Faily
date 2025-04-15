@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-main">
+<main>
 @include('includes.navbar')
   <div class="container mt-5">
     <div class="row">
@@ -20,18 +21,15 @@
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="zdjecie1.png" alt="Zdjęcie 1" class="d-block img-fluid">
+                <img src="{{ asset('images/includes/zdjecie1.png') }}" alt="Logo">
             </div>
             <div class="carousel-item">
-              <img src="zdjecie2.png" alt="Zdjęcie 2" class="d-block img-fluid">
+                <img src="{{ asset('images/includes/zdjecie2.png') }}" alt="Logo" >
             </div>
             <div class="carousel-item">
-              <img src="zdjecie3.png" alt="Zdjęcie 3" class="d-block img-fluid">
+                <img src="{{ asset('images/includes/zdjecie3.png') }}" alt="Logo" >
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
           <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
             <span class="carousel-control-next-icon"></span>
           </button>
@@ -98,6 +96,7 @@
       </div>
     </div>
   </div>
+</main>
   @include('includes.footer')
   <script>
     const autoYes = document.getElementById('autoYes');

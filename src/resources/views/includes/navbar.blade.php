@@ -1,5 +1,19 @@
 <header>
-    <nav class="navbar navbar-expand-lg bg-transparent">
+    <style>
+        .btn-gradient {
+            background: linear-gradient(45deg, #4e4376 0%, #2b5876 100%);
+            border: none;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">>
         <div class="container-fluid">
             <!-- Logo + napis -->
             <a class="navbar-brand fs-3 text-white" href="{{ url('/') }}" style="text-decoration: none;">
@@ -15,22 +29,22 @@
                 <div class="collapse navbar-collapse  align-content-center" id="navbarTogglerDemo02">
                     <ul class="navbar-nav justify-content-center align-items-center fs-4 flex-grow-1 pe-3">
                         <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="{{ url('/mapa') }}">Mapa eventów</a>
+                            <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/mapa') }}">Mapa eventów</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="{{ url('/event_list') }}">Posty</a>
+                            <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/event_list') }}">Posty</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
+                            <a class="btn btn-gradient btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-outline-light me-2" href="{{ url('/about') }}">Twórcy</a>
+                            <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/about') }}">Twórcy</a>
                         </li>
                     </ul>
 
-                    <a class="btn btn-outline-light me-2" href="{{ url('/add_event') }}">Dodaj ogłoszenie</a>
+                    <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/add_event') }}">Dodaj ogłoszenie</a>
                     <div class="dropdown">
-                        <a class="btn btn-outline-light dropdown-toggle" href="#" role="button"
+                        <a class="btn btn-gradient btn-outline-light dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Moje konto
                         </a>
@@ -38,7 +52,7 @@
                             <li><a class="dropdown-item" href="{{ url('/account') }}">Przejdź do konta</a></li>
                             <li><a class="dropdown-item" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
                             <li><a class="dropdown-item" href="{{ url('/help') }}">Pomoc</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/profile.dashboard') }}">Ustawienia</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/profile/dashboard') }}">Ustawienia</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

@@ -47,8 +47,8 @@
                 </div>
             </div>
         </section>
-        {{--
- <section class="py-5 bg-dark">
+
+ <section class="py-5 bg-dark align-content-lg-center">
      <div class="container align-content-center">
          <h2 class="text-center mb-4 text-white">Zobacz, jak to wygląda!</h2>
          <div class="gallery">
@@ -58,8 +58,6 @@
          </div>
      </div>
  </section>
- --}}
-
     </main>
 </div>
 
