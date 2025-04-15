@@ -8,10 +8,10 @@ use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/add_event', function () {
-    return view('add_event');
+    return view('events.add_event');
 });
 
 Route::get('/account', function () {

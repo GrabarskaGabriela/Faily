@@ -37,18 +37,19 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-           'title' => 'required|max:255',
-           'description' => 'required',
-           'date' => 'required|date',
-           'latitude' =>  'required|numeric',
-           'longitude' =>  'required|numeric',
-           'location_name' => 'required|string|max:255',
-           'has_ride_sharing' => 'boolean',
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'date' => 'required|date',
+            'latitude' =>  'required|numeric',
+            'longitude' =>  'required|numeric',
+            'location_name' => 'required|string|max:255',
+            'has_ride_sharing' => 'boolean',
         ]);
 
         $validated['user_id'] = Auth::id();
 
         $event = new Event($validated);
+        $event->save(); // Dodaj tę linię, aby zapisać wydarzenie w bazie danych
 
         if ($request->has_ride_sharing) {
             return redirect()->route('rides.create', ['event_id' => $event->id])
