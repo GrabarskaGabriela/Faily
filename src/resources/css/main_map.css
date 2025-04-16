@@ -1,0 +1,36 @@
+@import 'leaflet/dist/leaflet.css';
+/*----------- Mapa -----------*/
+.map-container {
+    width: 100%;
+    height: 600px;
+    position: relative;
+}
+
+.map-element {
+    width: 100%;
+    height: 100% !important;
+}
+
+.leaflet-container {
+    width: 100%;
+    height: 100% !important;
+}
+
+.map-fullwidth {
+    width: 100%;
+    height: 600px;
+    position: relative;
+}
+
+.map-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+@media (max-width: 768px)
+{
+    .map-container
+    {
+        height: 400px;
+    }
+}

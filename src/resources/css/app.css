@@ -1,7 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.css';
 
-/* Poprawiona struktura dla body, html */
-html, body {
+
+html, body
+{
     background-image: url('/images/includes/tlo.jpg');
     background-size: cover;
     background-position: center;
@@ -13,14 +14,14 @@ html, body {
     overflow-x: hidden;
 }
 
-.navbar {
+.navbar
+{
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     margin-bottom: 10px;
     height: auto;
     flex-shrink: 0;
 }
 
-/* Naprawienie ustawień dla footera */
 footer {
     background-color: #212529;
     color: white;
@@ -30,7 +31,7 @@ footer {
     flex-shrink: 0;
 }
 
-/* Główna zawartość strony */
+
 #app {
     flex: 1 0 auto;
     display: flex;
@@ -38,7 +39,6 @@ footer {
     width: 100%;
 }
 
-/* Rozmieszczenie kontenerów */
 main {
     flex: 1;
     display: flex;
@@ -46,51 +46,10 @@ main {
     width: 100%;
 }
 
-/* Responsive dla mapy */
-@media (max-width: 768px) {
-    .map-container {
-        height: 400px; /* Stała wysokość na mniejszych ekranach */
+@media (max-width: 768px)
+{
+    .map-container
+    {
+        height: 400px;
     }
-}
-
-/*----------- Mapa -----------*/
-.map-container {
-    width: 100%;
-    height: 600px; /* Stała wysokość dla mapy */
-    position: relative;
-}
-
-.map-element {
-    width: 100%;
-    height: 100% !important;
-}
-
-.leaflet-container {
-    width: 100%;
-    height: 100% !important;
-}
-
-.map-fullwidth {
-    width: 100%;
-    height: 600px; /* Stała wysokość dla pełnej mapy */
-    position: relative;
-}
-
-.map-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.container-fluid.flex-grow-1 {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Dodatkowe style dla zawartości, która może być dłuższa niż ekran */
-.content-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
 }

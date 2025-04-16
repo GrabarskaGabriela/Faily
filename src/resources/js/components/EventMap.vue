@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <!-- Map container -->
+        <!-- MainMapController container -->
         <div :id="mapId" ref="mapContainer" class="map-element"></div>
 
         <!-- Coordinate display -->
@@ -172,7 +172,7 @@ export default {
                 });
         };
 
-        // Map initialization
+        // MainMapController initialization
         const initMap = () => {
             // Inicjalizacja mapy
             map = L.map(mapId.value, {

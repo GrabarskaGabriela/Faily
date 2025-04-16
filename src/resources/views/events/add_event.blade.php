@@ -74,7 +74,6 @@
                     @csrf
 
                     <div class="row g-3">
-                        <!-- Sekcja podstawowych informacji -->
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Tytuł wydarzenia</label>
@@ -103,18 +102,17 @@
                             </div>
                         </div>
 
-                        <!-- Sekcja lokalizacji -->
+
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="location_name" class="form-label">Nazwa lokalizacji</label>
                                 <input type="text" class="form-control" id="location_name" name="location_name" placeholder="Nazwa miejsca" required>
                             </div>
 
-                            <!-- Ukryte pola na współrzędne -->
                             <input type="hidden" id="latitude" name="latitude" value="52.069">
                             <input type="hidden" id="longitude" name="longitude" value="19.480">
 
-                            <!-- Wyszukiwarka adresów -->
+
                             <div class="mb-3">
                                 <label for="search-address" class="form-label">Wyszukaj adres</label>
                                 <div class="input-group">
@@ -125,7 +123,6 @@
                                 </div>
                             </div>
 
-                            <!-- Kontener mapy -->
                             <div class="mb-3">
                                 <div id="map-container" class="map-container"></div>
                                 <div class="coordinate-display">
@@ -133,7 +130,7 @@
                                 </div>
                             </div>
 
-                            <!-- Współdzielenie przejazdów -->
+
                             <div class="mb-3 form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="has_ride_sharing" name="has_ride_sharing" value="1">
                                 <label class="form-check-label" for="has_ride_sharing">Włącz współdzielenie przejazdów</label>
@@ -141,7 +138,7 @@
                         </div>
                     </div>
 
-                    <!-- Formularz współdzielenia przejazdów -->
+
                     <div id="ride-sharing-form" style="display: none;" class="mt-4 mb-4 p-3">
                         <h4 class="mb-3">Szczegóły przejazdu</h4>
 

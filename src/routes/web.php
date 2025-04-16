@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MainMapController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
@@ -32,9 +32,7 @@ Route::get('/event', function () {
     return view('event');
 });
 
-Route::get('/mapa', function () {
-    return view('mapa');
-});
+Route::get('/map', [MainMapController::class, 'showMap']);
 Route::get('/about', function () {
     return view('about');
 });

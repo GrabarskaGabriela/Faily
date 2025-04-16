@@ -8,6 +8,7 @@ export default defineConfig({
         laravel({
             input: [
                 path.resolve(__dirname, 'resources/css/app.css'), // pełna ścieżka do pliku
+                path.resolve(__dirname, 'resources/css/main_map.css'), // pełna ścieżka do pliku
                 path.resolve(__dirname, 'resources/js/app.js')   // pełna ścieżka do pliku
             ],
             refresh: true,
