@@ -1,4 +1,4 @@
-<?php
+e<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('driver_id')->constrained('users')->cascadeOnDelete();
             $table->string('vehicle_description');
-            $table->integer('avalible_seats');
+            $table->integer('available_seats');
             $table->decimal('meeting_latitude', 10, 7);
             $table->decimal('meeting_longitude', 10, 7);
             $table->string('meeting_location_name');

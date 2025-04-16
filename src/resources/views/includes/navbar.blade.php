@@ -18,8 +18,7 @@
             <!-- Logo + napis -->
             <a class="navbar-brand fs-3 text-white" href="{{ url('/') }}" style="text-decoration: none;">
                 <img src="{{ asset('images/includes/logo.png') }}" alt="Logo" width="50" height="50"
-                     class="d-inline-block align-text-top">
-                Faily
+                     class="d-inline-block align-text-top">Faily
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
                     aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +45,7 @@
                     <div class="dropdown">
                         <a class="btn btn-gradient btn-outline-light dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Moje konto
+                            Konto
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url('/account') }}">Przejdź do konta</a></li>
@@ -66,7 +65,7 @@
                     </div>
                     @else
                         <!-- Dla niezalogowanego użytkownika - tylko przycisk logowania -->
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">
+                        <a href="{{ route('login') }}" class="btn btn-gradient btn-outline-light">
                             Zaloguj się
                         </a>
                     @endauth

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\RideController;
+use App\Models\Ride;
 
 class EventController extends Controller
 {
@@ -19,40 +21,85 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::with('user')->latest()->paginate(10);
-        return view('events.index', compact('events'));
+        $events = Event::with(['user', 'photos'])->latest()->paginate(9);
+        return view('events.event_list', compact('events'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('events.create');
+        $preset_event_id = $request->input('preset_event_id');
+        $preset_event = null;
+
+        if ($preset_event_id)
+        {
+            $preset_event = Event::findOrFail($preset_event_id);
+        }
+
+        return view('events.create', compact('preset_event'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-           'title' => 'required|max:255',
-           'description' => 'required',
-           'date' => 'required|date',
-           'latitude' =>  'required|numeric',
-           'longitude' =>  'required|numeric',
-           'location_name' => 'required|string|max:255',
-           'has_ride_sharing' => 'boolean',
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'date' => 'required|date',
+            'latitude' =>  'required|numeric',
+            'longitude' =>  'required|numeric',
+            'location_name' => 'required|string|max:255',
+            'has_ride_sharing' => 'boolean',
+            'people_count' => 'required|integer|min:1',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            // Nowe pola do przejazdu
+            'vehicle_description' => 'required_if:has_ride_sharing,1|string|max:255|nullable',
+            'available_seats' => 'required_if:has_ride_sharing,1|integer|min:1|nullable',
+            'meeting_location_name' => 'required_if:has_ride_sharing,1|string|max:255|nullable',
+            'meeting_latitude' => 'required_if:has_ride_sharing,1|numeric|nullable',
+            'meeting_longitude' => 'required_if:has_ride_sharing,1|numeric|nullable',
         ]);
 
-        $validated['user_id'] = Auth::id();
+        // Usuwamy dane przejazdu z danych wydarzenia
+        $eventData = $validated;
+        unset($eventData['vehicle_description']);
+        unset($eventData['avalible_seats']);
+        unset($eventData['meeting_location_name']);
+        unset($eventData['meeting_latitude']);
+        unset($eventData['meeting_longitude']);
 
-        $event = new Event($validated);
+        $eventData['user_id'] = Auth::id();
+        $event = Event::create($eventData);
 
-        if ($request->has_ride_sharing) {
-            return redirect()->route('rides.create', ['event_id' => $event->id])
-                ->with('success', 'Event created successfully. Now add transit information.');
+        // Obsługa przesyłania zdjęć
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('event_photos', 'public');
+                $event->photos()->create([
+                    'path' => $path,
+                    'filename' => $photo->getClientOriginalName()
+                ]);
+            }
+        }
+
+        // Jeśli ma być współdzielenie przejazdów i wszystkie wymagane dane są podane
+        if ($request->has('has_ride_sharing') && $request->has('vehicle_description') && $request->has('avalible_seats')) {
+            // Tworzenie przejazdu
+            Ride::create([
+                'event_id' => $event->id,
+                'driver_id' => Auth::id(),
+                'vehicle_description' => $request->vehicle_description,
+                'avalible_seats' => $request->avalible_seats,
+                'meeting_latitude' => $request->meeting_latitude,
+                'meeting_longitude' => $request->meeting_longitude,
+                'meeting_location_name' => $request->meeting_location_name
+            ]);
         }
 
         return redirect()->route('events.show', $event)
@@ -64,7 +111,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        $event->load(['user', 'rides.driver', 'rides.requests']);
+        $event->load(['user', 'rides.driver', 'rides.requests', 'photos']);
         return view('events.show', compact('event'));
     }
 

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->timestamp('date');
-            $table->decimal('latitude'. 10, 7);
-            $table->decimal('longitude'. 10, 7);
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
             $table->string('location_name');
             $table->boolean('has_ride_sharing')->default(false);
             $table->timestamps();

@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
+
 Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/add_event', function () {
-    return view('add_event');
+    return view('events.add_event');
 });
 Route::get('/account', function () {
     return view('account');
@@ -40,37 +41,32 @@ Route::get('/about', function () {
 Route::get('/help', function () {
     return view('help');
 });
+
 Route::middleware(['auth'])->group(function () {
-    // Grupa routów profilu użytkownika
-    Route::prefix('profile')->name('profile.')->group(function () {
-        // Dashboard
-        Route::get('/dashboard', function () {
-            return view('profile.dashboard');
-        })->name('dashboard');
+    // Profil użytkownika
+    Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
 
-        // Podstawowe operacje profilu
-        Route::get('/', [ProfileController::class, 'show'])->name('show');
-        Route::put('/', [ProfileController::class, 'update'])->name('update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    Route::resource('events', EventController::class)->names('events');
+    Route::resource('rides', RideController::class)->names('rides');
+    Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
 
-        // Edycja profilu
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+    Route::get('/my_events', function () {
+        $events = App\Models\Event::with(['user', 'photos'])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(9);
 
-        // Zarządzanie zdjęciem profilowym
-        Route::prefix('photo')->group(function () {
-            Route::get('/', [ProfileController::class, 'editPhoto'])->name('edit-photo');
-            Route::post('/', [ProfileController::class, 'updatePhoto'])->name('update-photo');
-        });
+        return view('events.event_list', compact('events'));
+    })->name('my.events');
 
-        // Ustawienia
-        Route::post('/toggle-2fa', [ProfileController::class, 'toggle2FA'])->name('toggle-2fa');
-        Route::post('/toggle-notifications', [ProfileController::class, 'toggleNotifications'])->name('toggle-notifications');
-    });
 });
 
-Route::resource('events', EventController::class);
-Route::resource('rides', RideController::class);
-Route::resource('ride-requests', RideRequestController::class);
 
 
 require __DIR__.'/auth.php';

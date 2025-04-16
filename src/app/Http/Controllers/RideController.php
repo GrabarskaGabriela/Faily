@@ -19,19 +19,17 @@ class RideController extends Controller
      */
     public function index(Request $request)
     {
-        $events_id = $request->get('event_id');
+        $event_id = $request->get('event_id');
 
-        if ($events_id){
-            $rides = Ride::where('event_id', $events_id)
-                ->with(['driver', 'event'])
-                ->get();
-
-            $event = Event::findOrFail($events_id);
-            return view('ride.index', compact('rides', 'event'));
+        if (!$event_id)
+        {
+            return redirect()->route('events.index')
+                ->with('error', 'You must select the event for which you are creating a ride');
         }
 
-        return redirect()->route('events.index');
-
+        $event = Event::findOrFail($event_id);
+        return redirect()->route('events.create', ['preset_event_id' => $event_id])
+            ->with('message', 'Dodaj przejazd dla wydarzenia: ' . $event->title);
     }
 
     /**
