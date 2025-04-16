@@ -9,33 +9,44 @@ use App\Http\Controllers\RideRequestController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
-
+});
 Route::get('/add_event', function () {
     return view('events.add_event');
 });
-
 Route::get('/account', function () {
     return view('account');
 });
-
+Route::get('/event_list', function () {
+    return view('event_list');
+});
 Route::get('/main', function () {
     return view('main');
 });
-
 Route::get('/password_reminder', function () {
     return view('password_reminder');
+});
+Route::get('/settings', function () {
+    return view('settings');
+});
+Route::get('/event', function () {
+    return view('event');
 });
 
 Route::get('/mapa', function () {
     return view('mapa');
+});
+Route::get('/about', function () {
+    return view('about');
+});
+Route::get('/help', function () {
+    return view('help');
 });
 
 Route::middleware(['auth'])->group(function () {
     // Profil użytkownika
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::match(['put', 'patch'],'/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');

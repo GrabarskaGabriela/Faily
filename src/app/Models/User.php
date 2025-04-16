@@ -74,4 +74,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(RideRequest::class, 'passenger_id');
     }
+
+    public function getAvatarAttribute()
+    {
+        if ($this->photo_path) {
+            return asset('storage/' . $this->photo_path);
+        }
+
+        return asset('images/default-avatar.png');
+    }
+
 }

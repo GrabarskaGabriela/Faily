@@ -1,11 +1,12 @@
 <template>
-    <div class="event-map-container mb-4">
+    <div class="map-container">
+        <!-- Address search input -->
         <div class="input-group mb-3">
             <input type="text" class="form-control" v-model="searchQuery" placeholder="Wyszukaj adres (np. Warszawa, ul. Marszałkowska 1)" @keyup.enter="searchLocation">
             <button class="btn btn-outline-secondary" type="button" @click="searchLocation">Wyszukaj</button>
         </div>
 
-        <!-- Lista sugestii adresów -->
+        <!-- Address suggestions list -->
         <div class="address-suggestions" v-show="suggestions.length > 0">
             <div
                 v-for="(suggestion, index) in suggestions"
@@ -16,220 +17,82 @@
             </div>
         </div>
 
-        <!-- Dodajemy ref do elementu mapy -->
-        <div ref="mapContainer" style="height: 400px; width: 100%; border: 1px solid #ccc; margin-bottom: 15px;"></div>
+        <!-- Map container -->
+        <div :id="mapId" ref="mapContainer" class="map-element"></div>
 
+        <!-- Coordinate display -->
         <div class="coordinate-display" v-if="latitude && longitude">
             Wybrana lokalizacja: <strong>{{ latitude.toFixed(6) }}, {{ longitude.toFixed(6) }}</strong>
-        </div>
-
-        <!-- Dodajemy komunikat debugujący -->
-        <div v-if="mapError" class="alert alert-danger">
-            {{ mapError }}
         </div>
     </div>
 </template>
 
 <script>
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import L from 'leaflet';
+
+// Naprawianie problemu z ikonami
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow
+});
+
 export default {
-    name: 'EventMap',
     props: {
-        initialLatitude: {
-            type: Number,
-            default: 52.2297
+        center: {
+            type: Array,
+            default: () => [51.2101, 16.1619] // Legnica
         },
-        initialLongitude: {
+        zoom: {
             type: Number,
-            default: 21.0122
+            default: 7
         },
-        initialLocationName: {
-            type: String,
-            default: ''
+        markers: {
+            type: Array,
+            default: () => []
         }
     },
-    data() {
-        return {
-            latitude: this.initialLatitude,
-            longitude: this.initialLongitude,
-            locationName: this.initialLocationName,
-            searchQuery: '',
-            map: null,
-            marker: null,
-            mapError: '',
-            leaflet: null,
-            suggestions: []
-        };
-    },
-    mounted() {
-        console.log('EventMap component mounted');
-        // Opóźnienie inicjalizacji, aby zapewnić załadowanie wszystkich zasobów
-        this.initMapWithRetry();
+    setup(props, { emit }) {
+        const mapId = ref('map-' + Math.random().toString(36).substring(2, 9));
+        const searchQuery = ref('');
+        const suggestions = ref([]);
+        const latitude = ref(props.center[0]);
+        const longitude = ref(props.center[1]);
 
-        // Ustawienie searchQuery na podstawie initialLocationName
-        if (this.initialLocationName) {
-            this.searchQuery = this.initialLocationName;
-        }
-    },
-    methods: {
-        initMapWithRetry(attempt = 1) {
-            console.log(`Próba inicjalizacji mapy #${attempt}`);
+        let map = null;
+        let mainMarker = null;
+        let resizeObserver = null;
 
-            // Ładowanie Leaflet dynamicznie jeśli nie jest dostępny
-            if (typeof L === 'undefined') {
-                console.log('Leaflet nie jest dostępny, ładuję dynamicznie...');
-                this.mapError = 'Ładowanie biblioteki map...';
-
-                // Ładujemy CSS Leaflet
-                const leafletCSS = document.createElement('link');
-                leafletCSS.rel = 'stylesheet';
-                leafletCSS.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-                document.head.appendChild(leafletCSS);
-
-                // Ładujemy JS Leaflet
-                const leafletScript = document.createElement('script');
-                leafletScript.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-                leafletScript.onload = () => {
-                    console.log('Leaflet załadowany dynamicznie');
-                    this.leaflet = window.L;
-                    this.initMap();
-                };
-                leafletScript.onerror = () => {
-                    this.mapError = 'Nie udało się załadować biblioteki map. Odśwież stronę.';
-                };
-                document.head.appendChild(leafletScript);
-                return;
-            } else {
-                this.leaflet = L;
-                this.initMap();
-            }
-        },
-
-        initMap() {
-            try {
-                console.log('Inicjalizacja mapy...');
-                console.log('Kontener mapy ref:', this.$refs.mapContainer);
-
-                // Sprawdzamy czy kontener mapy jest dostępny
-                if (!this.$refs.mapContainer) {
-                    this.mapError = 'Kontener mapy nie jest dostępny. Odśwież stronę.';
-                    console.error('Kontener mapy nie jest dostępny');
-                    return;
-                }
-
-                // Ustawienie jednoznacznego ID dla kontenera mapy
-                const mapId = 'leaflet-map-' + Date.now();
-                this.$refs.mapContainer.id = mapId;
-
-                // Sprawdzenie wymiarów kontenera
-                const containerWidth = this.$refs.mapContainer.offsetWidth;
-                const containerHeight = this.$refs.mapContainer.offsetHeight;
-                console.log(`Wymiary kontenera mapy: ${containerWidth}x${containerHeight}`);
-
-                if (containerWidth === 0 || containerHeight === 0) {
-                    console.warn('Kontener mapy ma zerowe wymiary, próbuję naprawić...');
-                    this.$refs.mapContainer.style.height = '400px';
-                    this.$refs.mapContainer.style.width = '100%';
-                }
-
-                // Inicjalizacja mapy
-                this.map = this.leaflet.map(mapId).setView([this.latitude, this.longitude], 13);
-
-                // Dodanie warstwy kafelków
-                this.leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                }).addTo(this.map);
-
-                // Dodanie markera
-                this.marker = this.leaflet.marker([this.latitude, this.longitude], {
-                    draggable: true
-                }).addTo(this.map);
-
-                // Obsługa zdarzeń
-                this.marker.on('dragend', (event) => {
-                    const position = this.marker.getLatLng();
-                    this.latitude = position.lat;
-                    this.longitude = position.lng;
-                    this.reverseGeocode(position.lat, position.lng);
-                });
-
-                this.map.on('click', (e) => {
-                    const position = e.latlng;
-                    this.latitude = position.lat;
-                    this.longitude = position.lng;
-                    this.marker.setLatLng(position);
-                    this.reverseGeocode(position.lat, position.lng);
-                });
-
-                // Po krótkim czasie wymuszamy przerysowanie mapy
-                setTimeout(() => {
-                    if (this.map) {
-                        this.map.invalidateSize();
-                        console.log('Mapa przerysowana');
-                    }
-                }, 100);
-
-                console.log('Mapa zainicjalizowana pomyślnie');
-                this.mapError = '';
-
-                // Emitujemy początkowe współrzędne - ważne dla wypełniania ukrytych pól
-                this.emitLocationUpdate();
-            } catch (error) {
-                console.error('Błąd inicjalizacji mapy:', error);
-                this.mapError = `Błąd inicjalizacji mapy: ${error.message}`;
-
-                // Jeśli próba się nie powiodła, spróbujmy ponownie
-                if (attempt < 3) {
-                    setTimeout(() => {
-                        this.initMapWithRetry(attempt + 1);
-                    }, 1000);
-                }
-            }
-        },
-
-        // Funkcja do pobierania sugestii adresów
-        getSuggestions() {
-            if (this.searchQuery.length < 3) {
-                this.suggestions = [];
+        // Search functionality methods
+        const getSuggestions = () => {
+            if (searchQuery.value.length < 3) {
+                suggestions.value = [];
                 return;
             }
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery)}&limit=5`)
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}&limit=5`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Sugestie adresów:', data);
-                    this.suggestions = data;
+                    suggestions.value = data;
                 })
                 .catch(error => {
                     console.error('Błąd pobierania sugestii:', error);
-                    this.suggestions = [];
+                    suggestions.value = [];
                 });
-        },
+        };
 
-        // Obsługa wyboru sugestii
-        selectSuggestion(suggestion) {
-            const lat = parseFloat(suggestion.lat);
-            const lon = parseFloat(suggestion.lon);
+        const searchLocation = () => {
+            if (!searchQuery.value) return;
+            console.log('Wyszukiwanie lokalizacji:', searchQuery.value);
 
-            this.latitude = lat;
-            this.longitude = lon;
-            this.searchQuery = suggestion.display_name;
-            this.suggestions = []; // Ukryj sugestie
-
-            this.map.setView([lat, lon], 16);
-            this.marker.setLatLng([lat, lon]);
-
-            if (suggestion.display_name) {
-                this.locationName = suggestion.display_name.split(',').slice(0, 3).join(', ');
-                this.emitLocationUpdate();
-            }
-        },
-
-        searchLocation() {
-            if (!this.searchQuery) return;
-            console.log('Wyszukiwanie lokalizacji:', this.searchQuery);
-
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery)}`)
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Wyniki wyszukiwania:', data);
@@ -238,16 +101,22 @@ export default {
                         const lat = parseFloat(location.lat);
                         const lon = parseFloat(location.lon);
 
-                        this.latitude = lat;
-                        this.longitude = lon;
+                        latitude.value = lat;
+                        longitude.value = lon;
 
-                        this.map.setView([lat, lon], 16);
-                        this.marker.setLatLng([lat, lon]);
+                        map.setView([lat, lon], 16);
 
-                        if (location.display_name) {
-                            this.locationName = location.display_name.split(',').slice(0, 3).join(', ');
-                            this.emitLocationUpdate();
+                        // Update marker position
+                        if (mainMarker) {
+                            mainMarker.setLatLng([lat, lon]);
                         }
+
+                        // Emit location update
+                        emit('location-updated', {
+                            latitude: lat,
+                            longitude: lon,
+                            locationName: location.display_name
+                        });
                     } else {
                         alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
                     }
@@ -256,66 +125,205 @@ export default {
                     console.error('Błąd wyszukiwania:', error);
                     alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
                 });
-        },
+        };
 
-        reverseGeocode(lat, lng) {
+        const selectSuggestion = (suggestion) => {
+            const lat = parseFloat(suggestion.lat);
+            const lon = parseFloat(suggestion.lon);
+
+            latitude.value = lat;
+            longitude.value = lon;
+            searchQuery.value = suggestion.display_name;
+            suggestions.value = []; // Hide suggestions
+
+            map.setView([lat, lon], 16);
+
+            // Update marker position
+            if (mainMarker) {
+                mainMarker.setLatLng([lat, lon]);
+            }
+
+            // Emit location update
+            emit('location-updated', {
+                latitude: lat,
+                longitude: lon,
+                locationName: suggestion.display_name
+            });
+        };
+
+        const reverseGeocode = (lat, lng) => {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Wyniki reverse geocoding:', data);
                     if (data && data.display_name) {
-                        this.locationName = data.display_name.split(',').slice(0, 3).join(', ');
-                        this.searchQuery = this.locationName; // Aktualizacja pola wyszukiwania
-                        this.emitLocationUpdate();
+                        searchQuery.value = data.display_name;
+
+                        // Emit location update
+                        emit('location-updated', {
+                            latitude: lat,
+                            longitude: lng,
+                            locationName: data.display_name
+                        });
                     }
                 })
                 .catch(error => {
                     console.error('Błąd reverse geocoding:', error);
                 });
-        },
+        };
 
-        emitLocationUpdate() {
-            console.log('Emitowanie aktualizacji lokalizacji:', {
-                latitude: this.latitude,
-                longitude: this.longitude,
-                locationName: this.locationName
+        // Map initialization
+        const initMap = () => {
+            // Inicjalizacja mapy
+            map = L.map(mapId.value, {
+                zoomControl: true,
+                scrollWheelZoom: true
+            }).setView(props.center, props.zoom);
+
+            // Dodanie warstwy OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Dodanie domyślnego markera na środku mapy
+            mainMarker = L.marker(props.center, {
+                draggable: true
+            }).addTo(map);
+
+            mainMarker.bindPopup('Tu jesteśmy :)').openPopup();
+
+            // Obsługa przeciągania markera
+            mainMarker.on('dragend', (event) => {
+                const position = mainMarker.getLatLng();
+                latitude.value = position.lat;
+                longitude.value = position.lng;
+                reverseGeocode(position.lat, position.lng);
             });
 
-            this.$emit('location-updated', {
-                latitude: this.latitude,
-                longitude: this.longitude,
-                locationName: this.locationName
+            // Obsługa kliknięcia na mapę
+            map.on('click', (e) => {
+                const position = e.latlng;
+                latitude.value = position.lat;
+                longitude.value = position.lng;
+                mainMarker.setLatLng(position);
+                reverseGeocode(position.lat, position.lng);
             });
-        }
-    },
-    // Dodajemy watch dla searchQuery, aby pobierać sugestie podczas wpisywania
-    watch: {
-        searchQuery: {
-            handler: function(newVal) {
-                if (newVal.length >= 3) {
-                    this.getSuggestions();
-                } else {
-                    this.suggestions = [];
+
+            // Dodanie dodatkowych markerów
+            if (props.markers.length > 0) {
+                props.markers.forEach(markerData => {
+                    const marker = L.marker([markerData.lat, markerData.lng]).addTo(map);
+
+                    if (markerData.popup) {
+                        marker.bindPopup(markerData.popup);
+                    }
+                });
+            }
+
+            // Nasłuchiwanie na zdarzenie resize okna
+            window.addEventListener('resize', handleResize);
+
+            // Użyj ResizeObserver dla dokładniejszego śledzenia zmian rozmiaru
+            if (typeof ResizeObserver !== 'undefined') {
+                resizeObserver = new ResizeObserver(() => {
+                    if (map) map.invalidateSize();
+                });
+
+                const mapContainer = document.getElementById(mapId.value);
+                if (mapContainer) {
+                    resizeObserver.observe(mapContainer);
                 }
-            },
-            debounce: 300 // Opóźnienie 300ms dla lepszej wydajności
-        }
+            }
+
+            // Przeładuj mapę po renderowaniu komponentu
+            setTimeout(() => {
+                if (map) map.invalidateSize();
+            }, 100);
+        };
+
+        const handleResize = () => {
+            if (map) {
+                map.invalidateSize();
+            }
+        };
+
+        onMounted(() => {
+            initMap();
+
+            // Dodatkowe opóźnione odświeżenie po pełnym renderowaniu strony
+            setTimeout(() => {
+                if (map) map.invalidateSize();
+            }, 500);
+
+            // Dodatkowe odświeżenie po dłuższym czasie, aby upewnić się że mapa jest prawidłowo wyświetlona
+            setTimeout(() => {
+                if (map) map.invalidateSize();
+            }, 1500);
+        });
+
+        onUnmounted(() => {
+            // Usuń nasłuchiwanie na zdarzenie resize
+            window.removeEventListener('resize', handleResize);
+
+            // Zatrzymaj obserwatora zmian rozmiaru
+            if (resizeObserver) {
+                resizeObserver.disconnect();
+            }
+
+            // Zniszcz mapę
+            if (map) {
+                map.remove();
+                map = null;
+            }
+        });
+
+        // Watch for searchQuery changes to get suggestions while typing
+        watch(searchQuery, (newValue) => {
+            if (newValue.length >= 3) {
+                getSuggestions();
+            } else {
+                suggestions.value = [];
+            }
+        }, { debounce: 300 }); // 300ms delay for better performance
+
+        return {
+            mapId,
+            searchQuery,
+            suggestions,
+            latitude,
+            longitude,
+            searchLocation,
+            selectSuggestion,
+            getMap: () => map
+        };
     }
-};
+}
 </script>
 
 <style scoped>
-.event-map-container {
+.map-container {
     position: relative;
+    width: 100%;
 }
+
+.map-element {
+    width: 100%;
+    height: 400px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
 .coordinate-display {
     margin-top: 5px;
     font-size: 0.9rem;
     color: #6c757d;
+    margin-bottom: 15px;
 }
+
 .address-suggestions {
     position: absolute;
-    top: calc(2.5rem + 2px); /* Wysokość input + margines */
+    top: calc(2.5rem + 2px); /* Input height + margin */
     left: 0;
     width: 100%;
     max-height: 200px;
@@ -326,15 +334,25 @@ export default {
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+
 .address-suggestion {
     padding: 8px 12px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
 }
+
 .address-suggestion:last-child {
     border-bottom: none;
 }
+
 .address-suggestion:hover {
     background-color: #f0f0f0;
+}
+
+/* Style dla kontenera Leaflet */
+:deep(.leaflet-container) {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 </style>

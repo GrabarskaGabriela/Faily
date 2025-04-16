@@ -8,11 +8,11 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 @include('includes.navbar')
-<div id="app" class="container-fluid flex-grow-1 p-0"> <!-- container-fluid for full width -->
-    <main class="h-100"> <!-- Added h-100 class for full height -->
-        <div class="row g-0 h-100"> <!-- Added h-100 class for full height -->
-            <div class="col-12 h-100"> <!-- Added h-100 class for full height -->
-                <div class="map-wrapper h-100"> <!-- Using h-100 instead of fixed height -->
+<div id="app" class="container-fluid flex-grow-1 p-0">
+    <main class="h-100">
+        <div class="row g-0 h-100">
+            <div class="col-12 h-100">
+                <div class="map-wrapper h-100">
                     <leaflet-map :center="[51.2101, 16.1619]" :zoom="7"></leaflet-map>
                 </div>
             </div>
