@@ -107,7 +107,7 @@
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <a href="#" class="btn btn-outline-primary w-100 py-3">
+                                    <a href="{{ url('/add_event') }}" class="btn btn-outline-primary w-100 py-3">
                                         <i class="fas fa-plus me-2"></i> Dodaj wydarzenie
                                     </a>
                                 </div>

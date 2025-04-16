@@ -1,11 +1,10 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
+<section class="mb-5">
+    <header class="mb-4">
+        <h2 class="h4 text-white">
+            {{ __('Informacje profilowe') }}
         </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+        <p class="text-white small">
+            {{ __("Zaktualizuj informacje profilowe oraz adres e-mail swojego konta.") }}
         </p>
     </header>
 
@@ -13,85 +12,120 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <div class="mb-3 text-white">
+            <label for="name" class="form-label">{{ __('Nazwa użytkownika') }}</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
+            @if ($errors->get('name'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('name') }}
+                </div>
+            @endif
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        <div class="mb-3 text-white">
+            <label for="first_name" class="form-label">{{ __('Imię') }}</label>
+            <input type="text" class="form-control" id="first_name" name="first_name"
+                   value="{{ old('first_name', $user->first_name) }}" required autofocus autocomplete="first_name">
+            @if ($errors->get('first_name'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('first_name') }}
+                </div>
+            @endif
+        </div>
+
+        <div class="mb-3 text-white">
+            <label for="last_name" class="form-label">{{ __('Nazwisko') }}</label>
+            <input type="text" class="form-control" id="last_name" name="last_name"
+                   value="{{ old('last_name', $user->last_name) }}" required autofocus autocomplete="last_name">
+            @if ($errors->get('last_name'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('last_name') }}
+                </div>
+            @endif
+        </div>
+
+
+        <div class="mb-3 text-white">
+            <label for="email" class="form-label">{{ __('Email') }}</label>
+            <input type="email" class="form-control" id="email" name="email"
+                   value="{{ old('email', $user->email) }}" required autocomplete="username">
+            @if ($errors->get('email'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('email') }}
+                </div>
+            @endif
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
+                <div class="mt-2 small text-dark">
+                    {{ __('Twój adres e-mail nie został zweryfikowany.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+                    <button form="send-verification" class="btn btn-link p-0 align-baseline text-decoration-underline">
+                        {{ __('Kliknij tutaj, aby ponownie wysłać wiadomość weryfikacyjną na twój adres e-mail.') }}
+                    </button>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
+                        <div class="text-success mt-1">
+                            {{ __('Na Twój adres e-mail został wysłany nowy link weryfikacyjny.') }}
+                        </div>
                     @endif
                 </div>
             @endif
         </div>
 
-        <!-- Avatar -->
-        <div>
-            <x-input-label for="avatar" :value="__('Avatar')" />
-
+        <div class="mb-3 text-white">
+            <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
             @if($user->avatar)
-                <div class="mt-2">
-                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-full h-20 w-20 object-cover">
+                <div class="mb-2">
+                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-circle" width="80" height="80">
                 </div>
             @endif
-
-            <input id="avatar" name="avatar" type="file" class="mt-1 block w-full" />
-            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+            <input type="file" class="form-control" id="avatar" name="avatar">
+            @if ($errors->get('avatar'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('avatar') }}
+                </div>
+            @endif
         </div>
 
-        <!-- Preferred Language -->
-        <div>
-            <x-input-label for="preferred_language" :value="__('Preferred Language')" />
-            <select id="preferred_language" name="preferred_language" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+        <div class="mb-3 text-white">
+            <label for="preferred_language" class="form-label">{{ __('Preferowany język') }}</label>
+            <select class="form-select" id="preferred_language" name="preferred_language">
                 <option value="pl" {{ $user->language == 'pl' ? 'selected' : '' }}>Polski</option>
                 <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
+                <option value="de" {{ $user->language == 'de' ? 'selected' : '' }}>Deutsch</option>
+                <option value="uk" {{ $user->language == 'uk' ? 'selected' : '' }}>Українська</option>
+
             </select>
-            <x-input-error class="mt-2" :messages="$errors->get('preferred_language')" />
+            @if ($errors->get('preferred_language'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('preferred_language') }}
+                </div>
+            @endif
         </div>
 
-        <!-- Theme -->
-        <div>
-            <x-input-label for="theme" :value="__('Theme')" />
-            <select id="theme" name="theme" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+        <div class="mb-4 text-white">
+            <label for="theme" class="form-label">{{ __('Motyw') }}</label>
+            <select class="form-select" id="theme" name="theme">
                 <option value="light" {{ $user->theme == 'light' ? 'selected' : '' }}>Light</option>
                 <option value="dark" {{ $user->theme == 'dark' ? 'selected' : '' }}>Dark</option>
             </select>
-            <x-input-error class="mt-2" :messages="$errors->get('theme')" />
+            @if ($errors->get('theme'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('theme') }}
+                </div>
+            @endif
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-primary">{{ __('Zapisz') }}</button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
+                <span class="text-success small">{{ __('Saved.') }}</span>
             @endif
         </div>
     </form>
