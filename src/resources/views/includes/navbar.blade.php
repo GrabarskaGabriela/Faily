@@ -31,7 +31,7 @@
                             <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/mapa') }}">Mapa eventów</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/event_list') }}">Posty</a>
+                            <a class="btn btn-gradient btn-outline-light me-2" href="{{ route('events.feed') }}">Posty</a>
                         </li>
                         <li class="nav-item mx-2">
                             <a class="btn btn-gradient btn-outline-light me-2" href="#">Guziczek bez nazwy</a>
@@ -41,7 +41,7 @@
                         </li>
                     </ul>
 
-                    <a class="btn btn-gradient btn-outline-light me-2" href="{{ url('/add_event') }}">Dodaj ogłoszenie</a>
+                    <a class="btn btn-gradient btn-outline-light me-2" href="{{ route('events.create') }}">Dodaj ogłoszenie</a>
                     <div class="dropdown">
                         <a class="btn btn-gradient btn-outline-light dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,7 +49,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url('/account') }}">Przejdź do konta</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
+                            <li><a class="dropdown-item" href="route('my.events')">Moje ogłoszenia</a></li>
                             <li><a class="dropdown-item" href="{{ url('/help') }}">Pomoc</a></li>
                             <li><a class="dropdown-item" href="{{ url('/profile/dashboard') }}">Ustawienia</a></li>
                             <li>

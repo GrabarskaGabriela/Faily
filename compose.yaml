@@ -6,6 +6,7 @@ volumes:
         name: faily-postgres-data
     faily-redis-data:
         name: faily-redis-data
+
 services:
     app:
         build:

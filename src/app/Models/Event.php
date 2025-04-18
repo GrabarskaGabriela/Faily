@@ -14,8 +14,15 @@ class Event extends Model
         'latitude',
         'longitude',
         'location_name',
-        'has_ride_sharing'
+        'has_ride_sharing',
+        'people_count'
     ];
+
+    protected $casts = [
+        'date' => 'datetime',
+        'has_ride_sharing' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -29,5 +36,33 @@ class Event extends Model
     public function photos()
     {
         return $this->hasMany(Photo::class);
+    }
+
+    public function attendees()
+    {
+        return $this->hasMany(EventAttendee::class);
+    }
+
+    public function acceptedAttendees()
+    {
+        return $this->hasMany(EventAttendee::class)->where('status', 'accepted');
+    }
+
+    public function hasAvailableSpots()
+    {
+        $totalAttendees = $this->acceptedAttendees()->sum('attendees_count');
+        return $totalAttendees < $this->people_count;
+    }
+
+    public function getAvailableSpotsCount()
+    {
+        $totalAttendees = $this->acceptedAttendees()->sum('attendees_count');
+        return max(0, $this->people_count - $totalAttendees);
+
+    }
+
+    public function isUserAttending($userid)
+    {
+
     }
 }

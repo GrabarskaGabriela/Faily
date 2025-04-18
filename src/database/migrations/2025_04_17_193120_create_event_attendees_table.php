@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('event_attendees', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
-            $table->text('description');
-            $table->timestamp('date');
-            $table->decimal('latitude', 10, 7);
-            $table->decimal('longitude', 10, 7);
-            $table->string('location_name');
-            $table->integer('people_count')->default(10);
-            $table->boolean('has_ride_sharing')->default(false);
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->text('message')->nullable();
+            $table->integer('attendees_count')->default(1);
             $table->timestamps();
+
+            $table->unique(['event_id', 'user_id']);
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('event_attendees');
     }
 };

@@ -93,6 +93,7 @@
 
                             <div class="mb-3">
                                 <label for="peopleCount" class="form-label">Ilość osób</label>
+
                                 <input type="number" class="form-control" id="peopleCount" name="people_count" min="1" required>
                             </div>
 

@@ -84,4 +84,20 @@ class User extends Authenticatable
         return asset('images/default-avatar.png');
     }
 
+
+    public function eventAttendees()
+    {
+        return $this->hasMany(EventAttendee::class);
+    }
+
+    public function acceptedEventAttendees()
+    {
+        return $this->hasMany(EventAttendee::class)->where('status', 'accepted');
+    }
+
+    public function pendingEventAttendees()
+    {
+        return $this->hasMany(EventAttendee::class)->where('status', 'pending');
+    }
+
 }
