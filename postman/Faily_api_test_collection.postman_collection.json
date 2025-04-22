@@ -8,6 +8,23 @@
 	"item": [
 		{
 			"name": "Get token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const xsrfCookie = pm.cookies.get('XSRF-TOKEN');\r",
+							"if (xsrfCookie) {\r",
+							"    const decodedToken = decodeURIComponent(xsrfCookie);\r",
+							"    pm.collectionVariables.set('csrf_token', decodedToken);\r",
+							"    console.log(\"CSRF Token został pobrany: \" + decodedToken);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -33,7 +50,7 @@
 			"response": []
 		},
 		{
-			"name": "register",
+			"name": "Register",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -41,11 +58,16 @@
 						"key": "Accept",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"mateusz Bogacz\",\r\n  \"email\": \"mateusz@example.com\",\r\n  \"password\": \"password123\",\r\n  \"password_confirmation\": \"password123\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Test Api User\",\r\n    \"email\": \"marek@example.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"first_name\": \"Marek\",\r\n    \"last_name\": \"Marucha\",\r\n    \"age\": \"15\",\r\n    \"phone\": \"+48 213719990\",\r\n    \"description\": \"użytkonik stworzony do testowania api\",\r\n    \"language\": \"pl\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,11 +110,21 @@
 						"key": "Accept",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"mateusz@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+					"raw": "{\r\n  \"email\": \"marek@example.com\",\r\n  \"password\": \"password123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -125,6 +157,11 @@
 						"key": "Accept",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -145,7 +182,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/events?Authorization=Bearer {{token}}&Accept=application/json",
+					"raw": "{{base_url}}/events?Authorization=Bearer {{token}}&Accept=application/json&X-XSRF-TOKEN={{csrf_token}}",
 					"host": [
 						"{{base_url}}"
 					],
@@ -160,6 +197,10 @@
 						{
 							"key": "Accept",
 							"value": "application/json"
+						},
+						{
+							"key": "X-XSRF-TOKEN",
+							"value": "{{csrf_token}}"
 						}
 					]
 				}
@@ -174,6 +215,11 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
 						"type": "text"
 					}
 				],
@@ -207,6 +253,51 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.sendRequest({\r",
+					"    url: pm.variables.get('base_url') + '/sanctum/csrf-cookie',\r",
+					"    method: 'GET'\r",
+					"}, function (err, response) {\r",
+					"    if (err) {\r",
+					"        console.error(err);\r",
+					"    } else {\r",
+					"        const xsrfCookie = pm.cookies.get('XSRF-TOKEN');\r",
+					"        if (xsrfCookie) {\r",
+					"            const decodedToken = decodeURIComponent(xsrfCookie);\r",
+					"            pm.collectionVariables.set('csrf_token', decodedToken);\r",
+					"            console.log(\"CSRF Token został pobrany: \" + decodedToken);\r",
+					"        } else {\r",
+					"            console.log(\"Nie udało się pobrać tokenu CSRF\");\r",
+					"        }\r",
+					"    }\r",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "csrf_token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
