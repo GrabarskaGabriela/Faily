@@ -63,6 +63,8 @@ class Event extends Model
 
     public function isUserAttending($userid)
     {
-
+        return $this->attendees()
+            ->where('user_id', $userid)
+            ->exists();
     }
 }
