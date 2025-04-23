@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
-use App\Http\Controllers\TestController;
 
 
 Route::get('/', function () {
@@ -40,14 +39,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('rides', RideController::class)->names('rides');
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
 
-    Route::get('/my_events', function () {
-        $events = App\Models\Event::with(['user', 'photos'])
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->paginate(9);
-
-        return view('events.event_list', compact('events'));
-    })->name('my.events');
 
     Route::get('/events/{event}/attendees', [EventAttendeeController::class, 'index'])->name('events.attendees.index');
     Route::get('/events/{event}/attend', [EventAttendeeController::class, 'create'])->name('events.attendees.create');

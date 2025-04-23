@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class Event extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'title',
@@ -66,5 +69,27 @@ class Event extends Model
         return $this->attendees()
             ->where('user_id', $userid)
             ->exists();
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'title',
+                'description',
+                'date',
+                'location_name',
+                'people_count',
+                'has_ride_sharing',
+            ])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function (string $eventName) {
+                return match ($eventName) {
+                    'created' => "Create new event: {$this->title}",
+                    'updated' => "Updated event: {$this->title}",
+                    'deleted' => "Deleted event: {$this->title}",
+                    default => $eventName
+                };
+            });
     }
 }

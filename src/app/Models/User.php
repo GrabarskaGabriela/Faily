@@ -8,17 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, LogsActivity;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -36,21 +32,11 @@ class User extends Authenticatable
         'email_notifications',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -99,6 +85,29 @@ class User extends Authenticatable
     public function pendingEventAttendees()
     {
         return $this->hasMany(EventAttendee::class)->where('status', 'pending');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'email',
+                'first_name',
+                'last_name',
+                'phone'
+            ])
+            ->logOnlyDirty()
+            ->useLogName('users')
+            ->dontLogIfAttributesChangedOnly(['password', 'remember_token', 'last_login_at'])
+            ->setDescriptionForEvent(function(string $eventName) {
+                return match($eventName) {
+                    'created' => "New user registered: {$this->name}",
+                    'updated' => "User profile updated: {$this->name}",
+                    'deleted' => "User profile deleted: {$this->name}",
+                    default => $eventName
+                };
+            });
     }
 
 }

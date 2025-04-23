@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\RideController;
 use App\Http\Controllers\Api\RideRequestController;
 use App\Http\Controllers\Api\TestApiController;
 
-Route::prefix('api')->group(function () {
+Route::prefix('api')->name('api.')->group(function () {
     Route::get("/test", [TestApiController::class, "test"]);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);

@@ -103,8 +103,22 @@ class EventAttendeeController extends Controller
             }
         }
 
+        $oldStatus = $attendee->status;
         $attendee->status = $request->status;
         $attendee->save();
+
+        $userName = $attendee->user->name ?? 'User';
+
+        activity('event_attendees')
+            ->performedOn($attendee)
+            ->withProperties([
+                'old_status' => $oldStatus,
+                'new_status' => $attendee->status,
+                'event_id' => $event->id,
+                'event_title' => $event->title
+            ])
+            ->log("Changed the status of {$userName} participation in the \"{$event->title}\"  event from \"{$oldStatus}\" to \"{$attendee->status}\"");
+
 
         return redirect()->route('events.attendees.index', $event)
             ->with('success', 'Participant status has been updated!');
