@@ -35,26 +35,21 @@ class ProfileController extends Controller
             'theme' => 'nullable|string|in:light,dark',
         ]);
 
-        // Obsługa przesyłania zdjęcia, jeśli zostało dostarczone
         if ($request->hasFile('avatar')) {
-            // Usuń stare zdjęcie, jeśli istnieje
             if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
                 Storage::disk('public')->delete($user->photo_path);
             }
 
-            // Zapisz nowe zdjęcie
             $photoPath = $request->file('avatar')->store('profile-photos', 'public');
             $validated['photo_path'] = $photoPath;
             $validated['photo_updated_at'] = now();
         }
 
-        // Mapowanie preferred_language na pole language
         if (isset($validated['preferred_language'])) {
             $validated['language'] = $validated['preferred_language'];
             unset($validated['preferred_language']);
         }
 
-        // Usunięcie pola avatar z tablicy validated, ponieważ nie ma odpowiadającej kolumny w bazie
         if (isset($validated['avatar'])) {
             unset($validated['avatar']);
         }
@@ -81,15 +76,13 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'photo' => 'required|image|max:2048', // max 2MB
+            'photo' => 'required|image|max:2048',
         ]);
 
-        // Usuń stare zdjęcie jeśli istnieje
         if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
             Storage::disk('public')->delete($user->photo_path);
         }
 
-        // Zapisz nowe zdjęcie
         $photoPath = $request->file('photo')->store('profile-photos', 'public');
 
         $user->update([
@@ -104,15 +97,6 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user->two_factor_enabled = $request->input('value');
-        $user->save();
-
-        return response()->json(['success' => true]);
-    }
-
-    public function toggleNotifications(Request $request)
-    {
-        $user = Auth::user();
-        $user->email_notifications = $request->input('value');
         $user->save();
 
         return response()->json(['success' => true]);

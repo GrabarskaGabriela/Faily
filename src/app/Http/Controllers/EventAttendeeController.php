@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventAttendee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\EventAttendeeStatusChanged;
 
 class EventAttendeeController extends Controller
 {
@@ -106,6 +107,8 @@ class EventAttendeeController extends Controller
         $oldStatus = $attendee->status;
         $attendee->status = $request->status;
         $attendee->save();
+
+        $attendee->user->notify(new EventAttendeeStatusChanged($attendee, $event, $oldStatus));
 
         $userName = $attendee->user->name ?? 'User';
 
