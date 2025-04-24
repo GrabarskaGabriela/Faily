@@ -22,9 +22,11 @@ Route::get('/about', function () {
     return view('about');
 });
 
-Route::get('/test', [\App\Http\Controllers\TestController::class, 'test']);
+//Route::get('/test', [\App\Http\Controllers\TestController::class, 'test']);
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', function () { return view('welcome'); })->name('afterlogin');
+
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::match(['put', 'patch'],'/profile', [ProfileController::class, 'update'])->name('profile.update');
