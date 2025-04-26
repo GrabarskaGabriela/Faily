@@ -18,9 +18,14 @@ class TestDataSeeder extends Seeder
     public function run(): void
     {
         $user = User::first() ?? User::create([
-            'name' => 'Jan Kowalski',
-            'email' => 'jan'.time().'@example.com',
+            'name' => 'Bodzio',
+            'first_name' => 'Jan',
+            'last_name' => 'Kowalski',
+            'email' => 'jan@example.com',
             'password' => Hash::make('password'),
+            'age' => '19',
+            'phone' => '+48 777 777 777',
+            'description' => 'testowe konto',
         ]);
 
         // Zapisz ID do zmiennej

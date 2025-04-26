@@ -1,9 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.css';
 
-
 html, body
 {
-    background-image: url('/images/includes/tlo.jpg');
+    background-image: url('/images/includes/tlo.png');
     background-size: cover;
     background-position: center;
     min-height: 100vh;
@@ -20,6 +19,41 @@ html, body
     margin-bottom: 10px;
     height: auto;
     flex-shrink: 0;
+}
+.dropdown-menu {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: none;
+}
+
+.dropdown-item {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active
+{
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+
+.dropdown-divider {
+    background-color: #ffffff;
+}
+.btn-gradient {
+    background: linear-gradient(45deg, #4e4376 0%, #2b5876 100%);
+    border: none;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 footer {

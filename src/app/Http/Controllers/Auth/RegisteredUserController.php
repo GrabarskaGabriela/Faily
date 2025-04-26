@@ -14,9 +14,6 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
@@ -41,7 +38,6 @@ class RegisteredUserController extends Controller
             'photo' => ['nullable', 'image', 'max:2048'], // Max 2MB
         ]);
 
-        // Obsługa zdjęcia
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('profile-photos', 'public');

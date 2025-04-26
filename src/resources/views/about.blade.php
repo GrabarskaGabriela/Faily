@@ -308,7 +308,6 @@
 @include('includes.footer')
 
 <script>
-    // Dodatkowa interaktywność
     document.querySelectorAll('.team-member').forEach(member => {
         member.addEventListener('click', function() {
             const memberName = this.querySelector('.member-name').textContent;
@@ -317,8 +316,6 @@
             const tab = document.getElementById(tabId);
             const tabInstance = new bootstrap.Tab(tab);
             tabInstance.show();
-
-            // Płynne przewinięcie do sekcji z opisem
             document.getElementById('creatorTabContent').scrollIntoView({
                 behavior: 'smooth'
             });

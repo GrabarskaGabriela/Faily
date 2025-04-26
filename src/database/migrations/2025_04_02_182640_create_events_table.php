@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
             $table->string('location_name');
+            $table->integer('people_count')->default(10);
             $table->boolean('has_ride_sharing')->default(false);
             $table->timestamps();
         });

@@ -64,9 +64,8 @@ class UserSettingsController extends Controller
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        // Sprawdź, czy te pola istnieją w bazie danych po migracjach
         if (isset($validated['preferred_language'])) {
-            $user->language = $validated['preferred_language']; // Używamy 'language' zamiast 'preferred_language' zgodnie z migracją
+            $user->language = $validated['preferred_language'];
         }
 
         if (isset($validated['theme'])) {
@@ -85,9 +84,6 @@ class UserSettingsController extends Controller
         return view('edit-photo', compact('user'));
     }
 
-    /**
-     * Aktualizuj zdjęcie profilowe użytkownika.
-     */
     public function updatePhoto(Request $request)
     {
         $request->validate([

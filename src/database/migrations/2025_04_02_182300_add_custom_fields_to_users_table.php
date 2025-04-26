@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('photo_path')->nullable();
             $table->string('language')->default('pl');
             $table->string('theme')->default('dark');
+            $table->timestamp('last_login_at')->nullable();
 
             #może się kiedyś przyda
             $table->boolean('two_factor_enabled')->default(false)->nullable();
@@ -45,6 +46,7 @@ return new class extends Migration
                 'photo_path',
                 'language',
                 'theme',
+                'last_login_at',
                 'two_factor_enabled',
                 'email_notifications',
                 'photo_updated_at',

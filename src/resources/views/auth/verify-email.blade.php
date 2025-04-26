@@ -27,14 +27,14 @@
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
                         Wyślij ponownie email weryfikacyjny
                     </button>
                 </form>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn btn-link text-decoration-none">
+                    <button type="submit" class="btn btn-link text-decoration-none text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">>
                         Wyloguj się
                     </button>
                 </form>

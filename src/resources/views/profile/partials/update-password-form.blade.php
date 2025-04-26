@@ -65,8 +65,7 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn btn-primary">
-                {{ __('Zapisz') }}
+            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('Zapisz') }}
             </button>
 
             @if (session('status') === 'password-updated')

@@ -15,7 +15,7 @@
             width: 100%;
             max-height: 200px;
             overflow-y: auto;
-            background: white;
+            background:  linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border: 1px solid #dee2e6;
             border-top: none;
             border-radius: 0 0 .375rem .375rem;
@@ -28,7 +28,7 @@
             transition: background-color .15s;
         }
         .address-suggestion:hover {
-            background-color: #f8f9fa;
+            background-color: rgba(255, 255, 255, 0.1) !important;
         }
 
         #map-container, #meeting-map-container {
@@ -74,6 +74,7 @@
                     @csrf
 
                     <div class="row g-3">
+
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Tytuł wydarzenia</label>
@@ -92,6 +93,7 @@
 
                             <div class="mb-3">
                                 <label for="peopleCount" class="form-label">Ilość osób</label>
+
                                 <input type="number" class="form-control" id="peopleCount" name="people_count" min="1" required>
                             </div>
 
@@ -102,12 +104,12 @@
                             </div>
                         </div>
 
-
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="location_name" class="form-label">Nazwa lokalizacji</label>
                                 <input type="text" class="form-control" id="location_name" name="location_name" placeholder="Nazwa miejsca" required>
                             </div>
+
 
                             <input type="hidden" id="latitude" name="latitude" value="52.069">
                             <input type="hidden" id="longitude" name="longitude" value="19.480">
@@ -122,6 +124,7 @@
                                     </button>
                                 </div>
                             </div>
+
 
                             <div class="mb-3">
                                 <div id="map-container" class="map-container"></div>
@@ -186,14 +189,13 @@
                             </div>
                         </div>
 
-                        <!-- Ukryte pola na współrzędne miejsca spotkania -->
                         <input type="hidden" id="meeting_latitude" name="meeting_latitude" value="52.069">
                         <input type="hidden" id="meeting_longitude" name="meeting_longitude" value="19.480">
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg px-4" id="submit-button">
-                            <i class="bi bi-check-circle me-2"></i>Dodaj wydarzenie
+                        <button type="submit" class="btn btn-lg px-4 text-white"  style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"id="submit-button">
+                            <i class="bi bi-check-circle me-2" ></i>Dodaj wydarzenie
                         </button>
                     </div>
                 </form>
@@ -203,9 +205,7 @@
     @include('includes.footer')
 </div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <script>
@@ -231,11 +231,9 @@
         }
     }
 
-    // Inicjalizacja map po pełnym załadowaniu DOM
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM w pełni załadowany, inicjalizacja map...');
 
-        // Ustawiamy opóźnienie, aby upewnić się, że kontenery map są w pełni renderowane
         setTimeout(() => {
             initMainMap();
             initRideSharingForm();
@@ -252,7 +250,6 @@
             return;
         }
 
-        // Ustaw jawnie wysokość kontenera mapy
         mapContainer.style.height = '300px';
 
         const latitudeInput = document.getElementById('latitude');
@@ -262,37 +259,31 @@
         const searchButton = document.getElementById('search-button');
         const coordinatesText = document.getElementById('coordinates-text');
 
-        // Początkowe współrzędne
         const initialLat = parseFloat(latitudeInput.value) || 52.069;
         const initialLng = parseFloat(longitudeInput.value) || 19.480;
 
-        // Inicjalizacja mapy
         try {
-            // Jeśli mapa już istnieje, usuń ją
             if (mapContainer._leaflet_id) {
                 mapContainer._leaflet = null;
             }
 
             const map = L.map(mapContainer).setView([initialLat, initialLng], 6);
 
-            // Dodanie warstwy kafelków
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
-            // Dodanie markera
+
             const marker = L.marker([initialLat, initialLng], {
                 draggable: true
             }).addTo(map);
 
-            // Funkcja aktualizująca współrzędne
             function updateCoordinates(lat, lng) {
                 latitudeInput.value = lat;
                 longitudeInput.value = lng;
                 coordinatesText.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
-                // Reverse geocoding
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                     .then(response => response.json())
                     .then(data => {
@@ -304,32 +295,30 @@
                     .catch(error => console.error('Błąd geokodowania:', error));
             }
 
-            // Obsługa zdarzeń mapy
             marker.on('dragend', function() {
                 const position = marker.getLatLng();
                 updateCoordinates(position.lat, position.lng);
             });
 
-            map.on('click', function(e) {
+            map.on('click', function(e)
+            {
                 marker.setLatLng(e.latlng);
                 updateCoordinates(e.latlng.lat, e.latlng.lng);
             });
 
-            // Funkcje dla sugestii adresów
             let suggestionElements = null;
 
-            function showSuggestions(items) {
-                // Usuń poprzednie sugestie jeśli istnieją
+            function showSuggestions(items)
+            {
                 if (suggestionElements) {
                     suggestionElements.remove();
                 }
 
-                // Utwórz kontener na sugestie
                 suggestionElements = document.createElement('div');
                 suggestionElements.className = 'address-suggestions';
                 suggestionElements.style.display = 'block';
 
-                // Dodaj każdą sugestię
+
                 items.forEach((item) => {
                     const suggestion = document.createElement('div');
                     suggestion.className = 'address-suggestion';
@@ -338,7 +327,6 @@
                     suggestionElements.appendChild(suggestion);
                 });
 
-                // Dodaj do DOM
                 const searchControl = searchInput.parentNode;
                 searchControl.style.position = 'relative';
                 searchControl.appendChild(suggestionElements);
@@ -353,13 +341,12 @@
                 marker.setLatLng([lat, lng]);
                 updateCoordinates(lat, lng);
 
-                // Ukryj sugestie
                 if (suggestionElements) {
                     suggestionElements.style.display = 'none';
                 }
             }
 
-            // Obsługa wpisywania w pole wyszukiwania
+
             searchInput.addEventListener('input', function() {
                 const query = this.value.trim();
 
@@ -370,7 +357,6 @@
                     return;
                 }
 
-                // Pobierz sugestie
                 fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
                     .then(response => response.json())
                     .then(data => {
@@ -383,7 +369,7 @@
                     .catch(error => console.error('Błąd pobierania sugestii:', error));
             });
 
-            // Funkcja wyszukiwania lokalizacji
+
             function searchLocation() {
                 const query = searchInput.value;
                 if (!query) return;
@@ -400,7 +386,6 @@
                             marker.setLatLng([lat, lng]);
                             updateCoordinates(lat, lng);
 
-                            // Ukryj sugestie
                             if (suggestionElements) {
                                 suggestionElements.style.display = 'none';
                             }
@@ -423,7 +408,6 @@
                 }
             });
 
-            // Po inicjalizacji wymuszamy przerysowanie mapy
             setTimeout(() => {
                 map.invalidateSize();
                 console.log('Mapa przerysowana');
@@ -434,16 +418,13 @@
     }
 
     function initRideSharingForm() {
-        // Pobranie referencji do elementów
         const rideShareCheckbox = document.getElementById('has_ride_sharing');
         const rideShareForm = document.getElementById('ride-sharing-form');
 
-        // Funkcja pokazująca/ukrywająca formularz przejazdów
         function toggleRideShareForm() {
             if (rideShareCheckbox && rideShareForm) {
                 if (rideShareCheckbox.checked) {
                     rideShareForm.style.display = 'block';
-                    // Opóźnij inicjalizację mapy, aby kontener był widoczny
                     setTimeout(() => initMeetingMap(), 300);
                 } else {
                     rideShareForm.style.display = 'none';
@@ -451,10 +432,9 @@
             }
         }
 
-        // Nasłuchiwanie zmiany stanu checkboxa
         if (rideShareCheckbox) {
             rideShareCheckbox.addEventListener('change', toggleRideShareForm);
-            toggleRideShareForm(); // Inicjalizacja stanu formularza
+            toggleRideShareForm();
         }
     }
 
@@ -467,13 +447,11 @@
             return;
         }
 
-        // Sprawdź, czy mapa została już zainicjowana
         if (mapContainer._leaflet_id) {
             console.log('Mapa miejsca spotkania już istnieje, pomijam inicjalizację.');
             return;
         }
 
-        // Ustaw jawnie wysokość kontenera mapy
         mapContainer.style.height = '200px';
 
         const latitudeInput = document.getElementById('meeting_latitude');
@@ -483,32 +461,29 @@
         const searchButton = document.getElementById('search-meeting-button');
         const coordinatesText = document.getElementById('meeting-coordinates-text');
 
-        // Początkowe współrzędne
+
         const initialLat = parseFloat(latitudeInput.value) || 52.069;
         const initialLng = parseFloat(longitudeInput.value) || 19.480;
 
         try {
-            // Inicjalizacja mapy
+
             const meetingMap = L.map(mapContainer).setView([initialLat, initialLng], 6);
 
-            // Dodanie warstwy kafelków
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(meetingMap);
 
-            // Dodanie markera
             const marker = L.marker([initialLat, initialLng], {
                 draggable: true
             }).addTo(meetingMap);
 
-            // Funkcja aktualizująca współrzędne
+
             function updateMeetingCoordinates(lat, lng) {
                 latitudeInput.value = lat;
                 longitudeInput.value = lng;
                 coordinatesText.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
-                // Reverse geocoding
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                     .then(response => response.json())
                     .then(data => {
@@ -520,7 +495,6 @@
                     .catch(error => console.error('Błąd geokodowania miejsca spotkania:', error));
             }
 
-            // Obsługa zdarzeń
             marker.on('dragend', function() {
                 const position = marker.getLatLng();
                 updateMeetingCoordinates(position.lat, position.lng);
@@ -531,7 +505,6 @@
                 updateMeetingCoordinates(e.latlng.lat, e.latlng.lng);
             });
 
-            // Funkcja wyszukiwania lokalizacji
             function searchMeetingLocation() {
                 const query = searchInput.value;
                 if (!query) return;
@@ -557,7 +530,6 @@
                     });
             }
 
-            // Obsługa wyszukiwania
             if (searchButton) {
                 searchButton.addEventListener('click', searchMeetingLocation);
             }
@@ -571,7 +543,6 @@
                 });
             }
 
-            // Po inicjalizacji wymuszamy przerysowanie mapy
             setTimeout(() => {
                 meetingMap.invalidateSize();
                 console.log('Mapa miejsca spotkania przerysowana');
@@ -581,7 +552,6 @@
         }
     }
 
-    // Ukryj sugestie po kliknięciu poza polem wyszukiwania
     document.addEventListener('click', function(e) {
         const suggestions = document.querySelector('.address-suggestions');
         const searchInput = document.getElementById('search-address');

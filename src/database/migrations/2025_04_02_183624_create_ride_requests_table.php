@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ride_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('ride_id')->constrained()->cascadeOnDelete();
             $table->foreignId('passenger_id')->constrained('users')->cascadeOnDelete();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->text('message');

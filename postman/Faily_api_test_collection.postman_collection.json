@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "7259397f-4f52-4e7b-8db4-10e50574ee69",
+		"name": "Faily_api_test_collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44286390"
+	},
+	"item": [
+		{
+			"name": "Get token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const xsrfCookie = pm.cookies.get('XSRF-TOKEN');\r",
+							"if (xsrfCookie) {\r",
+							"    const decodedToken = decodeURIComponent(xsrfCookie);\r",
+							"    pm.collectionVariables.set('csrf_token', decodedToken);\r",
+							"    console.log(\"CSRF Token został pobrany: \" + decodedToken);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:63851/sanctum/csrf-cookie",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "63851",
+					"path": [
+						"sanctum",
+						"csrf-cookie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Api User\",\r\n    \"email\": \"marek@example.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"first_name\": \"Marek\",\r\n    \"last_name\": \"Marucha\",\r\n    \"age\": \"15\",\r\n    \"phone\": \"+48 213719990\",\r\n    \"description\": \"użytkonik stworzony do testowania api\",\r\n    \"language\": \"pl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.environment.set(\"token\", jsonData.token);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"marek@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/me",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/events?Authorization=Bearer {{token}}&Accept=application/json&X-XSRF-TOKEN={{csrf_token}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{token}}"
+						},
+						{
+							"key": "Accept",
+							"value": "application/json"
+						},
+						{
+							"key": "X-XSRF-TOKEN",
+							"value": "{{csrf_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Testowe wydarzenie\",\r\n  \"description\": \"Opis testowego wydarzenia\",\r\n  \"date\": \"2025-05-01 15:00:00\",\r\n  \"latitude\": 52.2297,\r\n  \"longitude\": 21.0122,\r\n  \"location_name\": \"Warszawa, Centrum\",\r\n  \"has_ride_sharing\": true,\r\n  \"people_count\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/events?Authorization=Bearer {{token}}&Accept=application/json",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{token}}"
+						},
+						{
+							"key": "Accept",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.sendRequest({\r",
+					"    url: pm.variables.get('base_url') + '/sanctum/csrf-cookie',\r",
+					"    method: 'GET'\r",
+					"}, function (err, response) {\r",
+					"    if (err) {\r",
+					"        console.error(err);\r",
+					"    } else {\r",
+					"        const xsrfCookie = pm.cookies.get('XSRF-TOKEN');\r",
+					"        if (xsrfCookie) {\r",
+					"            const decodedToken = decodeURIComponent(xsrfCookie);\r",
+					"            pm.collectionVariables.set('csrf_token', decodedToken);\r",
+					"            console.log(\"CSRF Token został pobrany: \" + decodedToken);\r",
+					"        } else {\r",
+					"            console.log(\"Nie udało się pobrać tokenu CSRF\");\r",
+					"        }\r",
+					"    }\r",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "csrf_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

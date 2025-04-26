@@ -11,7 +11,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-12">
-
+        <!-- Carousel -->
         <div id="demo" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>

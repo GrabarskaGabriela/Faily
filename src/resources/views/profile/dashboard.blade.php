@@ -8,18 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
-@include('includes.navbar')?
+@include('includes.navbar')
 
 <main class="container flex-grow-1 my-5">
     <div class="row">
         @include('includes.profile_menu')
-        <!-- Główna zawartość -->
+
         <div class="col-md-9">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card shadow-sm mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
+                <div class="card-header d-flex justify-content-between align-items-center"
+                     style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
                     <h4 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Podsumowanie</h4>
-                    <span class="badge bg-primary">Ostatnia aktualizacja: {{ now()->format('d.m.Y H:i') }}</span>
+                    <span class="badge">Ostatnia aktualizacja: {{ now()->format('d.m.Y H:i') }}</span>
                 </div>
+
                 <div class="card-body">
                     <div class="alert alert-success d-flex align-items-center">
                         <i class="fas fa-check-circle me-3 fs-4"></i>
@@ -29,91 +31,87 @@
                         </div>
                     </div>
 
-                    <!-- Statystyki -->
-                    <div class="row mb-4">
+                    <div class="row mb-4" >
                         <div class="col-md-4 mb-3">
-                            <div class="card border-primary h-100">
+                            <div class="card border-white text-white h-100" style="background: rgba(255,255,255,0.05);">
                                 <div class="card-body text-center d-flex flex-column">
-                                    <h5 class="card-title"><i class="fas fa-calendar-check text-primary me-2"></i>Moje wydarzenia</h5>
+                                    <h5 class="card-title">
+                                        <i class="fas fa-home text-white me-2"></i>Moje wydarzenia
+                                    </h5>
                                     <p class="h2 my-3">5</p>
-                                    <p class="text-muted small mb-3">Utworzone wydarzenia</p>
-                                    <a href="#" class="btn btn-sm btn-outline-primary mt-auto">Zobacz</a>
+                                    <p class="text-white small mb-3">Utworzone wydarzenia</p>
+                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">Zobacz</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <div class="card border-success h-100">
+                            <div class="card border-white text-white h-100" style="background: rgba(255,255,255,0.05);">
                                 <div class="card-body text-center d-flex flex-column">
-                                    <h5 class="card-title"><i class="fas fa-tasks text-success me-2"></i>Ulubione</h5>
+                                    <h5 class="card-title">
+                                        <i class="fas fa-tasks text-white me-2"></i>Ulubione
+                                    </h5>
                                     <p class="h2 my-3">3</p>
-                                    <p class="text-muted small mb-3">Obserwowane wydarzenia</p>
-                                    <a href="#" class="btn btn-sm btn-outline-success mt-auto">Zobacz</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card border-info h-100">
-                                <div class="card-body text-center d-flex flex-column">
-                                    <h5 class="card-title"><i class="fas fa-home text-info me-2"></i>Wiadomości</h5>
-                                    <p class="h2 my-3">2</p>
-                                    <p class="text-muted small mb-3">Odebrane wiadomości</p>
-                                    <a href="#" class="btn btn-sm btn-outline-info mt-auto">Zobacz</a>
+                                    <p class="text-white small mb-3">Obserwowane wydarzenia</p>
+                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">Zobacz</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Ostatnie aktywności -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                    <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
+                        <div class="card-header d-flex justify-content-between align-items-center"
+                             style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
                             <h5 class="mb-0"><i class="fas fa-history me-2"></i>Ostatnie aktywności</h5>
-                            <a href="#" class="btn btn-sm btn-outline-secondary">Więcej</a>
+                            <a href="#" class="btn btn-sm btn-outline-light">Więcej</a>
                         </div>
                         <div class="card-body p-0">
                             <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="list-group-item d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05);">
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded-circle p-2 me-3">
-                                            <i class="fas fa-sign-in-alt text-success"></i>
+                                        <div class=" rounded-circle p-2 me-3" style="background: rgba(255,255,255,0.05);">
+                                            <i class="fas fa-sign-in-alt text-white"></i>
                                         </div>
                                         <div>
-                                            <h6 class="mb-1">Zalogowano pomyślnie</h6>
-                                            <p class="mb-0 small text-muted">System Faily</p>
+                                            <h6 class="mb-1 text-white">Zalogowano pomyślnie</h6>
+                                            <p class="mb-0 small text-white">System Faily</p>
                                         </div>
                                     </div>
-                                    <small class="text-muted">5 minut temu</small>
+                                    <small class="text-white">5 minut temu</small>
                                 </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="list-group-item d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05);">
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded-circle p-2 me-3">
-                                            <i class="fas fa-edit text-primary"></i>
+                                        <div class=" rounded-circle p-2 me-3" style="background: rgba(255,255,255,0.05);">
+                                            <i class="fas fa-edit text-white"></i>
                                         </div>
                                         <div>
-                                            <h6 class="mb-1">Zaktualizowano profil</h6>
-                                            <p class="mb-0 small text-muted">Dane osobowe</p>
+                                            <h6 class="mb-1 text-white">Zaktualizowano profil</h6>
+                                            <p class="mb-0 small text-white">Dane osobowe</p>
                                         </div>
                                     </div>
-                                    <small class="text-muted">2 dni temu</small>
+                                    <small class="text-white">2 dni temu</small>
                                 </div>
+
                             </div>
                         </div>
                     </div>
 
-                    <!-- Szybkie akcje -->
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-header bg-white">
+                    <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
+                        <div class="card-header" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
                             <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Szybkie akcje</h5>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <a href="{{ url('/add_event') }}" class="btn btn-outline-primary w-100 py-3">
+                                    <a href="{{ url('/add_event') }}" class="btn btn-outline-light w-100 py-3">
                                         <i class="fas fa-plus me-2"></i> Dodaj wydarzenie
                                     </a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

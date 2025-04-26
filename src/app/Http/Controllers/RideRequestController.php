@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RideRequest;
 use Illuminate\Http\Request;
+use App\Notifications\RideRequestStatusChanged;
 
 class RideRequestController extends Controller
 {
@@ -12,9 +13,6 @@ class RideRequestController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $ride_id = $request->query('ride_id');
@@ -37,9 +35,7 @@ class RideRequestController extends Controller
         return view('ride_requests.index', compact('requests', 'ride'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create(Request $request)
     {
         $ride_id = $request->query('ride_id');
@@ -67,9 +63,6 @@ class RideRequestController extends Controller
         return view('ride_requests.create', compact('ride'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -96,23 +89,20 @@ class RideRequestController extends Controller
         $validated['passenger_id'] = Auth::id();
         $validated['status'] = 'pending';
 
-        RideRequest::create($validated);
+        $rideRequest = RideRequest::create($validated);
+
+        $ride->driver->notify(new RideRequestStatusChanged($rideRequest, $ride, Auth::user()));
 
         return redirect()->route('events.show', $ride->event_id)
             ->with('success', 'Your application has been sent!');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
@@ -145,7 +135,27 @@ class RideRequestController extends Controller
             }
         }
 
+        $oldStatus = $rideRequest->status;
         $rideRequest->update($validated);
+
+        $rideRequest->passenger->notify(new RideRequestStatusChanged($rideRequest, $ride));
+
+        $passengerName = $rideRequest->passenger->name ?? 'Passenger';
+        $driverName = $ride->driver->name ?? 'Driver';
+        $eventTitle = $ride->event->title ?? 'Event';
+
+        activity('ride_requests')
+            ->performedOn($rideRequest)
+            ->withProperties([
+                'old_status' => $oldStatus,
+                'new_status' => $request->status,
+                'ride_id' => $ride->id,
+                'event_id' => $ride->event_id,
+                'event_title' => $eventTitle,
+                'driver_id' => $ride->driver_id,
+                'passenger_id' => $rideRequest->passenger_id
+            ])
+            ->log("The status of the travel request from {$passengerName} to {$driverName} for the event \"{$eventTitle}\" changed from \"{$oldStatus}\" to \"{$request->status}\"");
 
         return redirect()->route('ride_requests.index', ['ride_id' => $ride->id])
             ->with('success', 'Status has be updated!');
