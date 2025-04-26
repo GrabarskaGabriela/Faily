@@ -86,6 +86,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(EventAttendee::class)->where('status', 'pending');
     }
+    public function myEvents()
+    {
+        $events = auth()->user()->events()->paginate(6);
+        return view('events.my_events', compact('events'));
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

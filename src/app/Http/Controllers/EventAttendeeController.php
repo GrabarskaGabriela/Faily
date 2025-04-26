@@ -23,7 +23,7 @@ class EventAttendeeController extends Controller
         }
         $attendees = $event->attendees()->with('user')->get();
 
-        return view('events.attendees.index', compact('event', 'attendees'));
+        return view('events.attendees.partials.attendees-table', compact('event', 'attendees'));
     }
 
 

@@ -6,7 +6,7 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ride;
-
+use Carbon\Carbon;
 class EventController extends Controller
 {
 
@@ -190,7 +190,7 @@ class EventController extends Controller
         }
 
         // Pobierz wydarzenia z paginacją
-        $events = $query->latest()->paginate(10);
+        $events = $query->latest()->paginate(6);
 
         // Popularne i nadchodzące wydarzenia
         $popularEvents = Event::withCount(['acceptedAttendees as attendees_count'])
@@ -207,4 +207,22 @@ class EventController extends Controller
         // Zwracanie widoku (poza blokiem warunkowym)
         return view('events.feed', compact('events', 'popularEvents', 'upcomingEvents'));
     }
+    public function myEvents()
+    {
+        $events = auth()->user()->events()->paginate(6);
+        return view('events.my_events', compact('events'));
+    }
+    public function Events_list()
+    {
+        $events = auth()->user()->events()->paginate(6);
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        $upcomingEvents = Event::whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->orderBy('date', 'asc')
+            ->get();
+        return view('events.events_list', compact('events') , compact('upcomingEvents'));
+    }
+
 }

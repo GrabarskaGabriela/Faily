@@ -41,7 +41,7 @@ class EventController extends Controller
             $query->whereRaw('people_count > (SELECT COALESCE(SUM(attendees_count), 0) FROM event_attendees WHERE event_attendees.event_id = events.id AND status = "accepted")');
         }
 
-        if ($request->has('my_events') && $request->my_events) {
+        if ($request->has('my_events.blade.php') && $request->my_events) {
             $query->where('user_id', Auth::id());
         }
 

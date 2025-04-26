@@ -81,7 +81,13 @@
             <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
             @if($user->avatar)
                 <div class="mb-2">
-                    <img src="{{ $user->avatar }}" alt="Avatar" class="rounded-circle" width="80" height="80">
+                    @if(Auth::user()->photo_path)
+                        <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
+                             class="rounded-circle profile-pic " alt="Zdjęcie profilowe" width="80" height="80">
+                    @else
+                        <img src="{{ asset('images/includes/default_avatar.png') }}"
+                             class="rounded-circle profile-pic" alt="Zdjęcie profilowe" width="80" height="80">
+                    @endif
                 </div>
             @endif
             <input type="file" class="form-control" id="avatar" name="avatar">
@@ -99,6 +105,7 @@
                 <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
                 <option value="de" {{ $user->language == 'de' ? 'selected' : '' }}>Deutsch</option>
                 <option value="uk" {{ $user->language == 'uk' ? 'selected' : '' }}>Українська</option>
+                <option value="uk" {{ $user->language == 'jpn' ? 'selected' : '' }}>日本語</option>
 
             </select>
             @if ($errors->get('preferred_language'))
@@ -122,10 +129,10 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn btn-primary">{{ __('Zapisz') }}</button>
+            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"> {{ __('Zapisz') }}</button>
 
             @if (session('status') === 'profile-updated')
-                <span class="text-success small">{{ __('Saved.') }}</span>
+                <span class="text-success small">{{ __('Zapisany.') }}</span>
             @endif
         </div>
     </form>

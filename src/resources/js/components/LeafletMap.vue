@@ -7,8 +7,8 @@
 <script>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Naprawianie problemu z ikonami
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -21,10 +21,11 @@ L.Icon.Default.mergeOptions({
 });
 
 export default {
+    name: 'LeafletMap',
     props: {
         center: {
             type: Array,
-            default: () => [51.2101, 16.1619] // Legnica
+            default: () => [51.2101, 16.1619]
         },
         zoom: {
             type: Number,
@@ -41,85 +42,114 @@ export default {
         let resizeObserver = null;
 
         const initMap = () => {
-            // Inicjalizacja mapy
-            map = L.map(mapId.value, {
-                zoomControl: true,
-                scrollWheelZoom: true
-            }).setView(props.center, props.zoom);
+            console.log('Inicjalizacja mapy w elemencie:', mapId.value);
+            const mapElement = document.getElementById(mapId.value);
 
-            // Dodanie warstwy OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
-            }).addTo(map);
-
-            // Dodanie domyślnego markera na środku mapy
-            L.marker(props.center).addTo(map)
-                .bindPopup('Tu jesteśmy :)')
-                .openPopup();
-
-            // Dodanie dodatkowych markerów
-            if (props.markers.length > 0) {
-                props.markers.forEach(markerData => {
-                    const marker = L.marker([markerData.lat, markerData.lng]).addTo(map);
-
-                    if (markerData.popup) {
-                        marker.bindPopup(markerData.popup);
-                    }
-                });
+            if (!mapElement) {
+                console.error('Element mapy nie istnieje:', mapId.value);
+                return;
             }
 
-            // Nasłuchiwanie na zdarzenie resize okna
+            console.log('Rozmiar kontenera:', mapElement.offsetWidth, 'x', mapElement.offsetHeight);
+
+            if (mapElement.offsetWidth === 0 || mapElement.offsetHeight === 0) {
+                console.warn('Kontener mapy ma zerowy rozmiar!');
+                mapElement.style.minHeight = '400px';
+                mapElement.style.minWidth = '100%';
+            }
+
+            try
+            {
+                map = L.map(mapId.value, {
+                    zoomControl: true,
+                    scrollWheelZoom: true
+                }).setView(props.center, props.zoom);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                L.marker(props.center).addTo(map)
+                    .bindPopup('Tu jesteśmy :)')
+                    .openPopup();
+
+                if (props.markers.length > 0) {
+                    props.markers.forEach(markerData => {
+                        const marker = L.marker([markerData.lat, markerData.lng]).addTo(map);
+
+                        if (markerData.popup) {
+                            marker.bindPopup(markerData.popup);
+                        }
+                    });
+                }
+
+                console.log('Mapa zainicjalizowana pomyślnie');
+            } catch (error) {
+                console.error('Błąd podczas inicjalizacji mapy:', error);
+            }
+
+
             window.addEventListener('resize', handleResize);
 
-            // Użyj ResizeObserver dla dokładniejszego śledzenia zmian rozmiaru
+
             if (typeof ResizeObserver !== 'undefined') {
                 resizeObserver = new ResizeObserver(() => {
-                    if (map) map.invalidateSize();
+                    if (map) {
+                        console.log('ResizeObserver wykrył zmianę rozmiaru');
+                        map.invalidateSize();
+                    }
                 });
 
-                const mapContainer = document.getElementById(mapId.value);
-                if (mapContainer) {
-                    resizeObserver.observe(mapContainer);
+                if (mapElement) {
+                    resizeObserver.observe(mapElement);
                 }
             }
 
-            // Przeładuj mapę po renderowaniu komponentu
+
             setTimeout(() => {
-                if (map) map.invalidateSize();
+                if (map) {
+                    console.log('Odświeżanie rozmiaru mapy po 100ms');
+                    map.invalidateSize();
+                }
             }, 100);
         };
 
         const handleResize = () => {
             if (map) {
+                console.log('Wykryto zmianę rozmiaru okna');
                 map.invalidateSize();
             }
         };
 
         onMounted(() => {
-            initMap();
+            console.log('Komponent LeafletMap zamontowany');
 
-            // Dodatkowe opóźnione odświeżenie po pełnym renderowaniu strony
+            setTimeout(() => {
+                initMap();
+            }, 100);
+
+
             setTimeout(() => {
                 if (map) map.invalidateSize();
             }, 500);
 
-            // Dodatkowe odświeżenie po dłuższym czasie, aby upewnić się że mapa jest prawidłowo wyświetlona
+
             setTimeout(() => {
                 if (map) map.invalidateSize();
             }, 1500);
         });
 
         onUnmounted(() => {
-            // Usuń nasłuchiwanie na zdarzenie resize
+            console.log('Odmontowywanie komponentu mapy');
+
             window.removeEventListener('resize', handleResize);
 
-            // Zatrzymaj obserwatora zmian rozmiaru
             if (resizeObserver) {
                 resizeObserver.disconnect();
             }
 
-            // Zniszcz mapę
+
             if (map) {
                 map.remove();
                 map = null;
@@ -134,10 +164,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.map-container {
+    width: 100%;
+    height: 600px;
+    position: relative;
+}
+
 .map-element {
     width: 100%;
     height: 100%;
+    min-height: 400px;
     position: absolute;
     top: 0;
     left: 0;
@@ -145,7 +182,7 @@ export default {
     bottom: 0;
 }
 
-/* Style dla kontenera Leaflet */
+
 :deep(.leaflet-container) {
     width: 100%;
     height: 100%;

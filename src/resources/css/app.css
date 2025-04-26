@@ -1,8 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.css';
 
-/* Poprawiona struktura dla body, html */
-html, body {
-    background-image: url('/images/includes/tlo.jpg');
+html, body
+{
+    background-image: url('/images/includes/tlo.png');
     background-size: cover;
     background-position: center;
     min-height: 100vh;
@@ -13,14 +13,49 @@ html, body {
     overflow-x: hidden;
 }
 
-.navbar {
+.navbar
+{
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     margin-bottom: 10px;
     height: auto;
     flex-shrink: 0;
 }
+.dropdown-menu {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: none;
+}
 
-/* Naprawienie ustawień dla footera */
+.dropdown-item {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active
+{
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+
+.dropdown-divider {
+    background-color: #ffffff;
+}
+.btn-gradient {
+    background: linear-gradient(45deg, #4e4376 0%, #2b5876 100%);
+    border: none;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 footer {
     background-color: #212529;
     color: white;
@@ -30,7 +65,7 @@ footer {
     flex-shrink: 0;
 }
 
-/* Główna zawartość strony */
+
 #app {
     flex: 1 0 auto;
     display: flex;
@@ -38,7 +73,6 @@ footer {
     width: 100%;
 }
 
-/* Rozmieszczenie kontenerów */
 main {
     flex: 1;
     display: flex;
@@ -46,51 +80,10 @@ main {
     width: 100%;
 }
 
-/* Responsive dla mapy */
-@media (max-width: 768px) {
-    .map-container {
-        height: 400px; /* Stała wysokość na mniejszych ekranach */
+@media (max-width: 768px)
+{
+    .map-container
+    {
+        height: 400px;
     }
-}
-
-/*----------- Mapa -----------*/
-.map-container {
-    width: 100%;
-    height: 600px; /* Stała wysokość dla mapy */
-    position: relative;
-}
-
-.map-element {
-    width: 100%;
-    height: 100% !important;
-}
-
-.leaflet-container {
-    width: 100%;
-    height: 100% !important;
-}
-
-.map-fullwidth {
-    width: 100%;
-    height: 600px; /* Stała wysokość dla pełnej mapy */
-    position: relative;
-}
-
-.map-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.container-fluid.flex-grow-1 {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Dodatkowe style dla zawartości, która może być dłuższa niż ekran */
-.content-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
 }

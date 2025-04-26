@@ -8,6 +8,7 @@ import LeafletMap from './components/LeafletMap.vue';
 import EventMap from "./components/EventMap.vue";
 import 'leaflet/dist/leaflet.css';
 
+
 const app = createApp({});
 app.component('example-component', ExampleComponent);
 app.component('leaflet-map', LeafletMap);

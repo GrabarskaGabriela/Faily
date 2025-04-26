@@ -8,7 +8,9 @@ export default defineConfig({
         laravel({
             input: [
                 path.resolve(__dirname, 'resources/css/app.css'),
-                path.resolve(__dirname, 'resources/js/app.js')
+                path.resolve(__dirname, 'resources/css/main_map.css'),
+                path.resolve(__dirname, 'resources/js/app.js'),
+                path.resolve(__dirname, 'resources/js/navbar.js'),
             ],
             refresh: true,
         }),

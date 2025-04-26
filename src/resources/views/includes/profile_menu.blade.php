@@ -10,13 +10,7 @@
             <a href="{{ route('profile.edit') }}" class="list-group-item list-group-item-action text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                 <i class="fas fa-user-edit me-2"></i>Profil
             </a>
-            <a href="{{ route('password.confirm') }}" class="list-group-item list-group-item-action text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <i class="fas fa-key me-2"></i>Zmiana hasła
-            </a>
-            <a href="#" class="list-group-item list-group-item-action text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <i class="fas fa-bell me-2"></i>Powiadomienia
-            </a>
-            <a href="#" class="list-group-item list-group-item-action text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+            <a href="{{ route('my_events') }}" class="list-group-item list-group-item-action text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                 <i class="fas fa-home me-2"></i>Moje wydarzenia
             </a>
         </div>

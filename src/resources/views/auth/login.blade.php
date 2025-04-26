@@ -11,9 +11,9 @@
 <main class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title text-center mb-4">Logowanie</h3>
+            <div class="card shadow-sm border-black">
+                <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                    <h3 class="card-title text-center text-white mb-4">Logowanie</h3>
 
                     <!-- Session Status -->
                     @if (session('status'))
@@ -37,38 +37,38 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Adres email</label>
+                            <label for="email" class="form-label text-white">Adres email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Wprowadź email" required autofocus>
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">Hasło</label>
+                            <label for="password" class="form-label text-white">Hasło</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Wprowadź hasło" required>
                         </div>
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">Zapamiętaj mnie</label>
+                            <label class="form-check-label text-white" for="remember">Zapamiętaj mnie</label>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="btn btn-outline-primary">Przypomnij hasło</a>
+                                <a href="{{ route('password.request') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border: none;">Przypomnij hasło</a>
                             @else
                                 <a href="#" class="btn btn-outline-primary">Przypomnij hasło</a>
                             @endif
-                            <button type="submit" class="btn btn-primary">Zaloguj się</button>
+                            <button type="submit" class="btn border-black text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">Zaloguj się</button>
                         </div>
                     </form>
 
                     <hr>
 
                     <div class="d-grid gap-2 text-center">
-                        <p class="mb-3">Nie posiadasz konta?</p>
+                        <p class="mb-3 text-white">Nie posiadasz konta?</p>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary">Zarejestruj się</a>
+                            <a href="{{ route('register') }}" class="btn border-black text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">Zarejestruj się</a>
                         @else
-                            <a href="#" class="btn btn-primary">Zarejestruj się</a>
+                            <a href="#" class="btn border-black text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">Zarejestruj się</a>
                         @endif
                     </div>
                 </div>

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Event;
@@ -28,27 +27,23 @@ class TestDataSeeder extends Seeder
             'description' => 'testowe konto',
         ]);
 
-        // Zapisz ID do zmiennej
         $userId = $user->id;
 
-        // Utwórz wydarzenie
         $event = Event::create([
             'user_id' => $userId,
             'title' => 'Koncert w Krakowie',
             'description' => 'Świetny koncert rockowy w centrum Krakowa',
             'date' => now()->addDays(10),
-            'latitude' => 50.0647,  // użyj poprawnej nazwy kolumny
+            'latitude' => 50.0647,
             'longitude' => 19.9450,
             'location_name' => 'Arena Kraków',
             'has_ride_sharing' => true,
         ]);
 
-        // Sprawdź, czy wydarzenie zostało utworzone
         if (!$event->id) {
             throw new \Exception("Nie udało się utworzyć wydarzenia!");
         }
 
-        // Utwórz przejazd
         $ride = Ride::create([
             'event_id' => $event->id,
             'driver_id' => $userId,

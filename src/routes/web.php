@@ -3,29 +3,19 @@
 use App\Http\Controllers\EventAttendeeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MainMapController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-
-Route::get('/password_reminder', function () {
-    return view('password_reminder');
-});
-
-Route::get('/about', function () {
-    return view('about');
-});
-
+Route::get('/', function () {return view('welcome');})->name('welcome');
+Route::get('/about', function () {return view('about');});
 //Route::get('/test', [\App\Http\Controllers\TestController::class, 'test']);
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () { return view('welcome'); })->name('afterlogin');
+Route::middleware(['auth', 'verified'])->group(function ()
+{
+    /**Route::get('/', function () { return view('welcome'); })->name('afterlogin');*/
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -48,9 +38,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/events/{event}/attendees/{attendee}', [EventAttendeeController::class, 'update'])->name('events.attendees.update');
     Route::delete('/events/{event}/attendees/{attendee}', [EventAttendeeController::class, 'destroy'])->name('events.attendees.destroy');
 
-    Route::get('/mapa', function () {
-        return view('mapa');
-    });
+    Route::get('/my_events', [EventController::class, 'myEvents'])->name('my_events');
+    Route::get('/event_list', [EventController::class, 'Events_list'])->name('event_list');
+
+    Route::delete('/photos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
+
+    Route::get('/add_event', function () {return view('events.create');});
+    Route::get('/account', function () {return view('account');});
+    Route::get('/settings', function () {return view('settings');});
+    Route::get('/event', function () {return view('event');});
+    Route::get('/map', [MainMapController::class, 'showMap']);
+    Route::get('/help', function () {return view('help');});
 });
 
 

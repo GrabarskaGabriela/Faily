@@ -14,7 +14,7 @@
             <div class="container">
                 <h1 class="display-3 fw-bold mb-3">Poznawaj ludzi. Twórz wydarzenia.</h1>
                 <p class="lead mb-4">Spotkaj się z innymi na wspólnych wyjściach – od kina po rower!</p>
-                <a href="{{ route('login') }}" class="btn btn-outline-light bg-dark btn-lg px-5 py-2">Wchodzę!</a>
+                <a href="{{ url('/about') }}" class="btn text-white btn-outline-dark btn-lg px-5 py-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">Poznaj twórców</a>
             </div>
         </section>
 
