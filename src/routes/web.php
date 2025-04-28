@@ -11,11 +11,9 @@ use App\Http\Controllers\RideRequestController;
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');});
-//Route::get('/test', [\App\Http\Controllers\TestController::class, 'test']);
 
 Route::middleware(['auth', 'verified'])->group(function ()
 {
-    /**Route::get('/', function () { return view('welcome'); })->name('afterlogin');*/
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -39,7 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::delete('/events/{event}/attendees/{attendee}', [EventAttendeeController::class, 'destroy'])->name('events.attendees.destroy');
 
     Route::get('/my_events', [EventController::class, 'myEvents'])->name('my_events');
-    Route::get('/event_list', [EventController::class, 'Events_list'])->name('event_list');
 
     Route::delete('/photos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
 

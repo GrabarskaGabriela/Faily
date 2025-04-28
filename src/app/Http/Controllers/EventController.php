@@ -212,17 +212,5 @@ class EventController extends Controller
         $events = auth()->user()->events()->paginate(6);
         return view('events.my_events', compact('events'));
     }
-    public function Events_list()
-    {
-        $events = auth()->user()->events()->paginate(6);
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
-
-        $upcomingEvents = Event::whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
-            ->orderBy('date', 'asc')
-            ->get();
-        return view('events.events_list', compact('events') , compact('upcomingEvents'));
-    }
 
 }

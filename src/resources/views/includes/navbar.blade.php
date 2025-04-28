@@ -43,7 +43,7 @@
                             <a class="btn btn-gradient" href="{{ url('/map') }}">Mapa eventów</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-gradient" href="{{ url('/event_list') }}">Posty</a>
+                            <a class="btn btn-gradient" href="{{ url('/feed') }}">Posty</a>
                         </li>
                         <li class="nav-item mx-2">
                             <a class="btn btn-gradient" href="{{ url('/about') }}">Twórcy</a>
