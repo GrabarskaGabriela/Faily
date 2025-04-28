@@ -327,10 +327,6 @@
                             @endif
                         @endif
                     @else
-                        <div class="alert text-white" style="background: linear-gradient(135deg, #007ad4 0%, #00a0ff 100%);">
-                            <p>Zaloguj się, aby zapisać się na to wydarzenie lub zobaczyć więcej opcji.</p>
-                            <a href="{{ route('login') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border: none;">Zaloguj się</a>
-                        </div>
                     @endauth
                 </div>
             </div>
