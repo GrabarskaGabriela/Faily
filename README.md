@@ -118,3 +118,6 @@ docker-compose down -v
 - `src/resources/css/` - pliki CSS i SCSS
 
 Ta instrukcja zawiera wszystkie niezbędne kroki do uruchomienia i pracy z projektem. W razie dodatkowych pytań, warto zajrzeć do oficjalnej dokumentacji Laravel i Vue.js.
+
+
+jak wyświetlanie zdjęci nie działa trzeba wykonać `php artisan storage:link`

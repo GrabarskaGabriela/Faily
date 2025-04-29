@@ -14,7 +14,7 @@ use Faker\Factory as Faker;
 class TestDataSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * To jest seeder udający factory XD
      */
     public function run(): void
     {

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Services\Interfaces\UserServiceInterface;
 
 class UserSettingsController extends Controller
 {
-    public function __construct()
+    protected $userService;
+    public function __construct(UserServiceInterface $userService)
     {
         $this->middleware('auth');
+        $this->userService = $userService;
     }
 
     public function edit()
@@ -24,8 +24,6 @@ class UserSettingsController extends Controller
 
     public function update(Request $request)
     {
-        $user = Auth::user();
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -33,7 +31,7 @@ class UserSettingsController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($user->id),
+                Rule::unique('users')->ignore(Auth::id()),
             ],
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'preferred_language' => 'required|in:pl,en',
@@ -42,40 +40,21 @@ class UserSettingsController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        if ($request->filled('current_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Aktualne hasło jest niepoprawne.']);
+        try {
+            if ($request->filled('current_password')) {
+                $this->userService->updatePassword([
+                    'current_password' => $request->current_password,
+                    'password' => $request->password
+                ], Auth::id());
             }
 
-            $user->password = Hash::make($validated['password']);
-            $user->password_updated_at = now();
+            $this->userService->updateProfile($request, Auth::id());
+
+            return redirect()->route('user.settings.edit')
+                ->with('success', 'Settings have been updated!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        if ($request->hasFile('photo')) {
-            if ($user->photo_path) {
-                Storage::delete($user->photo_path);
-            }
-
-            $photoPath = $request->file('photo')->store('profile-photos', 'public');
-            $user->photo_path = $photoPath;
-            $user->photo_updated_at = now();
-        }
-
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-
-        if (isset($validated['preferred_language'])) {
-            $user->language = $validated['preferred_language'];
-        }
-
-        if (isset($validated['theme'])) {
-            $user->theme = $validated['theme'];
-        }
-
-        $user->save();
-
-        return redirect()->route('user.settings.edit')
-            ->with('success', 'Ustawienia zostały zaktualizowane!');
     }
 
     public function editPhoto()
@@ -90,24 +69,13 @@ class UserSettingsController extends Controller
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $user = Auth::user();
-
-        if ($request->hasFile('photo')) {
-            if ($user->photo_path) {
-                Storage::disk('public')->delete($user->photo_path);
-            }
-
-            $path = $request->file('photo')->store('profile-photos', 'public');
-
-            $user->photo_path = $path;
-            $user->photo_updated_at = now();
-            $user->save();
-
+        try {
+            $this->userService->updatePhoto($request, Auth::id());
             return redirect()->route('user.settings.edit')
-                ->with('succes', 'Photo updated');
+                ->with('success', 'Photo updated');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        return back()->with('error', 'Photo not updated');
     }
 
     public function showDeleteForm()
@@ -121,21 +89,15 @@ class UserSettingsController extends Controller
             'password' => 'required',
         ]);
 
-        $user = Auth::user();
+        try {
+            $this->userService->deleteAccount($request->password, Auth::id());
 
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['password' => 'Niepoprawne hasło.']);
+            Auth::logout();
+
+            return redirect()->route('welcome')
+                ->with('success', 'Your account has been deleted!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['password' => $e->getMessage()]);
         }
-
-        if ($user->photo_path) {
-            Storage::delete($user->photo_path);
-        }
-
-        Auth::logout();
-
-        $user->delete();
-
-        return redirect()->route('welcome')
-            ->with('success', 'Twoje konto zostało usunięte!');
     }
 }

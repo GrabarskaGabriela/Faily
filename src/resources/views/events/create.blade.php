@@ -156,7 +156,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="avalible_seats" class="form-label">Dostępna liczba miejsc</label>
-                                    <input type="number" class="form-control" id="avalible_seats" name="avalible_seats" min="1" value="1">
+                                    <input type="number" class="form-control" id="available_seats" name="available_seats" min="1" value="1">
                                 </div>
                             </div>
 
@@ -231,6 +231,8 @@
         }
     }
 
+    // Kompleksowe poprawki do obsługi mapy i formularza
+
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM w pełni załadowany, inicjalizacja map...');
 
@@ -238,7 +240,78 @@
             initMainMap();
             initRideSharingForm();
         }, 300);
+
+        // Dodanie walidacji formularza
+        const eventForm = document.getElementById('event-form');
+        if (eventForm) {
+            eventForm.addEventListener('submit', function(e) {
+                const rideShareCheckbox = document.getElementById('has_ride_sharing');
+
+                // Sprawdź, czy opcja przejazdu jest włączona
+                if (rideShareCheckbox && rideShareCheckbox.checked) {
+                    // Sprawdź wymagane pola dla współdzielenia przejazdu
+                    const vehicleDesc = document.getElementById('vehicle_description').value;
+                    const availSeats = document.getElementById('available_seats').value;
+                    const meetingLocationName = document.getElementById('meeting_location_name').value;
+                    const meetingLatitude = document.getElementById('meeting_latitude').value;
+                    const meetingLongitude = document.getElementById('meeting_longitude').value;
+
+                    if (!vehicleDesc || !availSeats || !meetingLocationName) {
+                        e.preventDefault();
+                        alert('Wypełnij wszystkie wymagane pola informacji o przejeździe');
+                        return false;
+                    }
+
+                    // Sprawdź współrzędne miejsca spotkania
+                    if (!meetingLatitude || !meetingLongitude ||
+                        (meetingLatitude === '52.069' && meetingLongitude === '19.480')) {
+                        e.preventDefault();
+                        alert('Wybierz lokalizację miejsca spotkania na mapie');
+                        return false;
+                    }
+
+                    console.log('Dane przejazdu przed wysłaniem:', {
+                        vehicle_description: vehicleDesc,
+                        available_seats: availSeats,
+                        meeting_location_name: meetingLocationName,
+                        meeting_latitude: meetingLatitude,
+                        meeting_longitude: meetingLongitude
+                    });
+                }
+
+                // Logowanie danych formularza przed wysłaniem
+                console.log('Formularz przed wysłaniem:', {
+                    title: document.getElementById('title').value,
+                    date: document.getElementById('date').value,
+                    latitude: document.getElementById('latitude').value,
+                    longitude: document.getElementById('longitude').value,
+                    has_ride_sharing: rideShareCheckbox ? rideShareCheckbox.checked : false
+                });
+            });
+        }
     });
+
+    function updateFileList() {
+        const input = document.getElementById('eventPhotos');
+        const list = document.getElementById('fileList');
+        list.innerHTML = '';
+
+        if (input.files.length > 0) {
+            const fileCount = document.createElement('div');
+            fileCount.textContent = `Wybrano plików: ${input.files.length}`;
+            list.appendChild(fileCount);
+
+            const fileNames = document.createElement('ul');
+            fileNames.className = 'mt-1 ps-3';
+
+            for (let i = 0; i < input.files.length; i++) {
+                const item = document.createElement('li');
+                item.textContent = input.files[i].name;
+                fileNames.appendChild(item);
+            }
+            list.appendChild(fileNames);
+        }
+    }
 
     function initMainMap() {
         console.log('Inicjalizacja głównej mapy Leaflet...');
@@ -265,6 +338,7 @@
         try {
             if (mapContainer._leaflet_id) {
                 mapContainer._leaflet = null;
+                mapContainer.innerHTML = '';
             }
 
             const map = L.map(mapContainer).setView([initialLat, initialLng], 6);
@@ -273,7 +347,6 @@
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
-
 
             const marker = L.marker([initialLat, initialLng], {
                 draggable: true
@@ -300,16 +373,14 @@
                 updateCoordinates(position.lat, position.lng);
             });
 
-            map.on('click', function(e)
-            {
+            map.on('click', function(e) {
                 marker.setLatLng(e.latlng);
                 updateCoordinates(e.latlng.lat, e.latlng.lng);
             });
 
             let suggestionElements = null;
 
-            function showSuggestions(items)
-            {
+            function showSuggestions(items) {
                 if (suggestionElements) {
                     suggestionElements.remove();
                 }
@@ -317,7 +388,6 @@
                 suggestionElements = document.createElement('div');
                 suggestionElements.className = 'address-suggestions';
                 suggestionElements.style.display = 'block';
-
 
                 items.forEach((item) => {
                     const suggestion = document.createElement('div');
@@ -346,7 +416,6 @@
                 }
             }
 
-
             searchInput.addEventListener('input', function() {
                 const query = this.value.trim();
 
@@ -368,7 +437,6 @@
                     })
                     .catch(error => console.error('Błąd pobierania sugestii:', error));
             });
-
 
             function searchLocation() {
                 const query = searchInput.value;
@@ -399,7 +467,6 @@
                     });
             }
 
-            // Nasłuchiwanie zdarzeń
             searchButton.addEventListener('click', searchLocation);
             searchInput.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
@@ -410,10 +477,10 @@
 
             setTimeout(() => {
                 map.invalidateSize();
-                console.log('Mapa przerysowana');
+                console.log('Główna mapa przerysowana');
             }, 500);
         } catch (error) {
-            console.error('Błąd podczas inicjalizacji mapy:', error);
+            console.error('Błąd podczas inicjalizacji głównej mapy:', error);
         }
     }
 
@@ -447,26 +514,27 @@
             return;
         }
 
+        // Czyścimy kontener przed ponowną inicjalizacją
         if (mapContainer._leaflet_id) {
-            console.log('Mapa miejsca spotkania już istnieje, pomijam inicjalizację.');
-            return;
+            mapContainer._leaflet = null;
+            mapContainer.innerHTML = '';
         }
 
-        mapContainer.style.height = '200px';
+        mapContainer.style.height = '300px';
 
-        const latitudeInput = document.getElementById('meeting_latitude');
-        const longitudeInput = document.getElementById('meeting_longitude');
-        const locationNameInput = document.getElementById('meeting_location_name');
+        // Poprawione zmienne dla współrzędnych miejsca spotkania - używamy meeting_latitude i meeting_longitude
+        const meetingLatitudeInput = document.getElementById('meeting_latitude');
+        const meetingLongitudeInput = document.getElementById('meeting_longitude');
+        const meetingLocationNameInput = document.getElementById('meeting_location_name');
         const searchInput = document.getElementById('search-meeting-address');
         const searchButton = document.getElementById('search-meeting-button');
         const coordinatesText = document.getElementById('meeting-coordinates-text');
 
-
-        const initialLat = parseFloat(latitudeInput.value) || 52.069;
-        const initialLng = parseFloat(longitudeInput.value) || 19.480;
+        // Pobierz początkowe współrzędne
+        const initialLat = parseFloat(meetingLatitudeInput.value) || 52.069;
+        const initialLng = parseFloat(meetingLongitudeInput.value) || 19.480;
 
         try {
-
             const meetingMap = L.map(mapContainer).setView([initialLat, initialLng], 6);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -478,18 +546,21 @@
                 draggable: true
             }).addTo(meetingMap);
 
-
+            // Poprawiona funkcja aktualizująca współrzędne miejsca spotkania
             function updateMeetingCoordinates(lat, lng) {
-                latitudeInput.value = lat;
-                longitudeInput.value = lng;
-                coordinatesText.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                // Aktualizacja właściwych pól
+                meetingLatitudeInput.value = lat;
+                meetingLongitudeInput.value = lng;
+                if (coordinatesText) {
+                    coordinatesText.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                }
 
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data && data.display_name) {
+                        if (data && data.display_name && meetingLocationNameInput) {
                             const locationName = data.display_name.split(',').slice(0, 3).join(', ');
-                            locationNameInput.value = locationName;
+                            meetingLocationNameInput.value = locationName;
                         }
                     })
                     .catch(error => console.error('Błąd geokodowania miejsca spotkania:', error));
@@ -504,6 +575,70 @@
                 marker.setLatLng(e.latlng);
                 updateMeetingCoordinates(e.latlng.lat, e.latlng.lng);
             });
+
+            // Dodanie obsługi wyszukiwania dla miejsca spotkania
+            let meetingSuggestionElements = null;
+
+            function showMeetingSuggestions(items) {
+                if (meetingSuggestionElements) {
+                    meetingSuggestionElements.remove();
+                }
+
+                meetingSuggestionElements = document.createElement('div');
+                meetingSuggestionElements.className = 'address-suggestions';
+                meetingSuggestionElements.style.display = 'block';
+
+                items.forEach((item) => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'address-suggestion';
+                    suggestion.textContent = item.display_name;
+                    suggestion.addEventListener('click', () => selectMeetingSuggestion(item));
+                    meetingSuggestionElements.appendChild(suggestion);
+                });
+
+                const searchControl = searchInput.parentNode;
+                searchControl.style.position = 'relative';
+                searchControl.appendChild(meetingSuggestionElements);
+            }
+
+            function selectMeetingSuggestion(item) {
+                const lat = parseFloat(item.lat);
+                const lng = parseFloat(item.lon);
+
+                searchInput.value = item.display_name;
+                meetingMap.setView([lat, lng], 16);
+                marker.setLatLng([lat, lng]);
+                updateMeetingCoordinates(lat, lng);
+
+                if (meetingSuggestionElements) {
+                    meetingSuggestionElements.style.display = 'none';
+                }
+            }
+
+            // Dodanie obsługi wyszukiwania dla miejsca spotkania
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+
+                    if (query.length < 3) {
+                        if (meetingSuggestionElements) {
+                            meetingSuggestionElements.style.display = 'none';
+                        }
+                        return;
+                    }
+
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                showMeetingSuggestions(data);
+                            } else if (meetingSuggestionElements) {
+                                meetingSuggestionElements.style.display = 'none';
+                            }
+                        })
+                        .catch(error => console.error('Błąd pobierania sugestii miejsca spotkania:', error));
+                });
+            }
 
             function searchMeetingLocation() {
                 const query = searchInput.value;
@@ -520,6 +655,10 @@
                             meetingMap.setView([lat, lng], 16);
                             marker.setLatLng([lat, lng]);
                             updateMeetingCoordinates(lat, lng);
+
+                            if (meetingSuggestionElements) {
+                                meetingSuggestionElements.style.display = 'none';
+                            }
                         } else {
                             alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
                         }
@@ -552,11 +691,13 @@
         }
     }
 
+    // Zamykanie sugestii po kliknięciu poza nimi
     document.addEventListener('click', function(e) {
         const suggestions = document.querySelector('.address-suggestions');
         const searchInput = document.getElementById('search-address');
+        const meetingSearchInput = document.getElementById('search-meeting-address');
 
-        if (suggestions && e.target !== searchInput && !suggestions.contains(e.target)) {
+        if (suggestions && e.target !== searchInput && e.target !== meetingSearchInput && !suggestions.contains(e.target)) {
             suggestions.style.display = 'none';
         }
     });

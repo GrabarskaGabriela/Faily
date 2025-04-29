@@ -3,14 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\RideRequest;
+use App\Models\Ride;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Services\Interfaces\RideRequestServiceInterface;
+use App\Services\Interfaces\RideServiceInterface;
 use App\Notifications\RideRequestStatusChanged;
 
 class RideRequestController extends Controller
 {
-    public function __construct()
-    {
+    protected $rideRequestService;
+    protected $rideService;
+
+    public function __construct(
+        RideRequestServiceInterface $rideRequestService,
+        RideServiceInterface $rideService
+    ) {
         $this->middleware('auth');
+        $this->rideRequestService = $rideRequestService;
+        $this->rideService = $rideService;
     }
 
     public function index(Request $request)
@@ -21,20 +32,18 @@ class RideRequestController extends Controller
             return redirect()->route('events.index');
         }
 
-        $ride = Ride::findOrFail($ride_id);
-
-        if (Auth::id() !== $ride->driver_id) {
+        try {
+            $data = $this->rideRequestService->getRideRequestsForDriver($ride_id, Auth::id());
+            return view('ride_requests.index', [
+                'requests' => $data['requests'],
+                'ride' => $data['ride']
+            ]);
+        } catch (\Exception $e) {
+            $ride = $this->rideService->findById($ride_id);
             return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'You do not have permission to view these submissions.');
+                ->with('error', $e->getMessage());
         }
-
-        $requests = RideRequest::where('ride_id', $ride_id)
-            ->with('passenger')
-            ->get();
-
-        return view('ride_requests.index', compact('requests', 'ride'));
     }
-
 
     public function create(Request $request)
     {
@@ -44,20 +53,13 @@ class RideRequestController extends Controller
             return redirect()->route('events.index');
         }
 
-        $ride = Ride::with('driver', 'event')->findOrFail($ride_id);
+        $ride = $this->rideService->getRideWithRelations($ride_id);
 
-        if (Auth::id() === $ride->driver_id) {
+        $result = $this->rideRequestService->canUserRequestRide($ride, Auth::id());
+
+        if (!$result['canRequest']) {
             return redirect()->route('events.show', $ride->event_id)
-                ->with('error', "You can't send an application to your own ride.");
-        }
-
-        $existingRequest = RideRequest::where('ride_id', $ride_id)
-            ->where('passenger_id', Auth::id())
-            ->first();
-
-        if ($existingRequest) {
-            return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'You have already sent an application for this passage.');
+                ->with('error', $result['message']);
         }
 
         return view('ride_requests.create', compact('ride'));
@@ -70,112 +72,49 @@ class RideRequestController extends Controller
             'message' => 'nullable|string',
         ]);
 
-        $ride = Ride::findOrFail($request->ride_id);
+        try {
+            $rideRequest = $this->rideRequestService->createRequest($validated, Auth::id());
+            $ride = $this->rideService->findById($rideRequest->ride_id);
 
-        if (Auth::id() === $ride->driver_id) {
             return redirect()->route('events.show', $ride->event_id)
-                ->with('error', "You can't send an application to your own ride.");
-        }
-
-        $existingRequests = RideRequest::where('ride_id', $ride->id)
-            ->where('status', 'accepted')
-            ->count();
-
-        if ($existingRequests >= $ride->available_seats) {
+                ->with('success', 'Your application has been sent!');
+        } catch (\Exception $e) {
+            $ride = $this->rideService->findById($validated['ride_id']);
             return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'Brak dostępnych miejsc w tym przejeździe.');
+                ->with('error', $e->getMessage());
         }
-
-        $validated['passenger_id'] = Auth::id();
-        $validated['status'] = 'pending';
-
-        $rideRequest = RideRequest::create($validated);
-
-        $ride->driver->notify(new RideRequestStatusChanged($rideRequest, $ride, Auth::user()));
-
-        return redirect()->route('events.show', $ride->event_id)
-            ->with('success', 'Your application has been sent!');
     }
 
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, RideRequest $rideRequest)
     {
-        $ride = Ride::findOrFail($rideRequest->ride_id);
-
-        if (Auth::id() !== $ride->driver_id) {
-            return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'You do not have the authority to manage this request.');
-        }
-
         $validated = $request->validate([
             'status' => 'required|in:accepted,rejected',
         ]);
 
-        if ($request->status === 'accepted') {
-            $acceptedCount = RideRequest::where('ride_id', $ride->id)
-                ->where('status', 'accepted')
-                ->count();
+        try {
+            $this->rideRequestService->updateRequestStatus($rideRequest, $validated['status'], Auth::id());
 
-            if ($acceptedCount >= $ride->available_seats) {
-                return redirect()->route('ride_requests.index', ['ride_id' => $ride->id])
-                    ->with('error', 'No seats available on this ride.');
-            }
+            return redirect()->route('ride_requests.index', ['ride_id' => $rideRequest->ride_id])
+                ->with('success', 'Status has be updated!');
+        } catch (\Exception $e) {
+            $ride = $this->rideService->findById($rideRequest->ride_id);
+            return redirect()->route('ride_requests.index', ['ride_id' => $rideRequest->ride_id])
+                ->with('error', $e->getMessage());
         }
-
-        $oldStatus = $rideRequest->status;
-        $rideRequest->update($validated);
-
-        $rideRequest->passenger->notify(new RideRequestStatusChanged($rideRequest, $ride));
-
-        $passengerName = $rideRequest->passenger->name ?? 'Passenger';
-        $driverName = $ride->driver->name ?? 'Driver';
-        $eventTitle = $ride->event->title ?? 'Event';
-
-        activity('ride_requests')
-            ->performedOn($rideRequest)
-            ->withProperties([
-                'old_status' => $oldStatus,
-                'new_status' => $request->status,
-                'ride_id' => $ride->id,
-                'event_id' => $ride->event_id,
-                'event_title' => $eventTitle,
-                'driver_id' => $ride->driver_id,
-                'passenger_id' => $rideRequest->passenger_id
-            ])
-            ->log("The status of the travel request from {$passengerName} to {$driverName} for the event \"{$eventTitle}\" changed from \"{$oldStatus}\" to \"{$request->status}\"");
-
-        return redirect()->route('ride_requests.index', ['ride_id' => $ride->id])
-            ->with('success', 'Status has be updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(RideRequest $rideRequest)
     {
-        if (Auth::id() !== $rideRequest->passenger_id) {
-            return redirect()->route('events.index')
-                ->with('error', 'You do not have the authority to cancel this request.');
+        try {
+            $ride = $this->rideService->findById($rideRequest->ride_id);
+            $this->rideRequestService->cancelRequest($rideRequest, Auth::id());
+
+            return redirect()->route('events.show', $ride->event_id)
+                ->with('success', 'The application has been canceled!');
+        } catch (\Exception $e) {
+            $ride = $this->rideService->findById($rideRequest->ride_id);
+            return redirect()->route('events.show', $ride->event_id)
+                ->with('error', $e->getMessage());
         }
-
-        $event_id = Ride::findOrFail($rideRequest->ride_id)->event_id;
-        $rideRequest->delete();
-
-        return redirect()->route('events.show', $event_id)
-            ->with('success', 'The application has been canceled!');
     }
-
 }
