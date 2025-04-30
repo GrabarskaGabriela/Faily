@@ -20,7 +20,20 @@ docker-compose up
 ```
 
 ## Krok 3: Konfiguracja projektu
-Po uruchomieniu kontenerów należy otworzyć terminal i wykonać poniższe polecenia:
+Po uruchomieniu kontenerów należy otworzyć terminal i wykonać poniższe polecenia w celu uruchominia specjalnie przygotowane skryptu ułatwiającego przygotowanie środowiska:
+
+```shell
+# Wejdź do kontenera aplikacji
+docker exec -it faily-app-dev bash
+
+# Nadanie skryptowi uprawnień do uruchamiania
+chmod +x script.sh
+
+# Uruchomienie skryptu
+./script.sh 
+```
+
+Można też wykonać polecenia ze skryptu ręcznie:
 
 ```bash
 # Wejdź do kontenera aplikacji
