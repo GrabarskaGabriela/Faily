@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\EventAttendee;
 use App\Models\Event;
 use App\Repositories\Interfaces\EventAttendeeRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class EventAttendeeRepository extends BaseRepository implements EventAttendeeRepositoryInterface
@@ -44,5 +45,27 @@ class EventAttendeeRepository extends BaseRepository implements EventAttendeeRep
     {
        $event = Event::findOrFail($eventId);
        return $event->user_id;
+    }
+
+    public function getUserAttendees($userId)
+    {
+        $now = Carbon::now();
+        $oneDayAgo = $now->subDay();
+
+        return $this->model
+            ->where('user_id', $userId)
+            ->where(function($query) use ($oneDayAgo) {
+                $query->where('status', '!=', 'rejected')
+                    ->orWhere(function($q) use ($oneDayAgo) {
+                        $q->where('status', 'rejected')
+                            ->where('updated_at', '>=', $oneDayAgo);
+                    });
+            })
+            ->with(['event.photos', 'event.user'])
+            ->whereHas('event', function($query) use ($now) {
+                $query->where('date', '>=', $now->toDateString());
+            })
+            ->latest()
+            ->get();
     }
 }

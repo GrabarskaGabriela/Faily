@@ -12,4 +12,6 @@ interface EventAttendeeRepositoryInterface extends RepositoryInterface
     public function createAttendeeRequest(array $data);
     public function updateStatus($attendeeId, $status);
     public function getEventOwner($eventId);
+
+    public function getUserAttendees($userId);
 }

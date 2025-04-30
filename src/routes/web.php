@@ -7,6 +7,7 @@ use App\Http\Controllers\MainMapController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
+use App\Http\Controllers\UserAttendancesController;
 
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
@@ -46,6 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::get('/event', function () {return view('event');});
     Route::get('/map', [MainMapController::class, 'showMap']);
     Route::get('/help', function () {return view('help');});
+
+    Route::get('/my-attendances', [UserAttendancesController::class, 'index'])->name('user.attendances');
 });
 
 

@@ -127,4 +127,9 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
 
         return $this->repository->delete($attendee->id);
     }
+
+    public function getUserAttendances($userId)
+    {
+        return $this->repository->getUserAttendees($userId);
+    }
 }

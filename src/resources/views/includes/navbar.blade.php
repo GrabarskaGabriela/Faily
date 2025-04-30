@@ -60,6 +60,7 @@
                             Konto
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                            <li><a class="dropdown-item text-white" href="{{ url('/my-attendances') }}">Moje uczestnictwo</a></li>
                             <li><a class="dropdown-item text-white" href="{{ url('/account') }}">Przejdź do konta</a></li>
                             <li><a class="dropdown-item text-white" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
                             <li><a class="dropdown-item text-white" href="{{ url('/help') }}">Pomoc</a></li>
