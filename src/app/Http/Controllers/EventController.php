@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index()
     {
         $events = $this->eventService->getEventsForListing();
-        return view('events.event_list', compact('events'));
+        return view('events.my_events', compact('events'));
     }
 
     public function create(Request $request)
