@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - Mapa</title>
+    <title>{{ __('messages.title.map') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -45,7 +45,7 @@
         .map-controls, .map-info, .search-container {
             position: absolute;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.8);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 80%);
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -54,29 +54,37 @@
         .map-info { bottom: 30px; left: 10px; max-width: 300px; }
         .search-container { top: 10px; left: 60px; width: 300px; }
         .search-results {
-            background-color: white;
-            border: 1px solid #ccc;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 80%);
+            border: 1px solid #000000;
             max-height: 200px;
+            color: white;
             overflow-y: auto;
             display: none;
         }
         .search-result-item {
             padding: 8px 12px;
             cursor: pointer;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ffffff;
         }
         .search-result-item:hover {
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e2d51 80%);
         }
+        .leaflet-control-zoom a {
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e2d51 80%);
+            color: white;
+            border: black;
+        }
+
         @media (max-width: 768px) {
             .search-container { width: calc(100% - 120px); left: 10px; }
             .map-info { bottom: 10px; max-width: calc(100% - 20px); }
         }
     </style>
+    @include('includes.navbar')
 </head>
 <body>
+
 <div class="page-container" id="app">
-    @include('includes.navbar')
 
     <main>
         <div class="map-container">
@@ -84,23 +92,23 @@
 
             <div class="search-container">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="search-input" placeholder="Wyszukaj miejsce...">
-                    <button class="btn btn-outline-secondary" type="button" id="search-button">
+                    <input type="text" class="form-control" id="search-input" placeholder="{{ __('messages.map.searchPlace') }}">
+                    <button class="btn btn-outline-light" type="button" id="search-button">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
                 <div class="search-results" id="search-results"></div>
             </div>
 
-            <div class="map-controls">
-                <button class="btn btn-sm btn-outline-primary mb-1" id="locate-me">
-                    <i class="bi bi-geo-alt"></i> Moja lokalizacja
+            <div class="map-controls border-dark" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <button class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);" id="locate-me">
+                    <i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}
                 </button>
             </div>
 
-            <div class="map-info" id="map-info">
-                <h5>Informacje o mapie</h5>
-                <p>Kliknij na mapę, aby poznać współrzędne wybranego miejsca.</p>
+            <div class="map-info text-white" id="map-info"  style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <h5>{{ __('messages.map.mapInfo') }}</h5>
+                <p>{{ __('messages.map.clickMapInstruction') }}</p>
                 <div id="coordinates"></div>
             </div>
         </div>
@@ -138,8 +146,8 @@
 
         function updateCoordinatesInfo(lat, lng) {
             document.getElementById('coordinates').innerHTML = `
-                <strong>Szerokość:</strong> ${lat.toFixed(6)}<br>
-                <strong>Długość:</strong> ${lng.toFixed(6)}
+                <strong>{{ __('messages.map.latitude')}}</strong> ${lat.toFixed(6)}<br>
+                <strong>{{__('messages.map.longitude')}}</strong> ${lng.toFixed(6)}
             `;
         }
 
@@ -178,26 +186,26 @@
         locateButton.addEventListener('click', () => {
             if ('geolocation' in navigator) {
                 locateButton.disabled = true;
-                locateButton.innerHTML = 'Lokalizowanie...';
+                locateButton.innerHTML = '{{ __('messages.map.locating') }}';
                 navigator.geolocation.getCurrentPosition(
                     pos => {
                         const lat = pos.coords.latitude;
                         const lng = pos.coords.longitude;
                         map.setView([lat, lng], 16);
-                        addMarker(lat, lng, 'Twoja lokalizacja');
+                        addMarker(lat, lng, '{{ __('messages.map.yourLocation') }}');
                         updateCoordinatesInfo(lat, lng);
                         reverseGeocode(lat, lng);
                         locateButton.disabled = false;
-                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> Moja lokalizacja';
+                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}';
                     },
                     err => {
-                        alert('Nie udało się uzyskać lokalizacji.');
+                        alert('{{ __('messages.map.alertGeolocalization') }}');
                         locateButton.disabled = false;
-                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> Moja lokalizacja';
+                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}';
                     }
                 );
             } else {
-                alert('Twoja przeglądarka nie obsługuje geolokalizacji.');
+                alert('{{ __('alertBrowserGeolocalization') }}');
             }
         });
 
@@ -228,7 +236,7 @@
                         });
                         searchResults.style.display = 'block';
                     } else {
-                        searchResults.innerHTML = '<div class="search-result-item">Brak wyników</div>';
+                        searchResults.innerHTML = '<div class="search-result-item">{{ __('messages.map.noResults') }}</div>';
                         searchResults.style.display = 'block';
                     }
                 });

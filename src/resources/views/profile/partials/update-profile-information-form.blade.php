@@ -1,10 +1,10 @@
 <section class="mb-5">
     <header class="mb-4">
         <h2 class="h4 text-white">
-            {{ __('Informacje profilowe') }}
+            {{ __('messages.profilepartialsupdateprofile.profileInfo') }}
         </h2>
         <p class="text-white small">
-            {{ __("Zaktualizuj informacje profilowe oraz adres e-mail swojego konta.") }}
+            {{ __('messages.profilepartialsupdateprofile.profileUpdateMessage') }}
         </p>
     </header>
 
@@ -17,7 +17,7 @@
         @method('patch')
 
         <div class="mb-3 text-white">
-            <label for="name" class="form-label">{{ __('Nazwa użytkownika') }}</label>
+            <label for="name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.username') }}</label>
             <input type="text" class="form-control" id="name" name="name"
                    value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
             @if ($errors->get('name'))
@@ -28,7 +28,7 @@
         </div>
 
         <div class="mb-3 text-white">
-            <label for="first_name" class="form-label">{{ __('Imię') }}</label>
+            <label for="first_name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.firstName') }}</label>
             <input type="text" class="form-control" id="first_name" name="first_name"
                    value="{{ old('first_name', $user->first_name) }}" required autofocus autocomplete="first_name">
             @if ($errors->get('first_name'))
@@ -39,7 +39,7 @@
         </div>
 
         <div class="mb-3 text-white">
-            <label for="last_name" class="form-label">{{ __('Nazwisko') }}</label>
+            <label for="last_name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.lastName') }}</label>
             <input type="text" class="form-control" id="last_name" name="last_name"
                    value="{{ old('last_name', $user->last_name) }}" required autofocus autocomplete="last_name">
             @if ($errors->get('last_name'))
@@ -51,7 +51,7 @@
 
 
         <div class="mb-3 text-white">
-            <label for="email" class="form-label">{{ __('Email') }}</label>
+            <label for="email" class="form-label"> {{ __('messages.profilepartialsupdateprofile.email') }}</label>
             <input type="email" class="form-control" id="email" name="email"
                    value="{{ old('email', $user->email) }}" required autocomplete="username">
             @if ($errors->get('email'))
@@ -62,15 +62,15 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div class="mt-2 small text-dark">
-                    {{ __('Twój adres e-mail nie został zweryfikowany.') }}
+                    {{ __('messages.profilepartialsupdateprofile.verifyEmailError') }}
 
                     <button form="send-verification" class="btn btn-link p-0 align-baseline text-decoration-underline">
-                        {{ __('Kliknij tutaj, aby ponownie wysłać wiadomość weryfikacyjną na twój adres e-mail.') }}
+                        {{ __('messages.profilepartialsupdateprofile.sendVerifyAgain') }}
                     </button>
 
                     @if (session('status') === 'verification-link-sent')
                         <div class="text-success mt-1">
-                            {{ __('Na Twój adres e-mail został wysłany nowy link weryfikacyjny.') }}
+                            {{ __('messages.profilepartialsupdateprofile.sendVerifyAgainInfo') }}
                         </div>
                     @endif
                 </div>
@@ -78,28 +78,41 @@
         </div>
 
         <div class="mb-3 text-white">
-            <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
+            <label class="form-label">{{ __('messages.profilepartialsupdateprofile.avatar') }}</label>
+
             @if($user->avatar)
                 <div class="mb-2">
                     @if(Auth::user()->photo_path)
                         <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
-                             class="rounded-circle profile-pic " alt="Zdjęcie profilowe" width="80" height="80">
+                             class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
                     @else
                         <img src="{{ asset('images/includes/default_avatar.png') }}"
-                             class="rounded-circle profile-pic" alt="Zdjęcie profilowe" width="80" height="80">
+                             class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
                     @endif
                 </div>
             @endif
-            <input type="file" class="form-control" id="avatar" name="avatar">
+            <input type="file" class="d-none" id="avatar" name="avatar" onchange="updateFileName(this)">
+            <label for="avatar"  class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                {{ __('messages.profilepartialsupdateprofile.chooseFile') ?? __('messages.profilepartialsupdateprofile.chooseFile') }}
+            </label>
+            <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
+
             @if ($errors->get('avatar'))
                 <div class="text-danger small mt-1">
                     {{ $errors->first('avatar') }}
                 </div>
             @endif
         </div>
+        <script>
+            function updateFileName(input) {
+                const fileName = input.files.length ? input.files[0].name : __('messages.profilepartialsupdateprofile.fileNotChoosen');
+                document.getElementById('file-name').textContent = fileName;
+            }
+        </script>
+
 
         <div class="mb-3 text-white">
-            <label for="preferred_language" class="form-label">{{ __('Preferowany język') }}</label>
+            <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.prefferredLanguage') }}</label>
             <select class="form-select" id="preferred_language" name="preferred_language">
                 <option value="pl" {{ $user->language == 'pl' ? 'selected' : '' }}>Polski</option>
                 <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
@@ -116,10 +129,10 @@
         </div>
 
         <div class="mb-4 text-white">
-            <label for="theme" class="form-label">{{ __('Motyw') }}</label>
+            <label for="theme" class="form-label"> {{ __('messages.profilepartialsupdateprofile.theme') }}</label>
             <select class="form-select" id="theme" name="theme">
-                <option value="light" {{ $user->theme == 'light' ? 'selected' : '' }}>Light</option>
-                <option value="dark" {{ $user->theme == 'dark' ? 'selected' : '' }}>Dark</option>
+                <option value="light" {{ $user->theme == 'light' ? 'selected' : '' }}>{{ __('messages.profilepartialsupdateprofile.light') }}</option>
+                <option value="dark" {{ $user->theme == 'dark' ? 'selected' : '' }}>{{ __('messages.profilepartialsupdateprofile.dark') }}</option>
             </select>
             @if ($errors->get('theme'))
                 <div class="text-danger small mt-1">
@@ -129,10 +142,10 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"> {{ __('Zapisz') }}</button>
+            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">  {{ __('messages.profilepartialsupdateprofile.save') }}</button>
 
             @if (session('status') === 'profile-updated')
-                <span class="text-success small">{{ __('Zapisany.') }}</span>
+                <span class="text-success small"> {{ __('messages.profilepartialsupdateprofile.saved') }}</span>
             @endif
         </div>
     </form>

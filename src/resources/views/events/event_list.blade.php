@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - Wydarzenia</title>
+    <title>{{ __('messages.title.events') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-main">
@@ -12,63 +12,62 @@
 <main class="container py-5 text-white">
     <div class="row g-4">
 
-        <!-- Lewa kolumna - filtry i szybkie linki -->
         <div class="col-md-3">
             <div class="card shadow-sm mb-4 border-black">
                 <div class="card-header text-white" style="background: #27214f">
-                    <h5>Filtry</h5>
+                    <h5>{{ __('messages.eventlist.filterTitle') }}</h5>
                 </div>
                 <div class="card-body text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                     <form action="{{ route('events.feed') }}" method="GET">
                         <div class="mb-3">
-                            <label for="search" class="form-label">Szukaj</label>
+                            <label for="search" class="form-label">{{ __('messages.eventlist.searchButton') }}</label>
                             <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="date_from" class="form-label">Data od</label>
+                            <label for="date_from" class="form-label">{{ __('messages.eventlist.startDateLabel') }}</label>
                             <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="date_to" class="form-label">Data do</label>
+                            <label for="date_to" class="form-label">{{ __('messages.eventlist.endDateLabel') }}</label>
                             <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
                         </div>
                         <div class="form-check form-switch mb-3">
                             <input class="form-check-input" type="checkbox" id="has_ride_sharing" name="has_ride_sharing" value="1" {{ request('has_ride_sharing') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="has_ride_sharing">Tylko z przejazdem</label>
+                            <label class="form-check-label" for="has_ride_sharing">{{ __('messages.eventlist.withTransportCheckbox') }}</label>
                         </div>
                         <div class="form-check form-switch mb-3">
                             <input class="form-check-input" type="checkbox" id="has_available_spots" name="has_available_spots" value="1" {{ request('has_available_spots') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="has_available_spots">Tylko z wolnymi miejscami</label>
+                            <label class="form-check-label" for="has_available_spots">{{ __('messages.eventlist.withFreeSpotsCheckbox') }}</label>
                         </div>
-                        <button type="submit" class="btn border-dark text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">Filtruj</button>
+                        <button type="submit" class="btn border-dark text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">{{ __('messages.eventlist.applyFiltersButton') }}</button>
                     </form>
                 </div>
             </div>
 
             <div class="card shadow-sm border-black">
                 <div class="card-header text-white" style="background:#27214f">
-                    <h5>Szybkie linki</h5>
+                    <h5>{{ __('messages.eventlist.quickLinksLabel') }}</h5>
                 </div>
                 <div class="card-body d-grid gap-2 text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                    <a href="{{ route('events.create') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">Utwórz nowe wydarzenie</a>
-                    <a href="{{ route('my_events') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">Moje wydarzenia</a>
-                    <a href="{{ route('events.index') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">Wszystkie wydarzenia</a>
+                    <a href="{{ route('events.create') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">{{ __('messages.eventlist.createEventButton') }}</a>
+                    <a href="{{ route('my_events') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">{{ __('messages.eventlist.myEventsButton') }}</a>
+                    <a href="{{ route('events.index') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 20px;">{{ __('messages.eventlist.allEventsButton') }}</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <h2 class="mb-4" >Aktualności</h2>
+            <h2 class="mb-4" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
             @forelse($events as $event)
                 <div class="card shadow-sm mb-4 text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                     <div class="card-header d-flex align-items-center gap-3" style="background: #27214f">
                         @if($event->user->photo_path)
                             <img src="{{ asset('storage/' . $event->user->photo_path) }}"
                                  class="rounded-circle border border-2 border-light"
-                                 alt="Zdjęcie profilowe" width="50" height="50" style="object-fit: cover;">
+                                 alt="{{ __('messages.eventlist.profilePhotoLabel') }}" width="50" height="50" style="object-fit: cover;">
                         @else
                             <img src="{{ asset('images/includes/default_avatar.png') }}"
                                  class="rounded-circle border border-2 border-light"
-                                 alt="Zdjęcie profilowe" width="50" height="50" style="object-fit: cover;">
+                                 alt="{{ __('messages.eventlist.profilePhotoLabel') }}" width="50" height="50" style="object-fit: cover;">
                         @endif
                         <div>
                             <h6 class="mb-1 fw-bold">{{ $event->user->name }}</h6>
@@ -89,12 +88,12 @@
                         <div>
                             <h5 class="card-title mb-2">{{ $event->title }}</h5>
                             <p class="mb-1">
-                                <i class="bi bi-geo-alt"></i>Lokalizacja: {{ $event->location_name }}
+                                <i class="bi bi-geo-alt"></i>{{ __('messages.eventlist.locationLabel') }} {{ $event->location_name }}
                             </p>
                             <p class="mb-3">
-                                <i class="bi bi-calendar"></i>Data: {{ \Carbon\Carbon::parse($event->date)->format('d.m.Y H:i') }}
+                                <i class="bi bi-calendar"></i>{{ __('messages.eventlist.dateLabel') }} {{ \Carbon\Carbon::parse($event->date)->format('d.m.Y H:i') }}
                             </p>
-                            <p class="text-white">Opis wydarzenia:</p>
+                            <p class="text-white">{{ __('messages.eventlist.eventDescriptionLabel') }}</p>
                             <p class="text-white">{{ Str::limit($event->description, 150) }}</p>
                         </div>
 
@@ -104,14 +103,14 @@
                         @endphp
 
                         <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-info">{{ $totalAttendees }}/{{ $event->people_count }} uczestników</span>
+                            <span class="badge bg-info">{{ $totalAttendees }}/{{ $event->people_count }} {{ __('messages.eventlist.participantsCountLabel') }}</span>
                             @if($event->has_ride_sharing)
-                                <span class="badge bg-success">Z przejazdem</span>
+                                <span class="badge bg-success">{{ __('messages.eventlist.statusWithTransport') }}</span>
                             @endif
                             @if($availableSpots > 0)
-                                <span class="badge bg-warning">{{ $availableSpots }} wolnych miejsc</span>
+                                <span class="badge bg-warning">{{ $availableSpots }} {{ __('messages.eventlist.statusFreeSpots') }}</span>
                             @else
-                                <span class="badge bg-danger">Brak miejsc</span>
+                                <span class="badge bg-danger">{{ __('messages.eventlist.statusNoSpots') }}</span>
                             @endif
                         </div>
 
@@ -119,7 +118,7 @@
                             <a href="{{ route('events.show', $event) }}"
                                class="btn border-dark text-white"
                                style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
-                                Szczegóły
+                                {{ __('messages.eventlist.detailsLabel') }}
                             </a>
 
                             @auth
@@ -130,15 +129,15 @@
                                     <a href="{{ route('events.attendees.create', $event) }}"
                                        class="btn btn-success"
                                        style="border-radius: 20px; padding: 5px 20px;">
-                                        Zapisz się
+                                        {{ __('messages.eventlist.signUpButton') }}
                                     </a>
                                 @elseif($attendee)
                                     @if($attendee->status == 'pending')
-                                        <span class="badge bg-warning align-self-center">Oczekuje</span>
+                                        <span class="badge bg-warning align-self-center">{{ __('messages.eventlist.statusPending') }}</span>
                                     @elseif($attendee->status == 'accepted')
-                                        <span class="badge bg-success align-self-center">Zapisany</span>
+                                        <span class="badge bg-success align-self-center">{{ __('messages.eventlist.statusConfirmed') }}</span>
                                     @elseif($attendee->status == 'rejected')
-                                        <span class="badge bg-danger align-self-center">Odrzucony</span>
+                                        <span class="badge bg-danger align-self-center">{{ __('messages.eventlist.statusRejected') }}</span>
                                     @endif
                                 @endif
                             @endauth
@@ -147,8 +146,8 @@
                 </div>
             @empty
                 <div class="alert alert-info text-center">
-                    Brak wydarzeń. Utwórz pierwsze!<br>
-                    <a href="{{ route('events.create') }}" class="btn btn-success mt-2">Utwórz wydarzenie</a>
+                    {{ __('messages.eventlist.noEventsMessage') }}<br>
+                    <a href="{{ route('events.create') }}" class="btn btn-success mt-2">{{ __('messages.eventlist.addFirstEventButton') }}</a>
                 </div>
             @endforelse
 
@@ -158,12 +157,11 @@
             </div>
         </div>
 
-        <!-- Prawa kolumna - nadchodzące -->
         <div class="col-md-3">
 
             <div class="card shadow-sm border-black">
                 <div class="card-header text-white" style="background: #27214f">
-                    <h5>Nadchodzące wkrótce</h5>
+                    <h5>{{ __('messages.eventlist.upcomingEventsLabel') }}</h5>
                 </div>
                 <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                     @foreach($upcomingEvents as $event)

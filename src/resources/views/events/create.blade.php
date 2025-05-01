@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - dodaj wydarzenie</title>
+    <title>{{ __('messages.title.addEvent') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -63,12 +63,12 @@
     </style>
 </head>
 <body class="bg-main text-white">
+@include('includes.navbar')
 <div class="page-container" id="app">
-    @include('includes.navbar')
     <main class="py-4">
         <div class="container">
             <div class="main-container">
-                <h2 class="mb-4">Dodaj wydarzenie</h2>
+                <h2 class="mb-4">{{ __('messages.addevent.addEvent') }}</h2>
 
                 <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" id="event-form">
                     @csrf
@@ -77,37 +77,53 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="title" class="form-label">Tytuł wydarzenia</label>
+                                <label for="title" class="form-label">{{ __('messages.addevent.eventTitle') }}</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="description" class="form-label">Opis wydarzenia</label>
+                                <label for="description" class="form-label">{{ __('messages.addevent.eventDesc') }}</label>
                                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
                             </div>
 
                             <div class="mb-3">
-                                <label for="date" class="form-label">Data wydarzenia</label>
+                                <label for="date" class="form-label">{{ __('messages.addevent.date') }}</label>
                                 <input type="datetime-local" class="form-control" id="date" name="date" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="peopleCount" class="form-label">Ilość osób</label>
+                                <label for="peopleCount" class="form-label">{{ __('messages.addevent.availablePersonNumber') }}</label>
 
                                 <input type="number" class="form-control" id="peopleCount" name="people_count" min="1" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="eventPhotos" class="form-label">Dodaj zdjęcia</label>
-                                <input type="file" class="form-control" id="eventPhotos" name="photos[]" multiple onchange="updateFileList()">
-                                <div id="fileList" class="mt-2 small text-muted"></div>
+
+                                <input type="file" class="d-none" id="eventPhotos" name="photos[]" multiple onchange="updateFileList()">
+
+                                <label for="eventPhotos" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                                    {{ __('messages.addevent.addPhotos') }}
+                                </label>
+
+                                <div id="fileList" class="mt-2 small text-white">{{ __('messages.addevent.fileNotChoosen') }}</div>
                             </div>
+
+                            <script>
+                                function updateFileList() {
+                                    const input = document.getElementById('eventPhotos');
+                                    const output = document.getElementById('fileList');
+                                    const files = Array.from(input.files).map(file => file.name);
+                                    output.textContent = files.length ? files.join(', ') : '{{ __('messages.addevent.fileNotChoosen') }}';
+                                }
+                            </script>
+
+
                         </div>
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="location_name" class="form-label">Nazwa lokalizacji</label>
-                                <input type="text" class="form-control" id="location_name" name="location_name" placeholder="Nazwa miejsca" required>
+                                <label for="location_name" class="form-label">{{ __('messages.addevent.locationName') }}</label>
+                                <input type="text" class="form-control" id="location_name" name="location_name" placeholder="{{ __('messages.addevent.placeName') }}" required>
                             </div>
 
 
@@ -116,9 +132,9 @@
 
 
                             <div class="mb-3">
-                                <label for="search-address" class="form-label">Wyszukaj adres</label>
+                                <label for="search-address" class="form-label">{{ __('messages.addevent.address') }}</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="search-address" placeholder="np. Warszawa, ul. Marszałkowska 1">
+                                    <input type="text" class="form-control" id="search-address" placeholder="{{ __('messages.addevent.addressExample') }}">
                                     <button class="btn btn-outline-secondary" type="button" id="search-button">
                                         <i class="bi bi-search"></i>
                                     </button>
@@ -129,49 +145,49 @@
                             <div class="mb-3">
                                 <div id="map-container" class="map-container"></div>
                                 <div class="coordinate-display">
-                                    Wybrana lokalizacja: <strong id="coordinates-text">52.069000, 19.480000</strong>
+                                    {{ __('messages.addevent.selectedLocation') }} <strong id="coordinates-text">52.069000, 19.480000</strong>
                                 </div>
                             </div>
 
 
                             <div class="mb-3 form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="has_ride_sharing" name="has_ride_sharing" value="1">
-                                <label class="form-check-label" for="has_ride_sharing">Włącz współdzielenie przejazdów</label>
+                                <label class="form-check-label" for="has_ride_sharing">{{ __('messages.addevent.enableCarSharing') }}</label>
                             </div>
                         </div>
                     </div>
 
 
                     <div id="ride-sharing-form" style="display: none;" class="mt-4 mb-4 p-3">
-                        <h4 class="mb-3">Szczegóły przejazdu</h4>
+                        <h4 class="mb-3">{{ __('messages.addevent.rideDetails') }}</h4>
 
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="vehicle_description" class="form-label">Opis pojazdu</label>
-                                    <input type="text" class="form-control" id="vehicle_description" name="vehicle_description" placeholder="np. Czerwony Ford Focus">
+                                    <label for="vehicle_description" class="form-label">{{ __('messages.addevent.carDesc') }}</label>
+                                    <input type="text" class="form-control" id="vehicle_description" name="vehicle_description" placeholder="{{ __('messages.addevent.carDescExample') }}">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="avalible_seats" class="form-label">Dostępna liczba miejsc</label>
+                                    <label for="avalible_seats" class="form-label">{{ __('messages.addevent.availableSeats') }}</label>
                                     <input type="number" class="form-control" id="avalible_seats" name="avalible_seats" min="1" value="1">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="meeting_location_name" class="form-label">Nazwa miejsca spotkania</label>
-                                    <input type="text" class="form-control" id="meeting_location_name" name="meeting_location_name" placeholder="np. Parking przy galerii">
+                                    <label for="meeting_location_name" class="form-label">{{ __('messages.addevent.meetingPlace') }}</label>
+                                    <input type="text" class="form-control" id="meeting_location_name" name="meeting_location_name" placeholder="{{ __('messages.addevent.meetingPlaceExample') }}">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="search-meeting-address" class="form-label">Wyszukaj adres miejsca spotkania</label>
+                                    <label for="search-meeting-address" class="form-label">{{ __('messages.addevent.searchMeetingPlace') }}</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="search-meeting-address" placeholder="Wpisz adres">
+                                        <input type="text" class="form-control" id="search-meeting-address" placeholder="{{ __('messages.addevent.enterAddress') }}">
                                         <button class="btn btn-outline-secondary" type="button" id="search-meeting-button">
                                             <i class="bi bi-search"></i>
                                         </button>
@@ -183,7 +199,7 @@
                                 <div class="mb-3">
                                     <div id="meeting-map-container" class="map-container" style="height: 200px;"></div>
                                     <div class="coordinate-display">
-                                        Wybrana lokalizacja spotkania: <strong id="meeting-coordinates-text">52.069000, 19.480000</strong>
+                                        {{ __('messages.addevent.selectedMeetingLocation') }} <strong id="meeting-coordinates-text">52.069000, 19.480000</strong>
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +211,7 @@
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                         <button type="submit" class="btn btn-lg px-4 text-white"  style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"id="submit-button">
-                            <i class="bi bi-check-circle me-2" ></i>Dodaj wydarzenie
+                            <i class="bi bi-check-circle me-2" ></i>{{ __('messages.addevent.addEvent') }}
                         </button>
                     </div>
                 </form>
@@ -216,7 +232,7 @@
 
         if (input.files.length > 0) {
             const fileCount = document.createElement('div');
-            fileCount.textContent = `Wybrano plików: ${input.files.length}`;
+            fileCount.textContent = `{{ __('messages.addevent.fileSelection') }} ${input.files.length}`;
             list.appendChild(fileCount);
 
             const fileNames = document.createElement('ul');
@@ -232,7 +248,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM w pełni załadowany, inicjalizacja map...');
+        console.log('{{ __('messages.addevent.mapLoadedInitialization') }}');
 
         setTimeout(() => {
             initMainMap();
@@ -241,12 +257,12 @@
     });
 
     function initMainMap() {
-        console.log('Inicjalizacja głównej mapy Leaflet...');
+        console.log('{{ __('messages.addevent.leafletMapInitialization') }}');
 
         const mapContainer = document.getElementById('map-container');
 
         if (!mapContainer) {
-            console.error('Nie znaleziono kontenera mapy!');
+            console.error('{{ __('messages.addevent.mapContainerNotFound') }}');
             return;
         }
 
@@ -292,7 +308,7 @@
                             locationNameInput.value = locationName;
                         }
                     })
-                    .catch(error => console.error('Błąd geokodowania:', error));
+                    .catch(error => console.error('{{ __('messages.addevent.geocodingError') }}', error));
             }
 
             marker.on('dragend', function() {
@@ -366,7 +382,7 @@
                             suggestionElements.style.display = 'none';
                         }
                     })
-                    .catch(error => console.error('Błąd pobierania sugestii:', error));
+                    .catch(error => console.error('{{ __('messages.addevent.suggestionsError') }}', error));
             });
 
 
@@ -390,16 +406,15 @@
                                 suggestionElements.style.display = 'none';
                             }
                         } else {
-                            alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
+                            alert('{{ __('messages.addevent.locationNotFoundRetry') }}');
                         }
                     })
                     .catch(error => {
-                        console.error('Błąd wyszukiwania:', error);
-                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                        console.error('{{ __('messages.addevent.searchError') }}', error);
+                        alert('{{ __('messages.addevent.searchErrorRetry') }}');
                     });
             }
 
-            // Nasłuchiwanie zdarzeń
             searchButton.addEventListener('click', searchLocation);
             searchInput.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
@@ -410,10 +425,10 @@
 
             setTimeout(() => {
                 map.invalidateSize();
-                console.log('Mapa przerysowana');
+                console.log('{{ __('messages.addevent.mapRedraw') }}');
             }, 500);
         } catch (error) {
-            console.error('Błąd podczas inicjalizacji mapy:', error);
+            console.error('{{ __('messages.addevent.mapInitializationError') }}', error);
         }
     }
 
@@ -439,16 +454,16 @@
     }
 
     function initMeetingMap() {
-        console.log('Inicjalizacja mapy miejsca spotkania...');
+        console.log('{{ __('messages.addevent.meetingMapInitialization') }}');
 
         const mapContainer = document.getElementById('meeting-map-container');
         if (!mapContainer) {
-            console.error('Nie znaleziono kontenera mapy miejsca spotkania!');
+            console.error('{{ __('messages.addevent.meetingMapContainerNotFound') }}');
             return;
         }
 
         if (mapContainer._leaflet_id) {
-            console.log('Mapa miejsca spotkania już istnieje, pomijam inicjalizację.');
+            console.log('{{ __('messages.addevent.meetingMapExists') }}');
             return;
         }
 
@@ -492,7 +507,7 @@
                             locationNameInput.value = locationName;
                         }
                     })
-                    .catch(error => console.error('Błąd geokodowania miejsca spotkania:', error));
+                    .catch(error => console.error('{{ __('messages.addevent.meetingGeocodingError') }}', error));
             }
 
             marker.on('dragend', function() {
@@ -521,12 +536,12 @@
                             marker.setLatLng([lat, lng]);
                             updateMeetingCoordinates(lat, lng);
                         } else {
-                            alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
+                            alert('{{ __('messages.addevent.meetingLocationNotFoundRetry') }}');
                         }
                     })
                     .catch(error => {
-                        console.error('Błąd wyszukiwania miejsca spotkania:', error);
-                        alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+                        console.error('{{ __('messages.addevent.meetingSearchError') }}', error);
+                        alert('{{ __('messages.addevent.meetingSearchErrorRetry') }}');
                     });
             }
 
@@ -545,10 +560,10 @@
 
             setTimeout(() => {
                 meetingMap.invalidateSize();
-                console.log('Mapa miejsca spotkania przerysowana');
+                console.log('{{ __('messages.addevent.meetingMapRedraw') }}');
             }, 500);
         } catch (error) {
-            console.error('Błąd podczas inicjalizacji mapy miejsca spotkania:', error);
+            console.error('{{ __('messages.addevent.meetingMapInitializationError') }}', error);
         }
     }
 

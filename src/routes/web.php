@@ -11,11 +11,11 @@ use App\Http\Controllers\RideRequestController;
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');});
-//Route::get('/test', [\App\Http\Controllers\TestController::class, 'test']);
+Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change');
 
 Route::middleware(['auth', 'verified'])->group(function ()
 {
-    /**Route::get('/', function () { return view('welcome'); })->name('afterlogin');*/
+    Route::get('/', function () { return view('welcome'); })->name('afterlogin');
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -25,11 +25,14 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
 
-    Route::get('/feed', [EventController::class, 'feed'])->name('events.feed');
+    Route::get('/events/feed', [EventController::class, 'index'])->name('events.feed');
 
     Route::resource('events', EventController::class)->names('events');
     Route::resource('rides', RideController::class)->names('rides');
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
+    Route::get('/ride_requests', [RideRequestController::class, 'index'])->name('ride_requests.index');
+    Route::get('/ride_requests/create', [RideRequestController::class, 'create'])->name('ride_requests.create');
+
 
 
     Route::get('/events/{event}/attendees', [EventAttendeeController::class, 'index'])->name('events.attendees.index');
@@ -41,14 +44,16 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::get('/my_events', [EventController::class, 'myEvents'])->name('my_events');
     Route::get('/event_list', [EventController::class, 'Events_list'])->name('event_list');
 
+
+
+
     Route::delete('/photos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
 
     Route::get('/add_event', function () {return view('events.create');});
     Route::get('/account', function () {return view('account');});
-    Route::get('/settings', function () {return view('settings');});
-    Route::get('/event', function () {return view('event');});
     Route::get('/map', [MainMapController::class, 'showMap']);
     Route::get('/help', function () {return view('help');});
+    Route::get('/my-attendances', [UserAttendancesController::class, 'index'])->name('user.attendances');
 });
 
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - Twórcy</title>
+    <title>{{ __('messages.title.aboutDevelopers') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .creator-section {
@@ -185,23 +185,23 @@
             <div class="team-stats">
                 <div class="stat-item">
                     <div class="stat-number">3</div>
-                    <div class="stat-label">Twórców</div>
+                    <div class="stat-label">{{ __('messages.developers.developersNumber') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">∞</div>
-                    <div class="stat-label">Pomysłów</div>
+                    <div class="stat-label">{{ __('messages.developers.ideasNumber') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">1000+</div>
-                    <div class="stat-label">Linijek kodu</div>
+                    <div class="stat-label">{{ __('messages.developers.linesOfCodeNumber') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">24/7</div>
-                    <div class="stat-label">Zaangażowania</div>
+                    <div class="stat-label">{{ __('messages.developers.engagement') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">100+</div>
-                    <div class="stat-label">Chomiczków</div>
+                    <div class="stat-label">{{ __('messages.developers.hamstersNumber') }}</div>
                 </div>
             </div>
 
@@ -212,12 +212,11 @@
                         <div class="member-front">
                             <img src="{{ asset('images/includes/wodz-faily.png') }}" alt="Wódz" class="member-img">
                             <h3 class="member-name">Mateusz Bogacz-Drewniak</h3>
-                            <div class="member-role">Backend Developer</div>
+                            <div class="member-role">{{ __('messages.developers.backendDeveloper') }}</div>
                         </div>
                         <div class="member-back">
                             <p class="member-description">
-                                Nieoficjalny lider projektu. Mistrz debugowania i jednocześnie główny źródło inspiracji.
-                                Kiedy nie naprawia kodu, słucha ciężkiego metalu i szuka nowych wyzwań.
+                                {{ __('messages.developers.wodzShortDesc') }}
                             </p>
                             <div class="member-social">
                                 <a href="https://github.com/mateusz-bogacz-collegiumwitelona" class="social-icon" title="Github" target="_blank" rel="noopener noreferrer">
@@ -234,12 +233,11 @@
                         <div class="member-front">
                             <img src="{{ asset('images/includes/gabi-faily.png') }}" alt="Gabi" class="member-img">
                             <h3 class="member-name">Gabriela Grabarska</h3>
-                            <div class="member-role">Frontend Developer</div>
+                            <div class="member-role">{{ __('messages.developers.frontendDeveloper') }}</div>
                         </div>
                         <div class="member-back">
                             <p class="member-description">
-                                Czarodziejka backendu, która potrafi zaczarować nawet najbardziej oporną bazę danych.
-                                Jej supermocą jest znajdowanie rozwiązań w środku nocy.
+                                {{ __('messages.developers.gabiShortDesc') }}
                             </p>
                             <div class="member-social">
                                 <a href="https://github.com/GrabarskaGabriela" class="social-icon" title="Github" target="_blank" rel="noopener noreferrer">
@@ -256,12 +254,11 @@
                         <div class="member-front">
                             <img src="{{ asset('images/includes/chimek-faily.png') }}" alt="Chimek" class="member-img">
                             <h3 class="member-name">Mateusz Chimkowski</h3>
-                            <div class="member-role">UX/UI Designer</div>
+                            <div class="member-role">{{ __('messages.developers.uxuiDesigner') }}</div>
                         </div>
                         <div class="member-back">
                             <p class="member-description">
-                                Wizjoner interfejsów użytkownika. Spędza godziny na dopracowywaniu szczegółów,
-                                a jego paleta kolorów jest legendarna. Miłośnik anime i gier komputerowych.
+                                {{ __('messages.developers.chimekShortDesc') }}
                             </p>
                             <div class="member-social">
                                 <a href="https://github.com/Chimek006" class="social-icon" title="Github" target="_blank" rel="noopener noreferrer">
@@ -274,31 +271,34 @@
             </div>
         </div>
 
-        <!-- Dodatkowa sekcja z pełnymi opisami -->
         <div class="creator-full-descriptions mt-5 p-4 text-white rounded-3" style=" background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-            <h2 class="text-center mb-4">Poznaj nas bliżej</h2>
-
+            <h2 class="text-center mb-4">{{ __('messages.developers.getMeetUs') }}</h2>
+            <div class="text-center my-5">
+                <a href="{{ asset('Faily-book.pdf') }}" target="_blank" class="btn border-dark text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);     ">
+                    {{ __('messages.developers.book') }}
+                </a>
+            </div>
             <div class="creator-tabs">
                 <ul class="nav nav-tabs justify-content-center" id="creatorTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab">Wódz</button>
+                        <button class="nav-link active" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab">{{ __('messages.developers.wodz') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab">Gabi</button>
+                        <button class="nav-link" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab">{{ __('messages.developers.gabi') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab">Chimek</button>
+                        <button class="nav-link" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab">{{ __('messages.developers.chimek') }}</button>
                     </li>
                 </ul>
                 <div class="tab-content p-3" id="creatorTabContent">
                     <div class="tab-pane fade show active" id="wodz" role="tabpanel">
-                        <p>Nieoficjalny, ale umówiony wódz projektu. Nikt nie wie, kto go wybrał, ale nikt też nie protestował – bo Wódz zawsze wie, co robić (albo przynajmniej sprawia takie wrażenie). Pilnuje pozostałej dwójki, jakby byli dziećmi z ADHD, chociaż sam je ma. Trzyma projekt w ryzach i mówi „zrób to lepiej” z taką pewnością, że człowiek robi. Podczas kodzenia słucha Twoyastara of Death i ogląda Kapitana Bombę, co czyni go nie tylko liderem, ale też artystą w cierpieniu. Gdy coś nie działa, poprawia. Gdy działa – i tak poprawia. Gdy milczy, wszyscy wiedzą, że coś wymyśla. Legenda głosi, że kiedyś jedną linijką naprawił cały projekt.</p>
+                        <p>{{ __('messages.developers.wodzDesc') }}</p>
                     </div>
                     <div class="tab-pane fade" id="gabi" role="tabpanel">
-                        <p>Backendowa czarodziejka o oczach pełnych cierpienia i logów Dockera. Gdy inni śpią – ona debuguje. Gdy inni płaczą – ona tylko przeklina pod nosem. Jej największym wrogiem nie są bugi, ale zależności Laravela i composer.lock, który nie zna litości. Zawsze dostępna na Slacku po 3 w nocy, gotowa naprawić bazę danych albo przypadkiem ją usunąć – zależnie od dnia. Kocha chomiczki i memy z nimi, co czyni ją niebezpiecznym połączeniem uroku i wewnętrznej rozpaczy. Wierzy w testy jednostkowe tak, jak inni wierzą w horoskopy. Raz powiedziała „chyba działa” – i to był historyczny moment.</p>
+                        <p>{{ __('messages.developers.gabiDesc') }}</p>
                     </div>
                     <div class="tab-pane fade" id="chimek" role="tabpanel">
-                        <p>Zajmuje się frontendem, bo… no cóż, nic innego nie potrafi (ale za to robi to z takim rozmachem, że projekt płacze od zachwytu). W duszy – artysta. W praktyce – ktoś, kto 3 godziny debatuje nad odcieniem hovera, a potem i tak wraca do pierwszej wersji. Nieśmiertelny entuzjasta mangi, anime i wszystkiego, co można określić słowem „klimacik”. Gdy nie kodzi, to gra: Factorio, Schedule 1, Baldur's Gate 3, czy CS2… wszystko, byle „ogarnąć to jutro”. Ma tysiąc plików nazwanych „final_v3_real” i każdy jest piękniejszy od poprzedniego. Gdy ktoś pyta „czemu nie działa?”, mówi „to artystyczna decyzja”. I wszyscy przytakują.</p>
+                        <p>{{ __('messages.developers.chimekDesc') }}</p>
                     </div>
                 </div>
             </div>

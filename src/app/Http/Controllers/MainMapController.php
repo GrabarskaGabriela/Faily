@@ -1,13 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Event;
+
+use App\Services\Interfaces\EventServiceInterface;
+
 class MainMapController extends Controller
 {
-    public function showMap()
+    protected $eventService;
+
+    public function __construct(EventServiceInterface $eventService)
     {
-        $events = Event::all(['title', 'description', 'latitude', 'longitude', 'location_name']);
-        return view('map', compact('events'));
+        $this->eventService = $eventService;
     }
 
+    public function showMap()
+    {
+        $events = $this->eventService->getEventsForMap();
+        return view('map', compact('events'));
+    }
 }

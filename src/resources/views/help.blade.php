@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,18 +8,16 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
-
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="card-title text-center mb-4">Centrum pomocy</h1>
+            <div class="card shadow-sm border-black">
+                <div class="card-body text-white " style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                    <h1 class="card-title text-center mb-4">Centrum pomocy - strona jeszcze do przebudowy</h1>
 
                     <div class="mb-5">
                         <h3 class="mb-3">Najczęściej zadawane pytania</h3>
                         <div class="accordion" id="faqAccordion">
-                            <!-- FAQ Item 1 -->
                             <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
                                 <h2 class="accordion-header" id="headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -35,7 +33,6 @@
                                 </div>
                             </div>
 
-                            <!-- FAQ Item 2 -->
                             <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
                                 <h2 class="accordion-header" id="headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -51,7 +48,6 @@
                                 </div>
                             </div>
 
-                            <!-- FAQ Item 3 -->
                             <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
                                 <h2 class="accordion-header" id="headingThree">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -73,12 +69,6 @@
                         <h3 class="mb-3">Przydatne linki</h3>
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="{{ route('profile.show') }}" class="text-decoration-none">Twój profil</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="{{ route('profile.edit-photo') }}" class="text-decoration-none">Edycja zdjęcia profilowego</a>
-                            </li>
-                            <li class="list-group-item">
                                 <a href="#" class="text-decoration-none">Regulamin serwisu</a>
                             </li>
                             <li class="list-group-item">
@@ -89,8 +79,8 @@
 
                     <div class="text-center mt-5">
                         <h3 class="mb-3">Potrzebujesz dodatkowej pomocy?</h3>
-                        <a href="mailto:support@faily.pl" class="btn btn-primary">
-                            <i class="fas fa-envelope me-2"></i>Napisz do nas
+                        <a href="mailto:support@faily.pl" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                            Napisz do nas
                         </a>
                     </div>
                 </div>

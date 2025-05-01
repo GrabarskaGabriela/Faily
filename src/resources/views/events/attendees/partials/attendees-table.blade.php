@@ -2,12 +2,12 @@
     <table class="table table-dark table-striped">
         <thead>
         <tr>
-            <th>Użytkownik</th>
-            <th>Liczba osób</th>
-            <th>Wiadomość</th>
-            <th>Status</th>
-            <th>Data zgłoszenia</th>
-            <th>Akcje</th>
+            <th>{ __('messages.eventatendeestable.userLabel') }}</th>
+            <th>{ __('messages.eventatendeestable.attendeeCountLabel') }}</th>
+            <th>{ __('messages.eventatendeestable.messageLabel') }}</th>
+            <th>{ __('messages.eventatendeestable.statusLabel') }}</th>
+            <th>{ __('messages.eventatendeestable.registrationDateLabel') }}</th>
+            <th>{ __('messages.eventatendeestable.actionsLabel') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -23,14 +23,14 @@
                     </div>
                 </td>
                 <td>{{ $attendee->attendees_count }}</td>
-                <td>{{ $attendee->message ?? 'Brak wiadomości' }}</td>
+                <td>{{ $attendee->message }}</td>
                 <td>
                     @if($attendee->status == 'pending')
-                        <span class="badge bg-warning">Oczekujące</span>
+                        <span class="badge bg-warning">{ __('messages.eventatendeestable.pendingStatusLabel') }}</span>
                     @elseif($attendee->status == 'accepted')
-                        <span class="badge bg-success">Zaakceptowane</span>
+                        <span class="badge bg-success">{ __('messages.eventatendeestable.acceptedStatusLabel') }}</span>
                     @elseif($attendee->status == 'rejected')
-                        <span class="badge bg-danger">Odrzucone</span>
+                        <span class="badge bg-danger">{ __('messages.eventatendeestable.rejectedStatusLabel') }}</span>
                     @endif
                 </td>
                 <td>{{ $attendee->created_at->format('d.m.Y H:i') }}</td>
@@ -41,14 +41,14 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="accepted">
-                                <button type="submit" class="btn btn-sm btn-success">Akceptuj</button>
+                                <button type="submit" class="btn btn-sm btn-success">{ __('messages.eventatendeestable.acceptButton') }}</button>
                             </form>
 
                             <form action="{{ route('events.attendees.update', ['event' => $event, 'attendee' => $attendee]) }}" method="POST" class="ms-1">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="rejected">
-                                <button type="submit" class="btn btn-sm btn-danger">Odrzuć</button>
+                                <button type="submit" class="btn btn-sm btn-danger">{ __('messages.eventatendeestable.rejectButton') }}</button>
                             </form>
                         </div>
                     @endif
@@ -56,13 +56,13 @@
                     <form action="{{ route('events.attendees.destroy', ['event' => $event, 'attendee' => $attendee]) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-outline-danger ms-1">Usuń</button>
+                        <button type="submit" class="btn btn-sm btn-outline-danger ms-1">{ __('messages.eventatendeestable.deleteButton') }}</button>
                     </form>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="6" class="text-center">Brak zgłoszeń</td>
+                <td colspan="6" class="text-center">{ __('messages.eventatendeestable.noApplicationsLabel') }}</td>
             </tr>
         @endforelse
         </tbody>

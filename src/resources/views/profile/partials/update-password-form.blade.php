@@ -1,11 +1,11 @@
 <section class="mb-5">
     <header class="mb-4">
         <h2 class="h4 text-white">
-            {{ __('Aktualizacja hasła') }}
+            {{ __('messages.profilepartialspassword.passwordUpdate') }}
         </h2>
 
         <p class=" small mt-2 text-white">
-            {{ __('Dla zachowania bezpieczeństwa upewnij się, że Twoje konto chronione jest silnym, losowym hasłem.') }}
+            {{ __('messages.profilepartialspassword.passwordSecurityMessage') }}
         </p>
     </header>
 
@@ -15,7 +15,7 @@
 
         <div class="mb-3 text-white">
             <label for="update_password_current_password" class="form-label">
-                {{ __('Obecne hasło') }}
+                {{ __('messages.profilepartialspassword.currentPassword') }}
             </label>
             <input type="password"
                    class="form-control"
@@ -32,7 +32,7 @@
 
         <div class="mb-3 text-white">
             <label for="update_password_password" class="form-label">
-                {{ __('Nowe hasło') }}
+                {{ __('messages.profilepartialspassword.newPassword') }}
             </label>
             <input type="password"
                    class="form-control"
@@ -49,7 +49,7 @@
 
         <div class="mb-4 text-white">
             <label for="update_password_password_confirmation" class="form-label">
-                {{ __('Potwierdź hasło') }}
+                {{ __('messages.profilepartialspassword.confirmPassword') }}
             </label>
             <input type="password"
                    class="form-control"
@@ -65,12 +65,12 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('Zapisz') }}
+            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"> {{ __('messages.profilepartialspassword.save') }}
             </button>
 
             @if (session('status') === 'password-updated')
                 <span class="text-success small">
-                    {{ __('Zapisane.') }}
+                     {{ __('messages.profilepartialspassword.saved') }}
                 </span>
             @endif
         </div>

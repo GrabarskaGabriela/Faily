@@ -6,52 +6,50 @@ use App\Models\Ride;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Interfaces\RideServiceInterface;
+use App\Services\Interfaces\EventServiceInterface;
 
 class RideController extends Controller
 {
-    public function __construct()
+    protected $rideService;
+    protected $eventService;
+
+    public function __construct(RideServiceInterface $rideService, EventServiceInterface $eventService)
     {
         $this->middleware('auth');
+        $this->rideService = $rideService;
+        $this->eventService = $eventService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $event_id = $request->get('event_id');
 
-        if (!$event_id)
-        {
+        if (!$event_id) {
             return redirect()->route('events.index')
                 ->with('error', 'You must select the event for which you are creating a ride');
         }
 
-        $event = Event::findOrFail($event_id);
+        $event = $this->eventService->findById($event_id);
+
         return redirect()->route('events.create', ['preset_event_id' => $event_id])
             ->with('message', 'Dodaj przejazd dla wydarzenia: ' . $event->title);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         $event_id = $request->get('event_id');
 
-        if (!$event_id){
+        if (!$event_id) {
             return redirect()->route('events.index')
                 ->with('error', 'You must select the event for which you are creating a ride');
         }
 
-        $event = Event::findOrFail($event_id);
+        $event = $this->eventService->findById($event_id);
 
         return view('ride.create', compact('event'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -63,34 +61,25 @@ class RideController extends Controller
             'meeting_location_name' => 'required|string|max:255',
         ]);
 
-        $validated['driver_id'] = Auth::id();
-        $ride = Ride::create($validated);
-        $event = Event::find($request->event_id);
-
-        if(!$event->has_ride_sharing){
-            $event->has_ride_sharing = true;
-            $event->save();
+        try {
+            $ride = $this->rideService->createRide($validated, Auth::id());
+            return redirect()->route('events.show', $ride->event_id)
+                ->with('success', 'Ride added successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        return redirect()->route('events.show', $ride->event_id)
-            ->with('success', 'Ride added successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ride $ride)
     {
-        $ride->load(['driver', 'event', 'requests.passenger']);
+        $ride = $this->rideService->getRideWithRelations($ride->id);
         return view('ride.show', compact('ride'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Ride $ride)
     {
-        if (Auth::id() !== $ride->driver_id) {
+        if (!$this->rideService->canUserManageRide($ride->id, Auth::id())) {
             return redirect()->route('events.show', $ride->event_id)
                 ->with('error', 'You do not have permission to edit this passage.');
         }
@@ -98,16 +87,8 @@ class RideController extends Controller
         return view('rides.edit', compact('ride'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Ride $ride)
     {
-        if (Auth::id() !== $ride->driver_id) {
-            return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'You do not have permission to update this passage.');
-        }
-
         $validated = $request->validate([
             'vehicle_description' => 'required|string|max:255',
             'available_seats' => 'required|integer|min:1',
@@ -116,26 +97,26 @@ class RideController extends Controller
             'meeting_location_name' => 'required|string|max:255',
         ]);
 
-        $ride->update($validated);
-
-        return redirect()->route('rides.show', $ride)
-            ->with('success', 'The passage has been updated!');
+        try {
+            $this->rideService->updateRide($ride->id, $validated, Auth::id());
+            return redirect()->route('rides.show', $ride)
+                ->with('success', 'The passage has been updated!');
+        } catch (\Exception $e) {
+            return redirect()->route('events.show', $ride->event_id)
+                ->with('error', $e->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ride $ride)
     {
-        if (Auth::id() !== $ride->driver_id) {
+        try {
+            $event_id = $ride->event_id;
+            $this->rideService->deleteRide($ride->id, Auth::id());
+            return redirect()->route('events.show', $event_id)
+                ->with('success', 'The passage has been deleted!');
+        } catch (\Exception $e) {
             return redirect()->route('events.show', $ride->event_id)
-                ->with('error', 'You do not have permission to delete this passage');
+                ->with('error', $e->getMessage());
         }
-
-        $event_id = $ride->event_id;
-        $ride->delete();
-
-        return redirect()->route('events.show', $event_id)
-            ->with('success', 'The passage has been deleted!');
     }
 }

@@ -40,42 +40,90 @@
                 @auth
                     <ul class="navbar-nav mb-2 mb-lg-0 fs-5">
                         <li class="nav-item mx-2">
-                            <a class="btn btn-gradient" href="{{ url('/map') }}">Mapa eventów</a>
+                            <a class="btn btn-gradient" href="{{ url('/map') }}">{{ __('messages.navbar.eventMap') }}</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-gradient" href="{{ url('/event_list') }}">Posty</a>
+                            <a class="btn btn-gradient" href="{{ url('/event_list') }}">{{ __('messages.navbar.events') }}</a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="btn btn-gradient" href="{{ url('/about') }}">Twórcy</a>
+                            <a class="btn btn-gradient" href="{{ url('/about') }}">{{ __('messages.navbar.developers') }}</a>
                         </li>
                     </ul>
 
                     <div class="mx-3">
-                        <a class="btn btn-gradient" href="{{ url('/add_event') }}">Nowe wydarzenie</a>
+                        <a class="btn btn-gradient" href="{{ url('/add_event') }}">{{ __('messages.navbar.newEvent') }}</a>
                     </div>
                     <div class="mx-2" id="theme-toggle-navbar"></div>
+                    <div class="dropdown mx-2">
+                        <a class="btn btn-gradient dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            @if (app()->getLocale() == 'pl')
+                                <span><img src="{{ asset('images/includes/pl.png') }}" alt="Poland" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'en')
+                                <span><img src="{{ asset('images/includes/gb-eng.png') }}" alt="England" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'es')
+                                <span><img src="{{ asset('images/includes/es.png') }}" alt="Spain" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'jpn')
+                                <span><img src="{{ asset('images/includes/jp.png') }}" alt="Japan" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'ua')
+                                <span><img src="{{ asset('images/includes/ua.png') }}" alt="Ukraine" width="20" height="15"></span>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'pl' ? 'active' : '' }}" href="{{ route('language.change', 'pl') }}"><img src="{{ asset('images/includes/pl.png') }}" alt="Poland" width="20" height="15">Polski</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('language.change', 'en') }}"><img src="{{ asset('images/includes/gb-eng.png') }}" alt="England" width="20" height="15">English</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'es' ? 'active' : '' }}" href="{{ route('language.change', 'es') }}"><img src="{{ asset('images/includes/es.png') }}" alt="Spain" width="20" height="15">Español</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'jpn' ? 'active' : '' }}" href="{{ route('language.change', 'jpn') }}"><img src="{{ asset('images/includes/jp.png') }}" alt="Japan" width="20" height="15">日本語</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'ua' ? 'active' : '' }}" href="{{ route('language.change', 'ua') }}"><img src="{{ asset('images/includes/ua.png') }}" alt="Ukraine" width="20" height="15"> Українська</a></li>
+                        </ul>
+                    </div>
+
                     <div class="dropdown ms-auto">
                         <a class="btn btn-gradient dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Konto
+                            {{ __('messages.navbar.account') }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                            <li><a class="dropdown-item text-white" href="{{ url('/account') }}">Przejdź do konta</a></li>
-                            <li><a class="dropdown-item text-white" href="{{ url('/my_events') }}">Moje ogłoszenia</a></li>
-                            <li><a class="dropdown-item text-white" href="{{ url('/help') }}">Pomoc</a></li>
-                            <li><a class="dropdown-item text-white" href="{{ url('/profile/dashboard') }}">Ustawienia</a></li>
+                            <li><a class="dropdown-item text-white" href="{{ url('/account') }}">{{ __('messages.navbar.goToAccount') }}</a></li>
+                            <li><a class="dropdown-item text-white" href="{{ url('/my_events') }}">{{ __('messages.navbar.myEvents') }}</a></li>
+                            <li><a class="dropdown-item text-white" href="{{ url('/help') }}">{{ __('messages.navbar.help') }}</a></li>
+                            <li><a class="dropdown-item text-white" href="{{ url('/profile/dashboard') }}">{{ __('messages.navbar.settings') }}</a></li>
                             <li><hr class="dropdown-divider bg-white"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="dropdown-item text-white">Wyloguj się</button>
+                                    <button type="submit" class="dropdown-item text-white">{{ __('messages.navbar.signOut') }}</button>
                                 </form>
                             </li>
                         </ul>
                     </div>
                 @else
+                    <div class="dropdown mx-2">
+                        <a class="btn btn-gradient dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            @if (app()->getLocale() == 'pl')
+                                <span><img src="{{ asset('images/includes/pl.png') }}" alt="Poland" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'en')
+                                <span><img src="{{ asset('images/includes/gb-eng.png') }}" alt="England" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'es')
+                                <span><img src="{{ asset('images/includes/es.png') }}" alt="Spain" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'jpn')
+                                <span><img src="{{ asset('images/includes/jp.png') }}" alt="Japan" width="20" height="15"></span>
+                            @elseif (app()->getLocale() == 'ua')
+                                <span><img src="{{ asset('images/includes/ua.png') }}" alt="Ukraine" width="20" height="15"></span>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'pl' ? 'active' : '' }}" href="{{ route('language.change', 'pl') }}"><img src="{{ asset('images/includes/pl.png') }}" alt="Poland" width="20" height="15">Polski</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('language.change', 'en') }}"><img src="{{ asset('images/includes/gb-eng.png') }}" alt="England" width="20" height="15">English</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'es' ? 'active' : '' }}" href="{{ route('language.change', 'es') }}"><img src="{{ asset('images/includes/es.png') }}" alt="Spain" width="20" height="15">Español</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'jpn' ? 'active' : '' }}" href="{{ route('language.change', 'jpn') }}"><img src="{{ asset('images/includes/jp.png') }}" alt="Japan" width="20" height="15">日本語</a></li>
+                            <li><a class="dropdown-item text-white {{ app()->getLocale() == 'ua' ? 'active' : '' }}" href="{{ route('language.change', 'ua') }}"><img src="{{ asset('images/includes/ua.png') }}" alt="Ukraine" width="20" height="15"> Українська</a></li>
+                        </ul>
+                    </div>
+
                     <a href="{{ route('login') }}" class="btn btn-gradient ms-auto">
-                        Zaloguj się
+                        {{ __('messages.navbar.signIn') }}
                     </a>
                 @endauth
             </div>
