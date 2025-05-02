@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ __('messages.title.map') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/main_map.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,74 +12,6 @@
     <script>
         window.events = @json($events);
     </script>
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 !important;
-        }
-        .map-container {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 1;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-        }
-        .map-controls, .map-info, .search-container {
-            position: absolute;
-            z-index: 1000;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 80%);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .map-controls { top: 10px; right: 10px; }
-        .map-info { bottom: 30px; left: 10px; max-width: 300px; }
-        .search-container { top: 10px; left: 60px; width: 300px; }
-        .search-results {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 80%);
-            border: 1px solid #000000;
-            max-height: 200px;
-            color: white;
-            overflow-y: auto;
-            display: none;
-        }
-        .search-result-item {
-            padding: 8px 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #ffffff;
-        }
-        .search-result-item:hover {
-            background: linear-gradient(135deg, #1a1a2e 0%, #1e2d51 80%);
-        }
-        .leaflet-control-zoom a {
-            background: linear-gradient(135deg, #1a1a2e 0%, #1e2d51 80%);
-            color: white;
-            border: black;
-        }
-
-        @media (max-width: 768px) {
-            .search-container { width: calc(100% - 120px); left: 10px; }
-            .map-info { bottom: 10px; max-width: calc(100% - 20px); }
-        }
-    </style>
     @include('includes.navbar')
 </head>
 <body>
@@ -120,6 +52,12 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    const customIcon = L.icon({
+        iconUrl: '/images/includes/custom_marker.png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
     document.addEventListener('DOMContentLoaded', function() {
         const map = L.map('map').setView([52.069, 19.480], 7);
 
@@ -134,7 +72,7 @@
             if (currentMarker) {
                 map.removeLayer(currentMarker);
             }
-            currentMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            currentMarker = L.marker([lat, lng], { draggable: true, icon: customIcon }).addTo(map);
             if (popupContent) currentMarker.bindPopup(popupContent).openPopup();
 
             currentMarker.on('dragend', () => {
@@ -168,11 +106,12 @@
             events.forEach(event => {
                 const lat = parseFloat(event.latitude);
                 const lng = parseFloat(event.longitude);
-                const marker = L.marker([lat, lng]).addTo(map);
+                const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
                 marker.bindPopup(`
-                    <b>${event.title}</b><br>
-                    ${event.location_name ?? ''}
-                `);
+            <b>${event.title}</b><br>
+            ${event.location_name ?? ''}<br>
+            ${event.date ?? ''}
+        `);
             });
         }
 
