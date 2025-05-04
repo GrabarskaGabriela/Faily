@@ -14,7 +14,7 @@
         <div class="card-body">
             <h3 class="card-title text-center mb-4">{{ __('auth.authconfirmpassword.confirmPassword') }}</h3>
 
-            <div class="mb-4 text-muted">
+            <div class="mb-4 text-color">
                 {{ __('auth.authconfirmpassword.confirmInfo') }}
             </div>
 

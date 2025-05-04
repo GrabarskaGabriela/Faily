@@ -8,78 +8,59 @@
 </head>
 <body class="bg-main">
 @include('includes.navbar')
+
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-black">
-                <div class="card-body text-white " style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                    <h1 class="card-title text-center mb-4">Centrum pomocy - strona jeszcze do przebudowy</h1>
+        <div class="col-lg-9">
+            <div class="card shadow shadow-sm border-0 rounded-4 overflow-hidden">
+                <div class="card-body text-color">
+                    <h1 class="card-title text-center mb-5 display-5 fw-bold">Centrum pomocy</h1>
+                    <p class="text-center text-color mb-4 fst-italic">Strona jest w trakcie przebudowy – dziękujemy za cierpliwość!</p>
 
                     <div class="mb-5">
-                        <h3 class="mb-3">Najczęściej zadawane pytania</h3>
+                        <h3 class="mb-4">Najczęściej zadawane pytania</h3>
                         <div class="accordion" id="faqAccordion">
-                            <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Jak zmienić zdjęcie profilowe?
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                                     data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Przejdź do swojego profilu, kliknij przycisk "Edytuj zdjęcie" i wybierz nowe zdjęcie z dysku.
+                            @foreach ([
+                                ['title' => 'Jak zmienić zdjęcie profilowe?', 'content' => 'Przejdź do swojego profilu, kliknij przycisk "Edytuj zdjęcie" i wybierz nowe zdjęcie z dysku.'],
+                                ['title' => 'Jak zaktualizować dane profilowe?', 'content' => 'W sekcji "Informacje" na swoim profilu możesz edytować wszystkie dane. Pamiętaj aby zapisać zmiany.'],
+                                ['title' => 'Jak skontaktować się z supportem?', 'content' => 'Napisz do nas na adres: <a href="mailto:support@faily.pl" class="text-color text-decoration-underline">support@faily.pl</a>.']
+                            ] as $index => $faq)
+                                <div class="accordion-item bg-dark text-color border-0 mb-3 rounded-3 shadow-sm">
+                                    <h2 class="accordion-header" id="heading{{ $index }}">
+                                        <button class="accordion-button bg-dark text-color collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ $index }}"
+                                                aria-expanded="false"
+                                                aria-controls="collapse{{ $index }}">
+                                            {{ $faq['title'] }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ $index }}" class="accordion-collapse collapse"
+                                         aria-labelledby="heading{{ $index }}" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            {!! $faq['content'] !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Jak zaktualizować dane profilowe?
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                     data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        W sekcji "Informacje" na swoim profilu możesz edytować wszystkie dane. Pamiętaj aby zapisać zmiany.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item mb-3 border-0 rounded-3 overflow-hidden shadow-sm">
-                                <h2 class="accordion-header" id="headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Jak skontaktować się z supportem?
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                                     data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Napisz do nas na adres: <a href="mailto:support@faily.pl">support@faily.pl</a>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <h3 class="mb-3">Przydatne linki</h3>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="#" class="text-decoration-none">Regulamin serwisu</a>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent border-secondary">
+                                <a href="#" class="text-decoration-none text-light">Regulamin serwisu</a>
                             </li>
-                            <li class="list-group-item">
-                                <a href="#" class="text-decoration-none">Polityka prywatności</a>
+                            <li class="list-group-item bg-transparent border-secondary">
+                                <a href="#" class="text-decoration-none text-light">Polityka prywatności</a>
                             </li>
                         </ul>
                     </div>
-
                     <div class="text-center mt-5">
                         <h3 class="mb-3">Potrzebujesz dodatkowej pomocy?</h3>
-                        <a href="mailto:support@faily.pl" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                        <a href="mailto:support@faily.pl" class="btn border-0 px-4 py-2 fw-semibold text-color"
+                           style="background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%); border-radius: 30px;">
                             Napisz do nas
                         </a>
                     </div>

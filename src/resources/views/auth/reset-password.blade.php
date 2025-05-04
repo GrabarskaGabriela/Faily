@@ -10,12 +10,12 @@
 @include('includes.navbar')
 
 <main class="container flex-grow-1 my-5">
-    <div class="card shadow-sm mx-auto border-dark" style="max-width: 500px;">
-        <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);" >
-            <h3 class="card-title text-center mb-4 text-white">{{ __('auth.authresetpassword.titleLabel') }}</h3>
+    <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="card-body shadow-sm">
+            <h3 class="card-title text-center mb-4 text-color">{{ __('auth.authresetpassword.titleLabel') }}</h3>
 
             @if ($errors->any())
-                <div class="alert alert-danger text-white">
+                <div class="alert alert-danger text-color">
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -29,32 +29,32 @@
                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
                 <div class="mb-3">
-                    <label for="email" class="form-label text-white">{{ __('auth.authresetpassword.emailLabel') }}</label>
+                    <label for="email" class="form-label text-color">{{ __('auth.authresetpassword.emailLabel') }}</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus autocomplete="email">
                     @error('email')
-                    <div class="invalid-feedback text-white">
+                    <div class="invalid-feedback text-color">
                         {{ __('auth.authresetpassword.userNotFoundMessage') }}
                     </div>
                     @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="password" class="form-label text-white">{{ __('auth.authresetpassword.newPasswordLabel') }}</label>
+                    <label for="password" class="form-label text-color">{{ __('auth.authresetpassword.newPasswordLabel') }}</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required autocomplete="new-password">
                     @error('password')
-                    <div class="invalid-feedback text-white">
+                    <div class="invalid-feedback text-color">
                         {{ __('auth.authresetpassword.passwordMismatchmessage') }}
                     </div>
                     @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="password_confirmation" class="form-label text-white">{{ __('auth.authresetpassword.confirmPasswordLabel') }}</label>
+                    <label for="password_confirmation" class="form-label text-color">{{ __('auth.authresetpassword.confirmPasswordLabel') }}</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                    <button type="submit" class="btn btn-gradient text-color mt-2">
                         {{ __('auth.authresetpassword.submitButton') }}
                     </button>
                 </div>

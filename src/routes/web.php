@@ -7,6 +7,7 @@ use App\Http\Controllers\MainMapController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\RideRequestController;
+use App\Http\Controllers\LanguageController;
 
 
 Route::get('/', function () {return view('welcome');})->name('welcome');

@@ -40,6 +40,7 @@ return [
         'userAttendances' => 'My Registrations - Faily',
         'editEvent' => 'Edit Event - Faily',
         'applyEvent' => 'Sign Up for Event - Faily',
+        'account' => 'Account - Faily',
     ],
 
     'navbar' => [

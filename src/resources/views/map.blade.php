@@ -32,13 +32,13 @@
                 <div class="search-results" id="search-results"></div>
             </div>
 
-            <div class="map-controls border-dark" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <button class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);" id="locate-me">
+            <div class="map-controls border-dark">
+                <button class="btn btn-gradient"id="locate-me">
                     <i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}
                 </button>
             </div>
 
-            <div class="map-info text-white" id="map-info"  style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+            <div class="map-info text-color" id="map-info">
                 <h5>{{ __('messages.map.mapInfo') }}</h5>
                 <p>{{ __('messages.map.clickMapInstruction') }}</p>
                 <div id="coordinates"></div>

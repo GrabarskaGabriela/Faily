@@ -10,8 +10,8 @@
 @include('includes.navbar')
 
 <main class="container flex-grow-1 my-5">
-    <div class="card shadow-sm mx-auto border-black text-white" style="max-width: 500px;">
-        <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+    <div class="card shadow-sm mx-auto border-black text-color" style="max-width: 500px;">
+        <div class="card-body shadow-sm">
             <h3 class="card-title text-center mb-4">{{ __('auth.authverifyemail.titleLabel') }}</h3>
 
             <div class="alert alert-info mb-4">
@@ -27,14 +27,14 @@
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                    <button type="submit" class="btn btn-gradient text-color">
                         {{ __('auth.authverifyemail.resendButtonLabel') }}
                     </button>
                 </form>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn btn-link text-decoration-none text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                    <button type="submit" class="btn btn-gradient btn-link text-decoration-none text-color">
                         {{ __('auth.authverifyemail.logoutButtonLabel') }}
                     </button>
                 </form>

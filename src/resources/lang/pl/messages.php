@@ -40,6 +40,7 @@ return [
         'userAttendances' => 'Moje zapisy - Faily',
         'editEvent' => 'Edytuj wydarzenie - Faily',
         'applyEvent' => 'Zapisz się na wydarzenie - Faily',
+        'account' => 'Konto - Faily',
 
     ],
 
@@ -68,7 +69,7 @@ return [
     ],
 
     'welcome' => [
-        'mainTitle' => 'Meet people. Make events.',
+        'mainTitle' => 'Poznawaj ludzi. Twórz wydarzenia.',
         'mainSubtitle' => 'Spotkaj się z innymi na wspólnych wyjściach – od kina po rower!',
         'meetDevelopers' => 'Poznaj twórców',
         'explore' => 'Poznawaj',

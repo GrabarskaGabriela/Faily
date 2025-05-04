@@ -41,7 +41,7 @@ return [
         'userAttendances' => 'Мої записи - Faily',
         'editEvent' => 'Редагувати подію - Faily',
         'applyEvent' => 'Записатися на подію - Faily',
-
+        'account' => 'мій профіль - Faily',
     ],
 
     'navbar' => [

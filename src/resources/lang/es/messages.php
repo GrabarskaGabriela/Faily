@@ -40,6 +40,7 @@ return [
         'userAttendances' => 'Mis registros - Faily',
         'editEvent' => 'Editar evento - Faily',
         'applyEvent' => 'Registrarse en evento - Faily',
+        'account' => 'Cuenta - Faily',
     ],
 
     'navbar' => [

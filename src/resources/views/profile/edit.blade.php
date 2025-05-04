@@ -16,8 +16,8 @@
 
         <div class="col-md-9 text-white">
 
-            <div class="card shadow-sm mb-4 border-dark " style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <div class="card-header text-white text-center" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card shadow-sm mb-4 ">
+                <div class="card-header text-center">
                     <h4 class="mb-0"><i class="fas fa-user-edit me-2 text-white"></i>{{ __('messages.profileedit.personalData') }}</h4>
                 </div>
                 <div class="card-body d-flex justify-content-center">
@@ -31,8 +31,8 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-4 border-dark" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <div class="card-header text-white text-center" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header text-white text-center">
                     <h4 class="mb-0"><i class="fas fa-key me-2 text-white"></i>{{ __('messages.profileedit.passwordChange') }}</h4>
                 </div>
                 <div class="card-body d-flex justify-content-center">
@@ -42,8 +42,8 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm border-dark" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                <div class="card-header text-white text-center" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
                     <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2 text-white"></i>{{ __('messages.profileedit.deleteAccount') }}</h4>
                 </div>
                 <div class="card-body d-flex justify-content-center">

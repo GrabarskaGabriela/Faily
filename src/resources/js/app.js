@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/app.css';
 
+
+
 import 'bootstrap';
 
 import { createApp } from 'vue';
@@ -10,6 +12,7 @@ import 'leaflet/dist/leaflet.css';
 import EventForm from "./components/EventForm.vue";
 import EventPlaceMap from "./components/EventPlaceMap.vue";
 import RideSharing from "./components/RideSharing.vue";
+
 
 const app = createApp({});
 app.component('leaflet-map', LeafletMap);

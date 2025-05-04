@@ -10,7 +10,7 @@
 
 @include('includes.navbar')
 
-<main class="container mt-5 mb-5 text-white">
+<main class="container mt-5 mb-5 text-color">
     <div class="row">
         <div class="col-md-8">
             @if($event->photos->count() > 0)
@@ -51,22 +51,22 @@
                      style="height: 250px; object-fit: cover;">
             @endif
 
-            <div class="card text-white border-dark mb-4" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card text-color  mb-4 shadow-sm">
                 <div class="card-header flex-column">
                     <h4>{{ __('messages.showevent.myEvents') }}</h4>
                 </div>
-                <div class="card-body border-black" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                    <p class="text-white">{{ __('messages.showevent.eventTitle') }}  {{ $event->title }}</p>
-                    <p class="text-white">{{ __('messages.showevent.eventLocation') }} {{ $event->location_name }}</p>
-                    <p class="text-white">{{ __('messages.showevent.eventDesc') }} {{ $event->description}}</p>
+                <div class="card-body border-black shadow-sm">
+                    <p class="text-color">{{ __('messages.showevent.eventTitle') }}  {{ $event->title }}</p>
+                    <p class="text-color">{{ __('messages.showevent.eventLocation') }} {{ $event->location_name }}</p>
+                    <p class="text-color">{{ __('messages.showevent.eventDesc') }} {{ $event->description}}</p>
                 </div>
             </div>
 
-            <div class="card text-white border-black mb-4" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card text-color shadow-sm border-black mb-4">
                 <div class="card-header">
                     <h4>{{ __('messages.showevent.eventDesc') }}</h4>
                 </div>
-                <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <p><strong>{{ __('messages.showevent.eventDate') }}</strong> {{ \Carbon\Carbon::parse($event->date)->format('d.m.Y H:i') }}</p>
@@ -87,15 +87,15 @@
             </div>
 
             @if($event->has_ride_sharing && $event->rides->count() > 0)
-                <div class="card shadow-lg mb-4 border-black" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); border-radius: 12px; border-color: black">
+                <div class="card shadow-lg mb-4 border-black shadow-sm">
                     <div class="card-header py-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
-                        <h4 class="text-white m-0 font-weight-bold"><i class="fas fa-car me-2"></i>{{ __('messages.showevent.availableRides') }}</h4>
+                        <h4 class="text-color m-0 font-weight-bold"><i class="fas fa-car me-2"></i>{{ __('messages.showevent.availableRides') }}</h4>
                     </div>
-                    <div class="card-body p-0  border-dark">
-                        <div class="table-responsive border-dark ">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
                             <table class="table table-dark table-hover mb-0">
                                 <thead>
-                                <tr class="border-dark">
+                                <tr>
                                     <th class="py-3 px-4 border-0">{{ __('messages.showevent.driver') }}</th>
                                     <th class="py-3 px-4 border-0">{{ __('messages.showevent.vehicle') }}</th>
                                     <th class="py-3 px-4 border-0">{{ __('messages.showevent.seats') }}</th>
@@ -149,8 +149,7 @@
                                                     @if(!$userRequest)
                                                         @if($availableSeats > 0)
                                                             <a href="{{ route('ride-requests.create', ['ride_id' => $ride->id]) }}"
-                                                               class="btn btn-sm fw-bold text-white"
-                                                               style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border-radius: 20px; padding: 5px 15px;">
+                                                               class="btn btn-sm fw-bold text-color btn-gradient">
                                                                 <i class="fas fa-hand-point-up me-1"></i>{{ __('messages.showevent.signUp') }}
                                                             </a>
                                                         @else
@@ -167,7 +166,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                        class="btn btn-sm text-white"
+                                                                        class="btn btn-sm text-color"
                                                                         style="background: linear-gradient(135deg, #d40000 0%, #ff0000 100%); border-radius: 20px; padding: 5px 15px;">
                                                                     <i class="fas fa-times me-1"></i>{{ __('messages.showevent.cancel') }}
                                                                 </button>
@@ -182,7 +181,7 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                        class="btn btn-sm text-white"
+                                                                        class="btn btn-sm text-color"
                                                                         style="background: linear-gradient(135deg, #d40000 0%, #ff0000 100%); border-radius: 20px; padding: 5px 15px;">
                                                                     <i class="fas fa-sign-out-alt me-1"></i>{{ __('messages.showevent.resign') }}
                                                                 </button>
@@ -196,12 +195,12 @@
                                                 @else
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ route('ride-requests.index', ['ride_id' => $ride->id]) }}"
-                                                           class="btn btn-sm text-white"
+                                                           class="btn btn-sm text-color"
                                                            style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); border-radius: 20px 0 0 20px; padding: 5px 10px;">
                                                             <i class="fas fa-users me-1"></i>{{ __('messages.showevent.applications') }}
                                                         </a>
                                                         <a href="{{ route('rides.edit', $ride) }}"
-                                                           class="btn btn-sm text-white"
+                                                           class="btn btn-sm text-color"
                                                            style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); padding: 5px 10px;">
                                                             <i class="fas fa-edit me-1"></i>{{ __('messages.showevent.edit') }}
                                                         </a>
@@ -209,7 +208,7 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
-                                                                    class="btn btn-sm text-white"
+                                                                    class="btn btn-sm text-color"
                                                                     style="background: linear-gradient(135deg, #d40000 0%, #ff0000 100%); border-radius: 0 20px 20px 0; padding: 5px 10px;"
                                                                     onclick="return confirm('{{ __('messages.showevent.deleteInfo') }}')">
                                                                 <i class="fas fa-trash-alt me-1"></i>{{ __('messages.showevent.delete') }}
@@ -230,30 +229,30 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card text-white border-black mb-4" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card shadow-sm text-color border-black mb-4">
                 <div class="card-header">
                     <h4>{{ __('messages.showevent.actions') }}</h4>
                 </div>
-                <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <div class="card-body shadow-sm">
                     @auth
                         @if(Auth::id() === $event->user_id)
                             {{-- Akcje dla organizatora wydarzenia --}}
                             <div class="d-grid gap-2 mb-3">
-                                <a href="{{ route('events.edit', $event) }}"  class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.showevent.editEvent') }}</a>
+                                <a href="{{ route('events.edit', $event) }}"  class="btn text-color btn-gradient">{{ __('messages.showevent.editEvent') }}</a>
                             </div>
                             <div class="d-grid gap-2 mb-3">
-                                <a href="{{ route('events.attendees.index', $event) }}"  class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.showevent.manageApplications') }}</a>
+                                <a href="{{ route('events.attendees.index', $event) }}"  class="btn text-color btn-gradient">{{ __('messages.showevent.manageApplications') }}</a>
                             </div>
                             @if($event->has_ride_sharing)
                                 <div class="d-grid gap-2 mb-3">
-                                    <a href="{{ route('rides.create', ['event_id' => $event->id]) }}" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.showevent.addRide') }}</a>
+                                    <a href="{{ route('rides.create', ['event_id' => $event->id]) }}" class="btn text-color btn-gradient">{{ __('messages.showevent.addRide') }}</a>
                                 </div>
                             @endif
                             <div class="d-grid gap-2">
                                 <form action="{{ route('events.destroy', $event) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn w-100 btn-danger btn-sm rounded-pill mt-2" onclick="return confirm('{{ __('messages.showevent.deleteEventInfo') }}')">{{ __('messages.showevent.deleteEvent') }}</button>
+                                    <button type="submit" class="btn w-100 btn-gradient-danger btn-sm rounded-pill mt-2" onclick="return confirm('{{ __('messages.showevent.deleteEventInfo') }}')">{{ __('messages.showevent.deleteEvent') }}</button>
                                 </form>
                             </div>
                         @else
@@ -264,10 +263,10 @@
 
                             @if(!$attendee)
                                 <div class="d-grid gap-2 mb-3">
-                                    <a href="{{ route('events.attendees.create', $event) }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.showevent.signUpForEvent') }}</a>
+                                    <a href="{{ route('events.attendees.create', $event) }}" class="btn text-color" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.showevent.signUpForEvent') }}</a>
                                 </div>
                             @else
-                                <div class="alert text-white" style="
+                                <div class="alert text-color" style="
                                     @if($attendee->status == 'pending') background: linear-gradient(135deg, #d47700 0%, #ffae00 100%);
                                     @elseif($attendee->status == 'accepted') background: linear-gradient(135deg, #00a01d 0%, #00d429 100%);
                                     @elseif($attendee->status == 'rejected') background: linear-gradient(135deg, #d40000 0%, #ff0000 100%);
@@ -288,7 +287,7 @@
                                     <form action="{{ route('events.attendees.destroy', ['event' => $event, 'attendee' => $attendee]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #d40000 0%, #ff0000 100%); border: none;">
+                                        <button type="submit" class="btn text-color btn-gradient-danger">
                                             @if($attendee->status == 'accepted') {{ __('messages.showevent.unsubscribe') }}
                                             @else {{ __('messages.showevent.cancelApplication') }}
                                             @endif
@@ -297,8 +296,8 @@
                                 </div>
 
                                 @if($attendee->status == 'accepted' && $event->has_ride_sharing)
-                                    <div class="card mb-3 text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: none;">
-                                        <div class="card-header" style="background: rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <div class="card mb-3 text-color shadow-sm">
+                                        <div class="card-header">
                                             <h5>{{ __('messages.showevent.rideOptions') }}</h5>
                                         </div>
                                         <div class="card-body">
@@ -308,16 +307,16 @@
 
                                             @if(!$userRide)
                                                 <div class="mb-3">
-                                                    <a href="{{ route('rides.create', ['event_id' => $event->id]) }}" class="btn w-100 text-white" style="background: linear-gradient(135deg, #00a01d 0%, #00d429 100%);">{{ __('messages.showevent.offerRide') }}</a>
+                                                    <a href="{{ route('rides.create', ['event_id' => $event->id]) }}" class="btn w-100 text-color" style="background: linear-gradient(135deg, #00a01d 0%, #00d429 100%);">{{ __('messages.showevent.offerRide') }}</a>
                                                 </div>
                                             @else
-                                                <div class="alert text-white" style="background: linear-gradient(135deg, #00a01d 0%, #00d429 100%);">
+                                                <div class="alert text-color" style="background: linear-gradient(135deg, #00a01d 0%, #00d429 100%);">
                                                     <p><strong>{{ __('messages.showevent.rideOffered') }}</strong></p>
                                                     <p>{{ __('messages.showevent.vehicleDetails') }} {{ $userRide->vehicle_description }}</p>
                                                     <p>{{ __('messages.showevent.availableSeats') }} {{ $userRide->available_seats }}</p>
                                                     <div class="mt-2">
-                                                        <a href="{{ route('ride-requests.index', ['ride_id' => $userRide->id]) }}" class="btn btn-sm text-white" style="background: linear-gradient(135deg, #007ad4 0%, #00a0ff 100%); border: none;">{{ __('messages.showevent.menageApplications') }}</a>
-                                                        <a href="{{ route('rides.edit', $userRide) }}" class="btn btn-sm text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%); border: none;">{{ __('messages.showevent.edit') }}</a>
+                                                        <a href="{{ route('ride-requests.index', ['ride_id' => $userRide->id]) }}" class="btn btn-sm text-color" style="background: linear-gradient(135deg, #007ad4 0%, #00a0ff 100%); border: none;">{{ __('messages.showevent.menageApplications') }}</a>
+                                                        <a href="{{ route('rides.edit', $userRide) }}" class="btn btn-sm text-color btn-gradient">{{ __('messages.showevent.edit') }}</a>
                                                     </div>
                                                 </div>
                                             @endif
@@ -330,23 +329,23 @@
                 </div>
             </div>
 
-            <div class="card text-white border-black" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card text-color border-black shadow-sm">
                 <div class="card-header">
                     <h4>{{ __('messages.showevent.organizer') }}</h4>
                 </div>
-                <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <div class="card-body">
                     <div class="d-flex align-items-center">
                         @if($event->user->photo_path)
                             <img src="{{ asset('storage/' . $event->user->photo_path) }}"
                                  class="rounded-circle me-3" alt="{{ __('messages.showevent.profilePhoto') }}" width="80" height="80">
                         @else
-                            <img src="{{ asset('images/includes/default_avatar.png') }}"
+                            <img src="{{ asset('images/includes/default-avatar.png') }}"
                                  class="rounded-circle me-3" alt="{{ __('messages.showevent.profilePhoto') }}" width="80" height="80">
                         @endif
                         <div>
                             <h5 class="mb-1">{{ $event->user->name }}</h5>
                             @if($event->user->description)
-                                <p class="mb-0 small text-white">{{ $event->user->description }}</p>
+                                <p class="mb-0 small text-color">{{ $event->user->description }}</p>
                             @endif
                         </div>
                     </div>

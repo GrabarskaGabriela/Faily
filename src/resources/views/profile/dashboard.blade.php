@@ -15,9 +15,8 @@
         @include('includes.profile_menu')
 
         <div class="col-md-9">
-            <div class="card shadow-sm mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
-                <div class="card-header d-flex justify-content-between align-items-center"
-                     style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>{{ __('messages.profiledashboard.summary') }}</h4>
                     <span class="badge">{{ __('messages.profiledashboard.lastUpdate') }} {{ now()->format('d.m.Y H:i') }}</span>
                 </div>
@@ -30,46 +29,16 @@
                             <p class="mb-0">{{ __('messages.profiledashboard.loggedInInfo') }}</p>
                         </div>
                     </div>
-
-                    <div class="row mb-4" >
-                        <div class="col-md-4 mb-3">
-                            <div class="card border-white text-white h-100" style="background: rgba(255,255,255,0.05);">
-                                <div class="card-body text-center d-flex flex-column">
-                                    <h5 class="card-title">
-                                        <i class="fas fa-home text-white me-2"></i>{{ __('messages.profiledashboard.myEvents') }}
-                                    </h5>
-                                    <p class="h2 my-3">5</p>
-                                    <p class="text-white small mb-3">{{ __('messages.profiledashboard.createdEvents') }}</p>
-                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">{{ __('messages.profiledashboard.viewButton') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="card border-white text-white h-100" style="background: rgba(255,255,255,0.05);">
-                                <div class="card-body text-center d-flex flex-column">
-                                    <h5 class="card-title">
-                                        <i class="fas fa-tasks text-white me-2"></i>{{ __('messages.profiledashboard.favorites') }}
-                                    </h5>
-                                    <p class="h2 my-3">3</p>
-                                    <p class="text-white small mb-3">{{ __('messages.profiledashboard.watchedEvents') }}</p>
-                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">{{ __('messages.profiledashboard.viewButton') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
-                        <div class="card-header d-flex justify-content-between align-items-center"
-                             style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0"><i class="fas fa-history me-2"></i>{{ __('messages.profiledashboard.recentActivities') }}</h5>
                             <a href="#" class="btn btn-sm btn-outline-light">{{ __('messages.profiledashboard.moreButton') }}</a>
                         </div>
                         <div class="card-body p-0">
                             <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05);">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <div class=" rounded-circle p-2 me-3" style="background: rgba(255,255,255,0.05);">
+                                        <div class=" rounded-circle p-2 me-3">
                                             <i class="fas fa-sign-in-alt text-white"></i>
                                         </div>
                                         <div>
@@ -79,9 +48,9 @@
                                     </div>
                                     <small class="text-white">{{ __('messages.profiledashboard.lastSeen') }}</small>
                                 </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05);">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <div class=" rounded-circle p-2 me-3" style="background: rgba(255,255,255,0.05);">
+                                        <div class=" rounded-circle p-2 me-3" >
                                             <i class="fas fa-edit text-white"></i>
                                         </div>
                                         <div>
@@ -89,15 +58,15 @@
                                             <p class="mb-0 small text-white">{{ __('messages.profiledashboard.personalData') }}</p>
                                         </div>
                                     </div>
-                                    <small class="text-white">{{ __('messages.profiledashboard.lastChanged ') }}</small>
+                                    <small class="text-white">{{ __('messages.profiledashboard.lastChanged') }}</small>
                                 </div>
 
                             </div>
                         </div>
                     </div>
 
-                    <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white;">
-                        <div class="card-header" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%); color: white;">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header" >
                             <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>{{ __('messages.profiledashboard.quickActions') }}</h5>
                         </div>
                         <div class="card-body">

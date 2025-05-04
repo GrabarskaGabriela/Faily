@@ -1,9 +1,9 @@
 <section class="mb-5">
     <header class="mb-4">
-        <h2 class="h4 text-white">
+        <h2 class="h4 text-color">
             {{ __('messages.profilepartialsupdateprofile.profileInfo') }}
         </h2>
-        <p class="text-white small">
+        <p class="text-color small">
             {{ __('messages.profilepartialsupdateprofile.profileUpdateMessage') }}
         </p>
     </header>
@@ -16,7 +16,7 @@
         @csrf
         @method('patch')
 
-        <div class="mb-3 text-white">
+        <div class="mb-3 text-color">
             <label for="name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.username') }}</label>
             <input type="text" class="form-control" id="name" name="name"
                    value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
@@ -27,7 +27,7 @@
             @endif
         </div>
 
-        <div class="mb-3 text-white">
+        <div class="mb-3 text-color">
             <label for="first_name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.firstName') }}</label>
             <input type="text" class="form-control" id="first_name" name="first_name"
                    value="{{ old('first_name', $user->first_name) }}" required autofocus autocomplete="first_name">
@@ -38,7 +38,7 @@
             @endif
         </div>
 
-        <div class="mb-3 text-white">
+        <div class="mb-3 text-color">
             <label for="last_name" class="form-label"> {{ __('messages.profilepartialsupdateprofile.lastName') }}</label>
             <input type="text" class="form-control" id="last_name" name="last_name"
                    value="{{ old('last_name', $user->last_name) }}" required autofocus autocomplete="last_name">
@@ -49,8 +49,7 @@
             @endif
         </div>
 
-
-        <div class="mb-3 text-white">
+        <div class="mb-3 text-color">
             <label for="email" class="form-label"> {{ __('messages.profilepartialsupdateprofile.email') }}</label>
             <input type="email" class="form-control" id="email" name="email"
                    value="{{ old('email', $user->email) }}" required autocomplete="username">
@@ -61,7 +60,7 @@
             @endif
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div class="mt-2 small text-dark">
+                <div class="mt-2 small text-color">
                     {{ __('messages.profilepartialsupdateprofile.verifyEmailError') }}
 
                     <button form="send-verification" class="btn btn-link p-0 align-baseline text-decoration-underline">
@@ -77,7 +76,18 @@
             @endif
         </div>
 
-        <div class="mb-3 text-white">
+        <div class="mb-3 text-color">
+            <label for="description" class="form-label"> {{ __('messages.account.aboutMe') }}</label>
+            <input type="text" class="form-control" id="description" name="description"
+                   value="{{ old('description', $user->description) }}" required autofocus autocomplete="description">
+            @if ($errors->get('descriptione'))
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('description') }}
+                </div>
+            @endif
+        </div>
+
+        <div class="mb-3 text-color">
             <label class="form-label">{{ __('messages.profilepartialsupdateprofile.avatar') }}</label>
 
             @if($user->avatar)
@@ -86,14 +96,14 @@
                         <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
                              class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
                     @else
-                        <img src="{{ asset('images/includes/default_avatar.png') }}"
+                        <img src="{{ asset('images/includes/default-avatar.png') }}"
                              class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
                     @endif
                 </div>
             @endif
             <input type="file" class="d-none" id="avatar" name="avatar" onchange="updateFileName(this)">
-            <label for="avatar"  class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
-                {{ __('messages.profilepartialsupdateprofile.chooseFile') ?? __('messages.profilepartialsupdateprofile.chooseFile') }}
+            <label for="avatar" href="{{ route('profile.edit') }}" class="btn btn-gradient text-color">
+                {{ __('messages.profilepartialsupdateprofile.chooseFile')}}
             </label>
             <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
 
@@ -103,6 +113,8 @@
                 </div>
             @endif
         </div>
+
+
         <script>
             function updateFileName(input) {
                 const fileName = input.files.length ? input.files[0].name : __('messages.profilepartialsupdateprofile.fileNotChoosen');
@@ -111,8 +123,8 @@
         </script>
 
 
-        <div class="mb-3 text-white">
-            <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.prefferredLanguage') }}</label>
+        <div class="mb-3 text-color">
+            <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.preferredLanguage') }}</label>
             <select class="form-select" id="preferred_language" name="preferred_language">
                 <option value="pl" {{ $user->language == 'pl' ? 'selected' : '' }}>Polski</option>
                 <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
@@ -128,7 +140,7 @@
             @endif
         </div>
 
-        <div class="mb-4 text-white">
+        <div class="mb-4 text-color">
             <label for="theme" class="form-label"> {{ __('messages.profilepartialsupdateprofile.theme') }}</label>
             <select class="form-select" id="theme" name="theme">
                 <option value="light" {{ $user->theme == 'light' ? 'selected' : '' }}>{{ __('messages.profilepartialsupdateprofile.light') }}</option>
@@ -142,10 +154,13 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">  {{ __('messages.profilepartialsupdateprofile.save') }}</button>
+            <button type="submit" class="btn-gradient text-color"> {{ __('messages.profilepartialsupdateprofile.save') }}
+            </button>
 
-            @if (session('status') === 'profile-updated')
-                <span class="text-success small"> {{ __('messages.profilepartialsupdateprofile.saved') }}</span>
+            @if (session('status') === 'password-updated')
+                <span class="text-success small">
+                     {{ __('messages.profilepartialsupdateprofile.saved') }}
+                </span>
             @endif
         </div>
     </form>

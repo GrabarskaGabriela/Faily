@@ -1,20 +1,17 @@
 <section class="mb-5" >
     <header class="mb-4" >
-        <h2 class="h4 text-white" >
+        <h2 class="h4 text-color" >
             {{ __('messages.profilepartialsdelete.deleteAccount') }}
         </h2>
 
-        <p class="text-white small mt-2">
+        <p class="text-color small mt-2">
             {{ __('messages.profilepartialsdelete.deleteAccountDataWarning') }}
         </p>
     </header>
-
-    <button type="button"
-            class="btn btn-danger"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmUserDeletionModal">
-        {{ __('messages.profilepartialsdelete.deleteAccount') }}
-    </button>
+    <div class="d-flex align-items-center gap-3">
+        <button type="submit" class="btn-gradient-danger text-color" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">  {{ __('messages.profilepartialsdelete.deleteAccount') }}
+        </button>
+    </div>
 
     <div class="modal fade" id="confirmUserDeletionModal" tabindex="-1" aria-labelledby="confirmUserDeletionLabel" aria-hidden="true" >
         <div class="modal-dialog">
@@ -22,20 +19,16 @@
                 @csrf
                 @method('delete')
 
-                <div class="modal-content text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-white" id="confirmUserDeletionLabel">
+                        <h5 class="modal-title" id="confirmUserDeletionLabel">
                             {{ __('messages.profilepartialsdelete.confirmDeleteAccount') }}
                         </h5>
                         <button type="button" class="btn-close white-close" data-bs-dismiss="modal" aria-label=" {{ __('messages.profilepartialsdelete.closeButton') }}"></button>
                     </div>
-                    <style>
-                        .btn-close.white-close {
-                            filter: invert(1);
-                        }
-                    </style>
+
                     <div class="modal-body">
-                        <p class="text-white small">
+                        <p class="text-color small">
                             {{ __('messages.profilepartialsdelete.deleteAccountFinalWarning') }}
                         </p>
 
@@ -54,13 +47,16 @@
                             @endif
                         </div>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            {{ __('messages.profilepartialsdelete.cancel') }}
-                        </button>
-                        <button type="submit" class="btn btn-danger">
-                            {{ __('messages.profilepartialsdelete.deleteAccount') }}
-                        </button>
+                        <div class="d-flex align-items-center gap-3">
+                            <button type="submit" class="btn-gradient-secondary text-color" data-bs-toggle="modal"> {{ __('messages.profilepartialsdelete.cancel') }}
+                            </button>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <button type="submit" class="btn-gradient-danger text-color" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">{{ __('messages.profilepartialsdelete.deleteAccount') }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>

@@ -11,7 +11,10 @@
 @include('includes.navbar')
 
 <main class="container mt-5 mb-5">
-    <h1 class="fw-bold mb-4 text-white">{{ __('messages.userattendances.title') }}</h1>
+    <div class="col-md-4 text-md-end">
+        <a href="{{ route('events.show', $event) }}" class="btn text-color " style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.editevent.backToEvent') }}</a>
+    </div>
+    <h1 class="fw-bold mb-4 text-color">{{ __('messages.userattendances.title') }}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -28,7 +31,7 @@
     <div class="row">
         @forelse ($attendances as $attendance)
             <div class="col-md-4 mb-4">
-                <div class="card text-black h-100 shadow text-white
+                <div class="card text-black h-100 shadow text-color
                          {{ $attendance->status == 'rejected' ? 'border border-danger border-3' : '' }}"
                      style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
                     <a href="{{ route('events.show', $attendance->event->id) }}">
@@ -50,7 +53,7 @@
                         <div class="mb-3">
                             <span class="fw-bold">{{ __('messages.userattendances.status') }}</span>
                             @if($attendance->status == 'pending')
-                                <span class="badge bg-warning text-dark">{{ __('messages.userattendances.pending') }}</span>
+                                <span class="badge bg-warning text-color">{{ __('messages.userattendances.pending') }}</span>
                             @elseif($attendance->status == 'accepted')
                                 <span class="badge bg-success">{{ __('messages.userattendances.accepted') }}</span>
                             @elseif($attendance->status == 'rejected')
@@ -83,7 +86,7 @@
                         @endif
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <a href="{{ route('events.show', $attendance->event->id) }}" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.userattendances.view') }}</a>
+                        <a href="{{ route('events.show', $attendance->event->id) }}" class="btn text-color" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.userattendances.view') }}</a>
 
                         @if($attendance->status != 'rejected')
                             <form action="{{ route('events.attendees.destroy', [$attendance->event->id, $attendance->id]) }}" method="POST">
@@ -102,7 +105,7 @@
                 <div class="alert alert-info text-center">
                     {{ __('messages.userattendances.noUpcomingEvents') }}
                     <div class="mt-3">
-                        <a href="{{ route('events.feed') }}" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                        <a href="{{ route('events.feed') }}" class="btn btn-gradient text-color">
                             {{ __('messages.userattendances.browseEvents') }}
                         </a>
                     </div>

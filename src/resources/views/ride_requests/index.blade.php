@@ -9,7 +9,7 @@
 <body class="bg-main">
 @include('includes.navbar')
 
-<div class="container mt-5 text-white">
+<div class="container mt-5 text-color">
     <div class="row mb-4">
         <div class="col-md-8">
             <h2>{{ __('messages.riderequestindex.rideMenagement') }}</h2>
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="card custom-card-bg text-white mb-4">
+    <div class="card custom-card-bg text-color mb-4">
         <div class="card-header">
             <h4>{{ __('messages.riderequestindex.rideInfo') }}</h4>
         </div>
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="card custom-card-bg text-white">
+    <div class="card custom-card-bg text-color">
         <div class="card-header">
             <h4>{{ __('messages.riderequestindex.applicationList') }} ({{ $requests->count() }})</h4>
         </div>

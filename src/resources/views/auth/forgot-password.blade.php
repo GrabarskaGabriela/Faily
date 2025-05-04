@@ -11,10 +11,10 @@
 
 <main class="container flex-grow-1 my-5">
     <div class="card shadow-sm mx-auto border-dark" style="max-width: 400px;">
-        <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-            <h3 class="card-title text-center mb-4 text-white">{{ __('auth.authforgotpassword.titleLabel') }}</h3>
+        <div class="card-body shadow-sm">
+            <h3 class="card-title text-center mb-4 text-color">{{ __('auth.authforgotpassword.titleLabel') }}</h3>
 
-            <div class="mb-4 text-white">
+            <div class="mb-4 text-color">
                 {{ __('auth.authforgotpassword.instructionText') }}
             </div>
 
@@ -28,7 +28,7 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label for="email" class="form-label text-white">{{ __('auth.authforgotpassword.emailInputLabel') }}</label>
+                    <label for="email" class="form-label text-color">{{ __('auth.authforgotpassword.emailInputLabel') }}</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                            id="email" name="email"
                            value="{{ old('email') }}"
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                    <button type="submit" class="btn btn-gradient text-color">
                         {{ __('auth.authforgotpassword.submitButton') }}
                     </button>
                 </div>

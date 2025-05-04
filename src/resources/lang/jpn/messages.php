@@ -41,7 +41,7 @@ return [
         'userAttendances' => '参加状況 - Faily',
         'editEvent' => 'イベントの編集 - Faily',
         'applyEvent' => 'イベントに申し込む - Faily',
-
+        'account' => 'アカウント - Faily',
     ],
 
     'navbar' => [

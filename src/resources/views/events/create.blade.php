@@ -6,63 +6,8 @@
     <title>{{ __('messages.title.addEvent') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        /* Style dla sugestii adresów */
-        .address-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            max-height: 200px;
-            overflow-y: auto;
-            background:  linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 1px solid #dee2e6;
-            border-top: none;
-            border-radius: 0 0 .375rem .375rem;
-            z-index: 1000;
-            display: none;
-        }
-        .address-suggestion {
-            padding: .5rem 1rem;
-            cursor: pointer;
-            transition: background-color .15s;
-        }
-        .address-suggestion:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        #map-container, #meeting-map-container {
-            width: 100%;
-            height: 400px !important;
-            display: block !important;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .coordinate-display {
-            margin-top: .5rem;
-            font-size: .875rem;
-            color: #6c757d;
-        }
-
-        .main-container {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: .5rem;
-            padding: 2rem;
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-        }
-
-        #ride-sharing-form {
-            background-color: rgba(255,255,255,.05);
-            border-radius: .375rem;
-        }
-    </style>
 </head>
-<body class="bg-main text-white">
+<body class="bg-main text-color">
 @include('includes.navbar')
 <div class="page-container" id="app">
     <main class="py-4">
@@ -101,11 +46,11 @@
 
                                 <input type="file" class="d-none" id="eventPhotos" name="photos[]" multiple onchange="updateFileList()">
 
-                                <label for="eventPhotos" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                                <label for="eventPhotos" class="btn btn-gradient text-color mt-2">
                                     {{ __('messages.addevent.addPhotos') }}
                                 </label>
 
-                                <div id="fileList" class="mt-2 small text-white">{{ __('messages.addevent.fileNotChoosen') }}</div>
+                                <div id="fileList" class="mt-2 small text-color">{{ __('messages.addevent.fileNotChoosen') }}</div>
                             </div>
 
                             <script>
@@ -210,7 +155,7 @@
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <button type="submit" class="btn btn-lg px-4 text-white"  style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"id="submit-button">
+                        <button type="submit" class="btn btn-lg px-4 btn-gradient text-color" id="submit-button">
                             <i class="bi bi-check-circle me-2" ></i>{{ __('messages.addevent.addEvent') }}
                         </button>
                     </div>

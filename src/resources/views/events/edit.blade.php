@@ -9,21 +9,21 @@
 <body class="bg-main">
 @include('includes.navbar')
 
-<div class="container py-5 text-white">
+<div class="container py-5 text-color">
     <div class="row mb-4">
         <div class="col-md-8">
             <h2>{{ __('messages.editevent.editTitle') }}</h2>
         </div>
         <div class="col-md-4 text-md-end">
-            <a href="{{ route('events.show', $event) }}" class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.editevent.backToEvent') }}</a>
+            <a href="{{ route('events.show', $event) }}" class="btn text-color btn-gradient border-dark">{{ __('messages.editevent.backToEvent') }}</a>
         </div>
     </div>
 
     <div class="card border-dark shadow-sm custom-card-bg mb-4">
-        <div class="card-header text-white" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);" >
+        <div class="card-header text-color" >
             <h4 class="mb-0">{{ __('messages.editevent.formTitle') }}</h4>
         </div>
-        <div class="card-body text-white border-black" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+        <div class="card-body text-color">
             <form action="{{ route('events.update', $event) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
@@ -95,12 +95,12 @@
 
                 <div class="mb-3">
                     <div><label for="photos" class="form-label">{{ __('messages.editevent.uploadPhotos') }}</label></div>
-                    <div><small class="text-white">{{ __('messages.editevent.uploadHint') }}</small></div>
+                    <div><small class="text-color">{{ __('messages.editevent.uploadHint') }}</small></div>
                     <input type="file" class="d-none" id="photos" name="photos[]" multiple accept="image/*" onchange="updateFileList()">
-                    <label for="photos" class="btn text-white border-dark mt-2" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">
+                    <label for="photos" class="btn text-color btn-gradient mt-2">
                         {{ __('messages.addevent.addPhotos') }}
                     </label>
-                    <div id="fileList" class="mt-2 small text-white">{{ __('messages.addevent.fileNotChoosen') }}</div>
+                    <div id="fileList" class="mt-2 small text-color">{{ __('messages.addevent.fileNotChoosen') }}</div>
                     @error('photos')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -127,8 +127,8 @@
 
 
                 <div class="mt-4">
-                    <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.editevent.submitChanges') }}</button>
-                    <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">{{ __('messages.editevent.cancelChanges') }}</a>
+                    <button type="submit" class="btn text-color btn-gradient">{{ __('messages.editevent.submitChanges') }}</button>
+                    <a href="{{ route('events.show', $event) }}" class="btn btn-gradient-secondary">{{ __('messages.editevent.cancelChanges') }}</a>
                 </div>
             </form>
         </div>
@@ -136,10 +136,10 @@
 
     @if($event->photos->count() > 0)
         <div class="card border-0 shadow-lg rounded-4 custom-card-bg mb-5 overflow-hidden">
-            <div class="card-header text-white" style="background: linear-gradient(45deg, #5a4e82 0%, #3a6b8a 100%);">
+            <div class="card-header text-color">
                 <h4 class="mb-0">{{ __('messages.editevent.existingPhotos') }}</h4>
             </div>
-            <div class="card-body border-black" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+            <div class="card-body">
                 <div class="row g-4">
                     @foreach($event->photos as $photo)
                         <div class="col-md-4">

@@ -11,7 +11,7 @@
 @include('includes.navbar')
 
 <main class="container mt-5 mb-5">
-    <h1 class="fw-bold mb-4 text-white">{{ __('messages.myevents.myEvents') }}</h1>
+    <h1 class="fw-bold mb-4 text-color">{{ __('messages.myevents.myEvents') }}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -21,7 +21,7 @@
     <div class="row">
         @forelse ($events as $event)
             <div class="col-md-4 mb-4">
-                <div class="card text-black h-100 shadow text-white" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                <div class="card h-100 shadow-sm text-color">
                     <a href="{{ route('events.show', $event->id) }}">
                         @if(isset($event->photos) && count($event->photos) > 0)
                             <img src="{{ asset('storage/' . $event->photos[0]->path) }}"
@@ -51,8 +51,8 @@
                         <p class="text-truncate">{{ Str::limit($event->description, 100) }}</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <a href="{{ route('events.show', $event->id) }}"  class="btn text-white border-dark" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.myevents.check') }}</a>
-                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary">{{ __('messages.myevents.edit') }}</a>
+                        <a href="{{ route('events.show', $event->id) }}"  class="btn btn-gradient text-color">{{ __('messages.myevents.check') }}</a>
+                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-gradient-secondary">{{ __('messages.myevents.edit') }}</a>
                     </div>
                 </div>
             </div>
