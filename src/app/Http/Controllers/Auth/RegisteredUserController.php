@@ -39,8 +39,13 @@ class RegisteredUserController extends Controller
         ]);
 
         $photoPath = null;
-        if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo'))
+        {
             $photoPath = $request->file('photo')->store('profile-photos', 'public');
+        }
+        else
+        {
+            $photoPath = 'images/includes/default-avatar.png';
         }
 
         $user = User::create([

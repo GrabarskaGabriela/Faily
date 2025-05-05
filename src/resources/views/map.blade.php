@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - Mapa</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ __('messages.title.map') }}</title>
+    @vite(['resources/css/app.css', 'resources/css/main_map.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,71 +12,11 @@
     <script>
         window.events = @json($events);
     </script>
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 !important;
-        }
-        .map-container {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 1;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-        }
-        .map-controls, .map-info, .search-container {
-            position: absolute;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .map-controls { top: 10px; right: 10px; }
-        .map-info { bottom: 30px; left: 10px; max-width: 300px; }
-        .search-container { top: 10px; left: 60px; width: 300px; }
-        .search-results {
-            background-color: white;
-            border: 1px solid #ccc;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-        }
-        .search-result-item {
-            padding: 8px 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-        .search-result-item:hover {
-            background-color: #f5f5f5;
-        }
-        @media (max-width: 768px) {
-            .search-container { width: calc(100% - 120px); left: 10px; }
-            .map-info { bottom: 10px; max-width: calc(100% - 20px); }
-        }
-    </style>
+    @include('includes.navbar')
 </head>
 <body>
+
 <div class="page-container" id="app">
-    @include('includes.navbar')
 
     <main>
         <div class="map-container">
@@ -84,23 +24,23 @@
 
             <div class="search-container">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="search-input" placeholder="Wyszukaj miejsce...">
-                    <button class="btn btn-outline-secondary" type="button" id="search-button">
+                    <input type="text" class="form-control" id="search-input" placeholder="{{ __('messages.map.searchPlace') }}">
+                    <button class="btn btn-outline-light" type="button" id="search-button">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
                 <div class="search-results" id="search-results"></div>
             </div>
 
-            <div class="map-controls">
-                <button class="btn btn-sm btn-outline-primary mb-1" id="locate-me">
-                    <i class="bi bi-geo-alt"></i> Moja lokalizacja
+            <div class="map-controls border-dark">
+                <button class="btn btn-gradient"id="locate-me">
+                    <i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}
                 </button>
             </div>
 
-            <div class="map-info" id="map-info">
-                <h5>Informacje o mapie</h5>
-                <p>Kliknij na mapę, aby poznać współrzędne wybranego miejsca.</p>
+            <div class="map-info text-color" id="map-info">
+                <h5>{{ __('messages.map.mapInfo') }}</h5>
+                <p>{{ __('messages.map.clickMapInstruction') }}</p>
                 <div id="coordinates"></div>
             </div>
         </div>
@@ -112,6 +52,12 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    const customIcon = L.icon({
+        iconUrl: '/images/includes/custom_marker.png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
     document.addEventListener('DOMContentLoaded', function() {
         const map = L.map('map').setView([52.069, 19.480], 7);
 
@@ -126,7 +72,7 @@
             if (currentMarker) {
                 map.removeLayer(currentMarker);
             }
-            currentMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            currentMarker = L.marker([lat, lng], { draggable: true, icon: customIcon }).addTo(map);
             if (popupContent) currentMarker.bindPopup(popupContent).openPopup();
 
             currentMarker.on('dragend', () => {
@@ -138,8 +84,8 @@
 
         function updateCoordinatesInfo(lat, lng) {
             document.getElementById('coordinates').innerHTML = `
-                <strong>Szerokość:</strong> ${lat.toFixed(6)}<br>
-                <strong>Długość:</strong> ${lng.toFixed(6)}
+                <strong>{{ __('messages.map.latitude')}}</strong> ${lat.toFixed(6)}<br>
+                <strong>{{__('messages.map.longitude')}}</strong> ${lng.toFixed(6)}
             `;
         }
 
@@ -160,11 +106,12 @@
             events.forEach(event => {
                 const lat = parseFloat(event.latitude);
                 const lng = parseFloat(event.longitude);
-                const marker = L.marker([lat, lng]).addTo(map);
+                const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
                 marker.bindPopup(`
-                    <b>${event.title}</b><br>
-                    ${event.location_name ?? ''}
-                `);
+            <b>${event.title}</b><br>
+            ${event.location_name ?? ''}<br>
+            ${event.date ?? ''}
+        `);
             });
         }
 
@@ -178,26 +125,26 @@
         locateButton.addEventListener('click', () => {
             if ('geolocation' in navigator) {
                 locateButton.disabled = true;
-                locateButton.innerHTML = 'Lokalizowanie...';
+                locateButton.innerHTML = '{{ __('messages.map.locating') }}';
                 navigator.geolocation.getCurrentPosition(
                     pos => {
                         const lat = pos.coords.latitude;
                         const lng = pos.coords.longitude;
                         map.setView([lat, lng], 16);
-                        addMarker(lat, lng, 'Twoja lokalizacja');
+                        addMarker(lat, lng, '{{ __('messages.map.yourLocation') }}');
                         updateCoordinatesInfo(lat, lng);
                         reverseGeocode(lat, lng);
                         locateButton.disabled = false;
-                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> Moja lokalizacja';
+                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}';
                     },
                     err => {
-                        alert('Nie udało się uzyskać lokalizacji.');
+                        alert('{{ __('messages.map.alertGeolocalization') }}');
                         locateButton.disabled = false;
-                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> Moja lokalizacja';
+                        locateButton.innerHTML = '<i class="bi bi-geo-alt"></i> {{ __('messages.map.myLocation') }}';
                     }
                 );
             } else {
-                alert('Twoja przeglądarka nie obsługuje geolokalizacji.');
+                alert('{{ __('alertBrowserGeolocalization') }}');
             }
         });
 
@@ -228,7 +175,7 @@
                         });
                         searchResults.style.display = 'block';
                     } else {
-                        searchResults.innerHTML = '<div class="search-result-item">Brak wyników</div>';
+                        searchResults.innerHTML = '<div class="search-result-item">{{ __('messages.map.noResults') }}</div>';
                         searchResults.style.display = 'block';
                     }
                 });
