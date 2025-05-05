@@ -81,12 +81,54 @@
             <input type="text" class="form-control" id="description" name="description"
                    value="{{ old('description', $user->description) }}" required autofocus autocomplete="description">
             @if ($errors->get('descriptione'))
+<<<<<<< HEAD
+=======
                 <div class="text-danger small mt-1">
                     {{ $errors->first('description') }}
                 </div>
             @endif
         </div>
 
+        <div class="mb-3 text-color">
+            <label class="form-label">{{ __('messages.profilepartialsupdateprofile.avatar') }}</label>
+
+            @if($user->avatar)
+                <div class="mb-2">
+                    @if(Auth::user()->photo_path)
+                        <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
+                             class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
+                    @else
+                        <img src="{{ asset('images/includes/default-avatar.png') }}"
+                             class="rounded-circle profile-pic" alt="{{ __('messages.profilepartialsupdateprofile.profilePhoto') }}" width="80" height="80">
+                    @endif
+                </div>
+            @endif
+            <input type="file" class="d-none" id="avatar" name="avatar" onchange="updateFileName(this)">
+            <label for="avatar" href="{{ route('profile.edit') }}" class="btn btn-gradient text-color">
+                {{ __('messages.profilepartialsupdateprofile.chooseFile')}}
+            </label>
+            <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
+
+            @if ($errors->get('avatar'))
+>>>>>>> origin/wodzu
+                <div class="text-danger small mt-1">
+                    {{ $errors->first('description') }}
+                </div>
+            @endif
+        </div>
+
+<<<<<<< HEAD
+=======
+
+        <script>
+            function updateFileName(input) {
+                const fileName = input.files.length ? input.files[0].name : __('messages.profilepartialsupdateprofile.fileNotChoosen');
+                document.getElementById('file-name').textContent = fileName;
+            }
+        </script>
+
+
+>>>>>>> origin/wodzu
         <div class="mb-3 text-color">
             <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.preferredLanguage') }}</label>
             <select class="form-select" id="preferred_language" name="preferred_language">

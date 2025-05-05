@@ -27,10 +27,17 @@ Po uruchomieniu kontenerów należy otworzyć terminal i wykonać poniższe pole
 docker exec -it faily-app-dev bash
 
 # Nadanie skryptowi uprawnień do uruchamiania
+<<<<<<< HEAD
 chmod +x script.sh
 
 # Uruchomienie skryptu
 ./script.sh 
+=======
+chmod +x deploy.sh
+
+# Uruchomienie skryptu
+./deploy.sh 
+>>>>>>> origin/wodzu
 ```
 
 Można też wykonać polecenia ze skryptu ręcznie:
@@ -87,6 +94,14 @@ php artisan view:clear
 docker exec -it faily-app-dev bash
 cd /application
 php artisan migrate:fresh
+```
+
+### Remedium na całe złp
+Stworzyłem skrypt który rozwiązuje znaczącą większość problemów po stronie Laravela
+```shell
+docker exec -it faily-app-dev bash
+chmod +x deploy.sh
+./deploy.sh 
 ```
 
 ## Uruchamianie projektu

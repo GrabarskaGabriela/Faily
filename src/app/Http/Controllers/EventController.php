@@ -15,7 +15,11 @@ class EventController extends Controller
 
     public function __construct(EventServiceInterface $eventService)
     {
+<<<<<<< HEAD
         $this->middleware('auth')->except(['index', 'show', 'feed']);
+=======
+        $this->middleware('auth')->except(['index', 'show']);
+>>>>>>> origin/wodzu
         $this->eventService = $eventService;
     }
 
@@ -23,6 +27,7 @@ class EventController extends Controller
     {
         $events = $this->eventService->getEventsForListing();
         return view('events.my_events', compact('events'));
+<<<<<<< HEAD
     }
 
     /**
@@ -80,6 +85,8 @@ class EventController extends Controller
         $events->appends($request->all());
 
         return view('events.feed', compact('events', 'upcomingEvents'));
+=======
+>>>>>>> origin/wodzu
     }
 
     public function create(Request $request)
@@ -122,7 +129,11 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
+<<<<<<< HEAD
         $event = $this->eventService->getEventWithRelations($event->id);
+=======
+        $event =  $this->eventService->getEventWithRelations($event->id);
+>>>>>>> origin/wodzu
         return view('events.show', compact('event'));
     }
 
@@ -174,6 +185,7 @@ class EventController extends Controller
             ->with('success', 'Event deleted successfully');
     }
 
+<<<<<<< HEAD
     public function Events_list()
     {
         $events = auth()->user()->events()->paginate(6);
@@ -185,6 +197,22 @@ class EventController extends Controller
             ->orderBy('date', 'asc')
             ->get();
         return view('events.event_list', compact('events', 'upcomingEvents'));
+=======
+    public function feed(Request $request)
+    {
+        $eventData = $this->eventService->getEventsForFeed($request);
+
+        return view('events.feed', [
+            'events' => $eventData['events'],
+            'popularEvents' => $eventData['popularEvents'],
+            'upcomingEvents' => $eventData['upcomingEvents']
+        ]);
+    }
+    public function myEvents()
+    {
+        $events = $this->eventService->getUserEvents(Auth::id());
+        return view('events.my_events', compact('events'));
+>>>>>>> origin/wodzu
     }
 
     public function myEvents()

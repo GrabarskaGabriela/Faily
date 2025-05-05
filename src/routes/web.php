@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\EventAttendeeController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainMapController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RideController;
@@ -10,12 +11,31 @@ use App\Http\Controllers\RideRequestController;
 use App\Http\Controllers\LanguageController;
 
 
+<<<<<<< HEAD
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');});
 Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change');
+=======
+>>>>>>> origin/wodzu
 
-Route::middleware(['auth', 'verified'])->group(function ()
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome')->middleware('locale');
+
+Route::get('/about', function () {
+    return view('about');
+})->middleware('locale');
+
+Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])
+    ->name('language.change')->
+    middleware('locale');
+
+Route::middleware(['auth', 'verified', 'locale'])->group(function ()
 {
+<<<<<<< HEAD
+=======
+    //Route::get('/', function () { return view('welcome'); })->name('afterlogin');
+>>>>>>> origin/wodzu
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -32,6 +52,11 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
     Route::get('/ride_requests', [RideRequestController::class, 'index'])->name('ride_requests.index');
     Route::get('/ride_requests/create', [RideRequestController::class, 'create'])->name('ride_requests.create');
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/wodzu
 
     Route::get('/events/{event}/attendees', [EventAttendeeController::class, 'index'])->name('events.attendees.index');
     Route::get('/events/{event}/attend', [EventAttendeeController::class, 'create'])->name('events.attendees.create');
@@ -40,7 +65,10 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::delete('/events/{event}/attendees/{attendee}', [EventAttendeeController::class, 'destroy'])->name('events.attendees.destroy');
 
     Route::get('/my_events', [EventController::class, 'myEvents'])->name('my_events');
-    Route::get('/event_list', [EventController::class, 'Events_list'])->name('event_list');
+    Route::get('/event_list', [EventController::class, 'index'])->name('event_list');
+
+
+
 
 
 
