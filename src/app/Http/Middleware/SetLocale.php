@@ -14,7 +14,8 @@ class SetLocale
     {
         $locale = $request->cookie('locale');
 
-        if ($locale && in_array($locale, ['pl', 'en', 'jpn', 'es', 'ua'])) {
+        if (
+            $locale && in_array($locale, ['pl', 'en', 'jpn', 'es', 'ua'])) {
             App::setLocale($locale);
         } else {
             $browserLocale = substr($request->server('HTTP_ACCEPT_LANGUAGE') ?? '', 0, 2);

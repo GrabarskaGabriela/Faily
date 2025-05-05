@@ -16,7 +16,6 @@ Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->
 
 Route::middleware(['auth', 'verified'])->group(function ()
 {
-    Route::get('/', function () { return view('welcome'); })->name('afterlogin');
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -33,8 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function ()
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
     Route::get('/ride_requests', [RideRequestController::class, 'index'])->name('ride_requests.index');
     Route::get('/ride_requests/create', [RideRequestController::class, 'create'])->name('ride_requests.create');
-
-
 
     Route::get('/events/{event}/attendees', [EventAttendeeController::class, 'index'])->name('events.attendees.index');
     Route::get('/events/{event}/attend', [EventAttendeeController::class, 'create'])->name('events.attendees.create');
