@@ -49,6 +49,9 @@ Route::prefix('api')->name('api.')->group(function ()
 
         Route::apiResource('ride-requests', RideRequestController::class)->except(['show', 'edit']);
         Route::get('/my-ride-requests', [RideRequestController::class, 'myRequests']);
+
+        Route::get('/geocode/search', 'GeocodingController@search');
+        Route::get('/geocode/reverse', 'GeocodingController@reverse');
     });
     Route::get('/nominatim/search', function (\Illuminate\Http\Request $request) {
         $q = $request->query('q');
@@ -62,7 +65,6 @@ Route::prefix('api')->name('api.')->group(function ()
             'limit' => $limit,
         ]);
 
-        // Logowanie odpowiedzi
         \Log::info("Response body: " . $response->body());
         \Log::info("Response status: " . $response->status());
 

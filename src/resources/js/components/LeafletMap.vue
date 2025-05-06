@@ -20,7 +20,7 @@
                     <i class="bi bi-search"></i>
                 </button>
             </div>
-            <div class="search-results" v-show="showSearchResults">
+            <div class="search-results" v-if="showSearchResults" ref="searchResultsContainer">
                 <div
                     v-for="(result, index) in searchResults"
                     :key="index"
@@ -182,18 +182,51 @@ export default {
         },
 
         async reverseGeocode(lat, lng) {
-            try {
-                const response = await fetch(`/api/nominatim/reverse?lat=${lat}&lon=${lng}`);
-                const data = await response.json();
+            try {j
+                const endpoints = [
+                    `/api/nominatim/reverse?lat=${lat}&lon=${lng}`,
+                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+                ];
+
+                let data = null;
+
+                for (const endpoint of endpoints) {
+                    try {
+                        const response = await fetch(endpoint, {
+                            headers: endpoint.includes('openstreetmap') ?
+                                {'User-Agent': 'YourAppName'} : {}
+                        });
+
+                        if (response.ok) {
+                            data = await response.json();
+                            break;
+                        }
+                    } catch (err) {
+                        console.warn(`Failed with endpoint ${endpoint}:`, err);
+                    }
+                }
 
                 if (data && data.display_name && this.currentMarker) {
                     this.currentMarker.bindPopup(`
                         <strong>${data.display_name}</strong><br>
                         <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
                     `).openPopup();
+                } else {
+                    console.warn('No valid data returned from geocoding services');
+                    // Fallback to just coordinates if no address data
+                    this.currentMarker.bindPopup(`
+                        <strong>Location</strong><br>
+                        <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
+                    `).openPopup();
                 }
             } catch (error) {
                 console.error('Error during reverse geocoding:', error);
+                // Still provide a popup with coordinates
+                if (this.currentMarker) {
+                    this.currentMarker.bindPopup(`
+                        <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
+                    `).openPopup();
+                }
             }
         },
 
@@ -244,17 +277,50 @@ export default {
             if (!this.searchQuery.trim()) return;
 
             try {
-                const response = await fetch(`/api/nominatim/search?q=${encodeURIComponent(this.searchQuery)}&limit=5`);
+                // Using direct Nominatim API as a fallback if your API proxy fails
+                const endpoints = [
+                    `/api/nominatim/search?q=${encodeURIComponent(this.searchQuery)}&limit=5`,
+                    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&limit=5`
+                ];
 
-                const data = await response.json();
+                let data = null;
 
-                this.searchResults = data;
+                for (const endpoint of endpoints) {
+                    try {
+                        const response = await fetch(endpoint, {
+                            headers: endpoint.includes('openstreetmap') ?
+                                {'User-Agent': 'YourAppName'} : {}
+                        });
+
+                        if (response.ok) {
+                            data = await response.json();
+                            break;
+                        }
+                    } catch (err) {
+                        console.warn(`Failed with endpoint ${endpoint}:`, err);
+                    }
+                }
+
+                this.searchResults = Array.isArray(data) ? [...data] : [];
                 this.showSearchResults = true;
                 this.hasSearched = true;
+
+                if (this.searchResults.length > 0) {
+                    console.log(`Found ${this.searchResults.length} results`);
+                    this.$nextTick(() => {
+                        const searchResultsElement = this.$el.querySelector('.search-results');
+                        if (searchResultsElement) {
+                            searchResultsElement.style.display = 'block';
+                        }
+                    });
+                }
+                console.log('Search results:', JSON.parse(JSON.stringify(this.searchResults)));
+
             } catch (error) {
                 console.error('Error during location search:', error);
                 this.searchResults = [];
                 this.hasSearched = true;
+                this.showSearchResults = true;
             }
         },
 
@@ -273,6 +339,7 @@ export default {
             this.map.setView([lat, lng], 16);
             this.addMarker(lat, lng, result.display_name);
             this.showSearchResults = false;
+            this.searchQuery = result.display_name;
             await this.reverseGeocode(lat, lng);
         },
 
@@ -316,7 +383,7 @@ export default {
     max-height: 200px;
     color: white;
     overflow-y: auto;
-    display: none;
+    /* Removed display: none; */
 }
 .search-result-item {
     padding: 8px 12px;
