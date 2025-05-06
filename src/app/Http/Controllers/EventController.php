@@ -8,85 +8,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Interfaces\EventServiceInterface;
 use Carbon\Carbon;
-
 class EventController extends Controller
 {
     protected $eventService;
 
     public function __construct(EventServiceInterface $eventService)
     {
-<<<<<<< HEAD
-        $this->middleware('auth')->except(['index', 'show', 'feed']);
-=======
         $this->middleware('auth')->except(['index', 'show']);
->>>>>>> origin/wodzu
         $this->eventService = $eventService;
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $events = $this->eventService->getEventsForListing();
         return view('events.my_events', compact('events'));
-<<<<<<< HEAD
-    }
-
-    /**
-     * Display a feed of events with filters
-     */
-    public function feed(Request $request)
-    {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
-
-        $upcomingEvents = Event::whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
-            ->where('date', '>=', now())
-            ->orderBy('date', 'asc')
-            ->take(5)
-            ->get();
-
-        $query = Event::query()->with(['user', 'photos', 'attendees', 'acceptedAttendees'])
-            ->where('date', '>=', now())
-            ->orderBy('date', 'asc');
-
-        if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('location_name', 'like', "%{$search}%");
-            });
-        }
-
-
-        if ($request->has('date_from') && !empty($request->date_from)) {
-            $query->whereDate('date', '>=', $request->date_from);
-        }
-
-        if ($request->has('date_to') && !empty($request->date_to)) {
-            $query->whereDate('date', '<=', $request->date_to);
-        }
-
-        // Apply ride sharing filter
-        if ($request->has('has_ride_sharing') && $request->has_ride_sharing == 1) {
-            $query->where('has_ride_sharing', true);
-        }
-
-        if ($request->has('has_available_spots') && $request->has_available_spots == 1) {
-            $query->whereRaw('people_count > (
-                SELECT COALESCE(SUM(attendees_count), 0)
-                FROM attendees
-                WHERE event_id = events.id AND status = "accepted"
-            )');
-        }
-
-        $events = $query->paginate(6);
-
-        $events->appends($request->all());
-
-        return view('events.feed', compact('events', 'upcomingEvents'));
-=======
->>>>>>> origin/wodzu
     }
 
     public function create(Request $request)
@@ -129,11 +64,7 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-<<<<<<< HEAD
-        $event = $this->eventService->getEventWithRelations($event->id);
-=======
         $event =  $this->eventService->getEventWithRelations($event->id);
->>>>>>> origin/wodzu
         return view('events.show', compact('event'));
     }
 
@@ -185,19 +116,6 @@ class EventController extends Controller
             ->with('success', 'Event deleted successfully');
     }
 
-<<<<<<< HEAD
-    public function Events_list()
-    {
-        $events = auth()->user()->events()->paginate(6);
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
-
-        $upcomingEvents = Event::whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
-            ->orderBy('date', 'asc')
-            ->get();
-        return view('events.event_list', compact('events', 'upcomingEvents'));
-=======
     public function feed(Request $request)
     {
         $eventData = $this->eventService->getEventsForFeed($request);
@@ -212,12 +130,6 @@ class EventController extends Controller
     {
         $events = $this->eventService->getUserEvents(Auth::id());
         return view('events.my_events', compact('events'));
->>>>>>> origin/wodzu
     }
 
-    public function myEvents()
-    {
-        $events = $this->eventService->getUserEvents(Auth::id());
-        return view('events.my_events', compact('events'));
-    }
 }
