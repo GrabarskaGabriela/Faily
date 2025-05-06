@@ -36,13 +36,15 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
 
-    Route::get('/events/feed', [EventController::class, 'index'])->name('events.feed');
+   // Route::get('/events/feed', [EventController::class, 'index'])->name('events.feed');
+    Route::get('/events/feed', [EventController::class, 'feed'])->name('events.feed');
 
     Route::resource('events', EventController::class)->names('events');
     Route::resource('rides', RideController::class)->names('rides');
     Route::resource('ride-requests', RideRequestController::class)->names('ride-requests');
     Route::get('/ride_requests', [RideRequestController::class, 'index'])->name('ride_requests.index');
     Route::get('/ride_requests/create', [RideRequestController::class, 'create'])->name('ride_requests.create');
+    //Route::get('/ride_requests/edit', [RideRequestController::class, 'edit'])->name('rides.edit');
 
     Route::get('/events/{event}/attendees', [EventAttendeeController::class, 'index'])->name('events.attendees.index');
     Route::get('/events/{event}/attend', [EventAttendeeController::class, 'create'])->name('events.attendees.create');
@@ -51,7 +53,9 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::delete('/events/{event}/attendees/{attendee}', [EventAttendeeController::class, 'destroy'])->name('events.attendees.destroy');
 
     Route::get('/my_events', [EventController::class, 'myEvents'])->name('my_events');
-    Route::get('/event_list', [EventController::class, 'index'])->name('event_list');
+    Route::get('/all_events', [EventController::class, 'allEvents'])->name('all_events');
+    Route::get('/event_list', [EventController::class, 'Events_list'])->name('event_list');
+    Route::get('/event_list.index', [EventController::class, 'index'])->name('event_list');
 
 
     Route::delete('/photos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');

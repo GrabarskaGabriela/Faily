@@ -115,7 +115,39 @@ class EventController extends Controller
         return redirect()->route('events.index')
             ->with('success', 'Event deleted successfully');
     }
+    public function getEventsForFeed(Request $request)
+    {
+        $query = Event::with(['user', 'photos', 'attendees']);
 
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        if ($dateFrom = $request->input('date_from')) {
+            $query->whereDate('date', '>=', $dateFrom);
+        }
+
+        if ($dateTo = $request->input('date_to')) {
+            $query->whereDate('date', '<=', $dateTo);
+        }
+
+        if ($request->boolean('has_ride_sharing')) {
+            $query->where('has_ride_sharing', true);
+        }
+
+        if ($request->boolean('has_available_spots')) {
+            $query->whereRaw('people_count > (SELECT COALESCE(SUM(attendees_count), 0) FROM attendees WHERE event_id = events.id AND status = "accepted")');
+        }
+
+        $events = $query->paginate(10);
+
+        return [
+            'events' => $events,
+            'popularEvents' => [],
+            'upcomingEvents' => Event::where('date', '>=', now())->orderBy('date')->limit(5)->get(),
+        ];
+    }
     public function feed(Request $request)
     {
         $eventData = $this->eventService->getEventsForFeed($request);
@@ -126,10 +158,28 @@ class EventController extends Controller
             'upcomingEvents' => $eventData['upcomingEvents']
         ]);
     }
+    public function Events_list()
+    {
+        $events = $this->eventService->getEventsForListing();
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        $upcomingEvents = Event::whereYear('date', $currentYear)
+            ->whereMonth('date', $currentMonth)
+            ->orderBy('date', 'asc')
+            ->get();
+        return view('events.event_list', compact('events', 'upcomingEvents'));
+    }
+
     public function myEvents()
     {
         $events = $this->eventService->getUserEvents(Auth::id());
         return view('events.my_events', compact('events'));
+    }
+    public function allEvents()
+    {
+        $events = Event::latest()->paginate(12);
+        return view('events.all_events', compact('events'));
     }
 
 }
