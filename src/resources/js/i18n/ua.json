@@ -1,0 +1,13 @@
+{
+    "map.title": "Карта",
+    "map.searchPlace": "Пошук місця",
+    "map.myLocation": "Моє місцезнаходження",
+    "map.locating": "Локалізація...",
+    "map.yourLocation": "Ваше місцезнаходження",
+    "map.mapInfo": "Інформація про карту",
+    "map.clickMapInstruction": "Натисніть на карту, щоб додати маркер",
+    "map.latitude": "Широта:",
+    "map.longitude": "Довгота:",
+    "map.noResults": "Результатів не знайдено",
+    "map.alertGeolocalization": "Не вдалося визначити ваше місцезнаходження"
+}

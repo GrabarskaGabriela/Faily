@@ -12,6 +12,9 @@
     <script>
         window.events = @json($events);
     </script>
+    <script>
+        window.locale = "{{ app()->getLocale() }}";
+    </script>
     @include('includes.navbar')
 </head>
 <body>

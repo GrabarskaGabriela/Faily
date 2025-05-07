@@ -1,337 +1,282 @@
 <template>
-    <div class="map-container">
-        <!-- Address search input -->
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" v-model="searchQuery" placeholder="Wyszukaj adres (np. Warszawa, ul. Marszałkowska 1)" @keyup.enter="searchLocation">
-            <button class="btn btn-outline-secondary" type="button" @click="searchLocation">Wyszukaj</button>
-        </div>
+    <div class="main-map-component">
+        <div class="form-group">
+            <label for="search-address">Search Location:</label>
+            <div class="input-group search-container">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="search-address"
+                    v-model="searchQuery"
+                    @input="handleSearchInput"
+                    @keyup.enter="searchLocation"
+                    placeholder="Enter address to search"
+                />
+                <button
+                    class="btn btn-primary"
+                    id="search-button"
+                    @click="searchLocation"
+                >Search</button>
+            </div>
 
-        <!-- Address suggestions list -->
-        <div class="address-suggestions" v-show="suggestions.length > 0">
-            <div
-                v-for="(suggestion, index) in suggestions"
-                :key="index"
-                class="address-suggestion"
-                @click="selectSuggestion(suggestion)">
-                {{ suggestion.display_name }}
+            <div v-if="suggestions.length > 0" class="address-suggestions">
+                <div
+                    v-for="(item, index) in suggestions"
+                    :key="index"
+                    class="address-suggestion"
+                    @click="selectSuggestion(item)"
+                >
+                    {{ item.display_name }}
+                </div>
             </div>
         </div>
 
-        <!-- Map container -->
-        <div :id="mapId" ref="mapContainer" class="map-element"></div>
+        <div id="map-container" ref="mapContainer" style="height: 300px;"></div>
 
-        <!-- Coordinate display -->
-        <div class="coordinate-display" v-if="latitude && longitude">
-            Wybrana lokalizacja: <strong>{{ latitude.toFixed(6) }}, {{ longitude.toFixed(6) }}</strong>
+        <div class="mt-3">
+            <p>Selected coordinates: <span id="coordinates-text">{{ coordinates }}</span></p>
+
+            <!-- Hidden form inputs to store values -->
+            <input type="hidden" id="latitude" :value="latitude">
+            <input type="hidden" id="longitude" :value="longitude">
+            <input type="hidden" id="location_name" :value="locationName">
         </div>
     </div>
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
-import L from 'leaflet';
-
-// Naprawianie problemu z ikonami
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: markerIcon2x,
-    iconUrl: markerIcon,
-    shadowUrl: markerShadow
-});
-
 export default {
+    name: 'MainMap',
     props: {
-        center: {
-            type: Array,
-            default: () => [51.2101, 16.1619] // Legnica
+        initialLatitude: {
+            type: [Number, String],
+            default: 52.069
         },
-        zoom: {
-            type: Number,
-            default: 7
-        },
-        markers: {
-            type: Array,
-            default: () => []
+        initialLongitude: {
+            type: [Number, String],
+            default: 19.480
         }
     },
-    setup(props, { emit }) {
-        const mapId = ref('map-' + Math.random().toString(36).substring(2, 9));
-        const searchQuery = ref('');
-        const suggestions = ref([]);
-        const latitude = ref(props.center[0]);
-        const longitude = ref(props.center[1]);
+    data() {
+        return {
+            map: null,
+            marker: null,
+            latitude: parseFloat(this.initialLatitude),
+            longitude: parseFloat(this.initialLongitude),
+            locationName: '',
+            searchQuery: '',
+            suggestions: [],
+            coordinates: ''
+        };
+    },
+    computed: {
+        formattedCoordinates() {
+            return `${this.latitude.toFixed(6)}, ${this.longitude.toFixed(6)}`;
+        }
+    },
+    watch: {
+        latitude() {
+            this.updateFormValues();
+        },
+        longitude() {
+            this.updateFormValues();
+        }
+    },
+    mounted() {
+        this.initMap();
+        // Update coordinates display initially
+        this.coordinates = this.formattedCoordinates;
 
-        let map = null;
-        let mainMarker = null;
-        let resizeObserver = null;
+        // Close suggestions when clicking outside
+        document.addEventListener('click', this.handleOutsideClick);
+    },
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleOutsideClick);
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+        }
+    },
+    methods: {
+        async initMap() {
+            try {
+                console.log('Initializing main event map...');
 
-        // Search functionality methods
-        const getSuggestions = () => {
-            if (searchQuery.value.length < 3) {
-                suggestions.value = [];
+                if (!this.$refs.mapContainer) {
+                    console.error('Map container not found');
+                    return;
+                }
+
+                this.map = L.map(this.$refs.mapContainer).setView(
+                    [this.latitude, this.longitude],
+                    6
+                );
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(this.map);
+
+
+                this.marker = L.marker([this.latitude, this.longitude], {
+                    draggable: true
+                }).addTo(this.map);
+
+                this.marker.on('dragend', this.handleMarkerDrag);
+
+                this.map.on('click', this.handleMapClick);
+
+                await this.reverseGeocode(this.latitude, this.longitude);
+
+                setTimeout(() => {
+                    this.map.invalidateSize();
+                    console.log('Main map redrawn');
+                }, 500);
+            } catch (error) {
+                console.error('Error initializing map:', error);
+            }
+        },
+
+        updateFormValues() {
+
+            this.coordinates = this.formattedCoordinates;
+
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+            const locNameInput = document.getElementById('location_name');
+
+            if (latInput) latInput.value = this.latitude;
+            if (lngInput) lngInput.value = this.longitude;
+            if (locNameInput) locNameInput.value = this.locationName;
+        },
+
+        handleMarkerDrag(event) {
+            const position = this.marker.getLatLng();
+            this.latitude = position.lat;
+            this.longitude = position.lng;
+
+            this.reverseGeocode(position.lat, position.lng);
+        },
+
+        handleMapClick(e) {
+            this.marker.setLatLng(e.latlng);
+            this.latitude = e.latlng.lat;
+            this.longitude = e.latlng.lng;
+
+            this.reverseGeocode(e.latlng.lat, e.latlng.lng);
+        },
+
+        async reverseGeocode(lat, lng) {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+                );
+                const data = await response.json();
+
+                if (data && data.display_name) {
+                    this.locationName = data.display_name.split(',').slice(0, 3).join(', ');
+                    this.updateFormValues();
+                }
+            } catch (error) {
+                console.error('Error during reverse geocoding:', error);
+            }
+        },
+
+        async handleSearchInput() {
+            if (this.searchQuery.trim().length < 3) {
+                this.suggestions = [];
                 return;
             }
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}&limit=5`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Sugestie adresów:', data);
-                    suggestions.value = data;
-                })
-                .catch(error => {
-                    console.error('Błąd pobierania sugestii:', error);
-                    suggestions.value = [];
-                });
-        };
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery.trim())}&limit=5`
+                );
+                const data = await response.json();
 
-        const searchLocation = () => {
-            if (!searchQuery.value) return;
-            console.log('Wyszukiwanie lokalizacji:', searchQuery.value);
-
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Wyniki wyszukiwania:', data);
-                    if (data && data.length > 0) {
-                        const location = data[0];
-                        const lat = parseFloat(location.lat);
-                        const lon = parseFloat(location.lon);
-
-                        latitude.value = lat;
-                        longitude.value = lon;
-
-                        map.setView([lat, lon], 16);
-
-                        // Update marker position
-                        if (mainMarker) {
-                            mainMarker.setLatLng([lat, lon]);
-                        }
-
-                        // Emit location update
-                        emit('location-updated', {
-                            latitude: lat,
-                            longitude: lon,
-                            locationName: location.display_name
-                        });
-                    } else {
-                        alert('Nie znaleziono lokalizacji. Spróbuj ponownie.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Błąd wyszukiwania:', error);
-                    alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
-                });
-        };
-
-        const selectSuggestion = (suggestion) => {
-            const lat = parseFloat(suggestion.lat);
-            const lon = parseFloat(suggestion.lon);
-
-            latitude.value = lat;
-            longitude.value = lon;
-            searchQuery.value = suggestion.display_name;
-            suggestions.value = []; // Hide suggestions
-
-            map.setView([lat, lon], 16);
-
-            // Update marker position
-            if (mainMarker) {
-                mainMarker.setLatLng([lat, lon]);
-            }
-
-            // Emit location update
-            emit('location-updated', {
-                latitude: lat,
-                longitude: lon,
-                locationName: suggestion.display_name
-            });
-        };
-
-        const reverseGeocode = (lat, lng) => {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Wyniki reverse geocoding:', data);
-                    if (data && data.display_name) {
-                        searchQuery.value = data.display_name;
-
-                        // Emit location update
-                        emit('location-updated', {
-                            latitude: lat,
-                            longitude: lng,
-                            locationName: data.display_name
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Błąd reverse geocoding:', error);
-                });
-        };
-
-        // Map initialization
-        const initMap = () => {
-            // Inicjalizacja mapy
-            map = L.map(mapId.value, {
-                zoomControl: true,
-                scrollWheelZoom: true
-            }).setView(props.center, props.zoom);
-
-            // Dodanie warstwy OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
-            }).addTo(map);
-
-            // Dodanie domyślnego markera na środku mapy
-            mainMarker = L.marker(props.center, {
-                draggable: true
-            }).addTo(map);
-
-            mainMarker.bindPopup('Tu jesteśmy :)').openPopup();
-
-            // Obsługa przeciągania markera
-            mainMarker.on('dragend', (event) => {
-                const position = mainMarker.getLatLng();
-                latitude.value = position.lat;
-                longitude.value = position.lng;
-                reverseGeocode(position.lat, position.lng);
-            });
-
-            // Obsługa kliknięcia na mapę
-            map.on('click', (e) => {
-                const position = e.latlng;
-                latitude.value = position.lat;
-                longitude.value = position.lng;
-                mainMarker.setLatLng(position);
-                reverseGeocode(position.lat, position.lng);
-            });
-
-            // Dodanie dodatkowych markerów
-            if (props.markers.length > 0) {
-                props.markers.forEach(markerData => {
-                    const marker = L.marker([markerData.lat, markerData.lng]).addTo(map);
-
-                    if (markerData.popup) {
-                        marker.bindPopup(markerData.popup);
-                    }
-                });
-            }
-
-            // Nasłuchiwanie na zdarzenie resize okna
-            window.addEventListener('resize', handleResize);
-
-            // Użyj ResizeObserver dla dokładniejszego śledzenia zmian rozmiaru
-            if (typeof ResizeObserver !== 'undefined') {
-                resizeObserver = new ResizeObserver(() => {
-                    if (map) map.invalidateSize();
-                });
-
-                const mapContainer = document.getElementById(mapId.value);
-                if (mapContainer) {
-                    resizeObserver.observe(mapContainer);
+                if (data && data.length > 0) {
+                    this.suggestions = data;
+                } else {
+                    this.suggestions = [];
                 }
+            } catch (error) {
+                console.error('Error fetching location suggestions:', error);
+                this.suggestions = [];
             }
+        },
 
-            // Przeładuj mapę po renderowaniu komponentu
-            setTimeout(() => {
-                if (map) map.invalidateSize();
-            }, 100);
-        };
+        selectSuggestion(item) {
+            const lat = parseFloat(item.lat);
+            const lng = parseFloat(item.lon);
 
-        const handleResize = () => {
-            if (map) {
-                map.invalidateSize();
+            this.searchQuery = item.display_name;
+            this.latitude = lat;
+            this.longitude = lng;
+            this.locationName = item.display_name.split(',').slice(0, 3).join(', ');
+
+            this.map.setView([lat, lng], 16);
+            this.marker.setLatLng([lat, lng]);
+
+            this.suggestions = [];
+        },
+
+        async searchLocation() {
+            if (!this.searchQuery.trim()) return;
+
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery.trim())}`
+                );
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    const location = data[0];
+                    const lat = parseFloat(location.lat);
+                    const lng = parseFloat(location.lon);
+
+                    this.latitude = lat;
+                    this.longitude = lng;
+                    this.locationName = location.display_name.split(',').slice(0, 3).join(', ');
+
+                    this.map.setView([lat, lng], 16);
+                    this.marker.setLatLng([lat, lng]);
+
+                    this.suggestions = [];
+                } else {
+                    alert('Location not found. Please try a different search.');
+                }
+            } catch (error) {
+                console.error('Error searching for location:', error);
+                alert('Error searching for location. Please try again.');
             }
-        };
+        },
 
-        onMounted(() => {
-            initMap();
-
-            // Dodatkowe opóźnione odświeżenie po pełnym renderowaniu strony
-            setTimeout(() => {
-                if (map) map.invalidateSize();
-            }, 500);
-
-            // Dodatkowe odświeżenie po dłuższym czasie, aby upewnić się że mapa jest prawidłowo wyświetlona
-            setTimeout(() => {
-                if (map) map.invalidateSize();
-            }, 1500);
-        });
-
-        onUnmounted(() => {
-            // Usuń nasłuchiwanie na zdarzenie resize
-            window.removeEventListener('resize', handleResize);
-
-            // Zatrzymaj obserwatora zmian rozmiaru
-            if (resizeObserver) {
-                resizeObserver.disconnect();
+        handleOutsideClick(event) {
+            if (this.suggestions.length > 0 &&
+                !event.target.closest('.search-container') &&
+                !event.target.closest('.address-suggestions')) {
+                this.suggestions = [];
             }
-
-            // Zniszcz mapę
-            if (map) {
-                map.remove();
-                map = null;
-            }
-        });
-
-        // Watch for searchQuery changes to get suggestions while typing
-        watch(searchQuery, (newValue) => {
-            if (newValue.length >= 3) {
-                getSuggestions();
-            } else {
-                suggestions.value = [];
-            }
-        }, { debounce: 300 }); // 300ms delay for better performance
-
-        return {
-            mapId,
-            searchQuery,
-            suggestions,
-            latitude,
-            longitude,
-            searchLocation,
-            selectSuggestion,
-            getMap: () => map
-        };
+        }
     }
-}
+};
 </script>
 
 <style scoped>
-.map-container {
+.search-container {
     position: relative;
-    width: 100%;
-}
-
-.map-element {
-    width: 100%;
-    height: 400px;
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-}
-
-.coordinate-display {
-    margin-top: 5px;
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .address-suggestions {
     position: absolute;
-    top: calc(2.5rem + 2px); /* Input height + margin */
-    left: 0;
+    z-index: 1000;
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
     background: white;
-    border: 1px solid #ccc;
-    border-radius: 0 0 4px 4px;
-    z-index: 1000;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
@@ -341,18 +286,7 @@ export default {
     border-bottom: 1px solid #eee;
 }
 
-.address-suggestion:last-child {
-    border-bottom: none;
-}
-
 .address-suggestion:hover {
-    background-color: #f0f0f0;
-}
-
-/* Style dla kontenera Leaflet */
-:deep(.leaflet-container) {
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+    background-color: #f5f5f5;
 }
 </style>

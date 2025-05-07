@@ -8,7 +8,7 @@
                     type="text"
                     class="form-control"
                     v-model="searchQuery"
-                    :placeholder="$t('messages.map.searchPlace')"
+                    :placeholder="$t('map.searchPlace')"
                     @keyup.enter="searchLocation"
                     @input="handleSearchInput"
                 >
@@ -30,7 +30,7 @@
                     {{ result.display_name }}
                 </div>
                 <div class="search-result-item" v-if="searchResults.length === 0 && hasSearched">
-                    {{ $t('messages.map.noResults') }}
+                    {{ $t('map.noResults') }}
                 </div>
             </div>
         </div>
@@ -42,13 +42,13 @@
                 :disabled="isLocating"
             >
                 <i class="bi bi-geo-alt"></i>
-                {{ isLocating ? $t('messages.map.locating') : $t('messages.map.myLocation') }}
+                {{ isLocating ? $t('map.locating') : $t('map.myLocation') }}
             </button>
         </div>
 
         <div class="map-info text-white">
-            <h5>{{ $t('messages.map.mapInfo') }}</h5>
-            <p>{{ $t('messages.map.clickMapInstruction') }}</p>
+            <h5>{{ $t('map.mapInfo') }}</h5>
+            <p>{{ $t('map.clickMapInstruction') }}</p>
             <div v-html="coordinatesInfo"></div>
         </div>
     </div>
@@ -123,27 +123,6 @@ export default {
                 popupAnchor: [0, -40]
             });
         },
-
-        $t(key) {
-            if (this.$root && this.$root.$i18n) {
-                return this.$root.$i18n.t(key);
-            }
-            const translations = {
-                'messages.map.searchPlace': 'Wyszukaj miejsce',
-                'messages.map.myLocation': 'Moja lokalizacja',
-                'messages.map.locating': 'Lokalizowanie...',
-                'messages.map.yourLocation': 'Twoja lokalizacja',
-                'messages.map.mapInfo': 'Informacje o mapie',
-                'messages.map.clickMapInstruction': 'Kliknij na mapę, aby dodać znacznik',
-                'messages.map.latitude': 'Szerokość geograficzna',
-                'messages.map.longitude': 'Długość geograficzna',
-                'messages.map.noResults': 'Brak wyników',
-                'messages.map.alertGeolocalization': 'Nie można określić Twojej lokalizacji',
-                'messages.alertBrowserGeolocalization': 'Twoja przeglądarka nie obsługuje geolokalizacji'
-            };
-            return translations[key] || key;
-        },
-
         addMarker(lat, lng, popupContent = null) {
             if (this.currentMarker) {
                 this.map.removeLayer(this.currentMarker);
@@ -176,8 +155,8 @@ export default {
 
         updateCoordinatesInfo(lat, lng) {
             this.coordinatesInfo = `
-                <strong>${this.$t('messages.map.latitude')}</strong> ${lat.toFixed(6)}<br>
-                <strong>${this.$t('messages.map.longitude')}</strong> ${lng.toFixed(6)}
+                <strong>${this.$t('map.latitude')}</strong> ${lat.toFixed(6)}<br>
+                <strong>${this.$t('map.longitude')}</strong> ${lng.toFixed(6)}
             `;
         },
 
@@ -213,7 +192,6 @@ export default {
                     `).openPopup();
                 } else {
                     console.warn('No valid data returned from geocoding services');
-                    // Fallback to just coordinates if no address data
                     this.currentMarker.bindPopup(`
                         <strong>Location</strong><br>
                         <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
@@ -221,7 +199,6 @@ export default {
                 }
             } catch (error) {
                 console.error('Error during reverse geocoding:', error);
-                // Still provide a popup with coordinates
                 if (this.currentMarker) {
                     this.currentMarker.bindPopup(`
                         <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
@@ -248,7 +225,7 @@ export default {
 
         async locateMe() {
             if (!('geolocation' in navigator)) {
-                alert(this.$t('messages.alertBrowserGeolocalization'));
+                alert(this.$t('map.alertBrowserGeolocalization'));
                 return;
             }
 
@@ -263,10 +240,10 @@ export default {
                 const lng = position.coords.longitude;
 
                 this.map.setView([lat, lng], 16);
-                this.addMarker(lat, lng, this.$t('messages.map.yourLocation'));
+                this.addMarker(lat, lng, this.$t('map.yourLocation'));
                 await this.reverseGeocode(lat, lng);
             } catch (error) {
-                alert(this.$t('messages.map.alertGeolocalization'));
+                alert(this.$t('map.alertGeolocalization'));
                 console.error('Geolocation error:', error);
             } finally {
                 this.isLocating = false;
@@ -277,7 +254,6 @@ export default {
             if (!this.searchQuery.trim()) return;
 
             try {
-                // Using direct Nominatim API as a fallback if your API proxy fails
                 const endpoints = [
                     `/api/nominatim/search?q=${encodeURIComponent(this.searchQuery)}&limit=5`,
                     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&limit=5`
