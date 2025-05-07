@@ -31,7 +31,7 @@ class PhotoRepository extends BaseRepository implements PhotoRepositoryInterface
         return $storedPhotos;
     }
 
-    public function deletePhotos($photoId)
+    public function deletePhoto($photoId)
     {
         return $this->delete($photoId);
     }

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\EventAttendeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MainMapController;
@@ -21,10 +21,6 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return view('about');
 })->middleware('locale');
-
-Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])
-    ->name('language.change')->
-    middleware('locale');
 
 Route::middleware(['auth', 'verified', 'locale'])->group(function ()
 {

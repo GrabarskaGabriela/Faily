@@ -123,7 +123,7 @@ export default {
                 popupAnchor: [0, -40]
             });
         },
-        addMarker(lat, lng, popupContent = null) {
+        addMarker(lat, lng, popupContent) {
             if (this.currentMarker) {
                 this.map.removeLayer(this.currentMarker);
             }
@@ -161,7 +161,7 @@ export default {
         },
 
         async reverseGeocode(lat, lng) {
-            try {j
+            try {
                 const endpoints = [
                     `/api/nominatim/reverse?lat=${lat}&lon=${lng}`,
                     `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
