@@ -524,4 +524,12 @@ return [
         'save' => 'Save',
         'saved' => 'Saved',
     ],
+
+    'counter' => [
+        'title' => 'Click counter',
+        'text' => 'Click count: :count',
+        'button' => 'Click me!',
+    ],
+
+
 ];

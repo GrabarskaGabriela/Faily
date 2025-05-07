@@ -24,9 +24,13 @@ Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])
     ->name('language.change')->
     middleware('locale');
 
+Route::get('/test', function () {
+    return view('test');
+})->middleware('locale')
+->name('test');
+
 Route::middleware(['auth', 'verified', 'locale'])->group(function ()
 {
-    //Route::get('/', function () { return view('welcome'); })->name('afterlogin');
 
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

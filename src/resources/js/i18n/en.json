@@ -1,0 +1,7 @@
+{
+    "counter": {
+        "title": "Click counter",
+        "text": "Click count: {count}",
+        "button": "Click me!"
+    }
+}
