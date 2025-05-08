@@ -127,7 +127,7 @@
 
 
                 <div class="mt-4">
-                    <button type="submit" class="btn text-color btn-gradient">{{ __('messages.editevent.submitChanges') }}</button>
+                    <button type="submit" href="{{ route('events.show', $event) }}" class="btn text-color btn-gradient">{{ __('messages.editevent.submitChanges') }}</button>
                     <a href="{{ route('events.show', $event) }}" class="btn btn-gradient-secondary">{{ __('messages.editevent.cancelChanges') }}</a>
                 </div>
             </form>
@@ -135,11 +135,11 @@
     </div>
 
     @if($event->photos->count() > 0)
-        <div class="card border-0 shadow-lg rounded-4 custom-card-bg mb-5 overflow-hidden">
+        <div class="card border-0 shadow-lg rounded-4 custom-card-bg mb-5 overflow-hidden shadow-sm">
             <div class="card-header text-color">
                 <h4 class="mb-0">{{ __('messages.editevent.existingPhotos') }}</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body shadow-sm">
                 <div class="row g-4">
                     @foreach($event->photos as $photo)
                         <div class="col-md-4">

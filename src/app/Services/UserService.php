@@ -9,6 +9,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\User;
+
 class UserService extends BaseService implements UserServiceInterface
 {
     protected $repository;
@@ -91,5 +93,56 @@ class UserService extends BaseService implements UserServiceInterface
         }
 
         return $this->repository->delete($userId);
+    }
+
+    public function banUser($userId)
+    {
+        $user = $this->repository->find($userId);
+
+        if (!$user) {
+            throw new \Exception('User not found.');
+        }
+
+        if ($user->role === 'admin') {
+            throw new \Exception('You can\'t ban other admin user.');
+        }
+
+        return $this->repository->update($userId, 'banned');
+    }
+
+    public function countBannedUsers()
+    {
+        return $this->repository->countByStatus('banned');
+    }
+
+    public function unbanUser($userId)
+    {
+        $user = $this->repository->updateStatus($userId, 'banned');
+        $this->repository->resetReportCount($userId);
+        return $user;
+    }
+
+    public function makeAdmin($userId)
+    {
+        return $this->repository->updateStatus($userId, 'admin');
+    }
+
+    public function removeAdmin($userId, $currentUserId)
+    {
+        if ($currentUserId == $userId) {
+            throw new \Exception('You can\'t take away admin privileges yourself.');
+        }
+
+        return $this->repository->updateStatus($userId, 'admin');
+    }
+
+    public function all()
+    {
+        return $this->getAll();
+    }
+
+    public function paginate($perPage = 15, array $columns = ['*'])
+    {
+        return User::paginate($perPage, $columns);
     }
 }

@@ -246,6 +246,7 @@ return [
         'noEventsMessage' => 'Немає подій. Створіть першу!',
         'addFirstEventButton' => 'Створити подію',
         'upcomingEventsLabel' => 'Незабаром',
+        'resetFiltersButton' => 'Скидання фільтрів',
     ],
 
     'eventattendeestable' => [

@@ -1,7 +1,15 @@
 {
-    "counter": {
-        "title": "Licznik kliknięć",
-        "text": "Liczba kliknięć: {count}",
-        "button": "Kliknij mnie!"
+    "map": {
+        "title": "Mapa",
+        "searchPlace": "Wyszukaj miejsce'",
+        "myLocation": "Moja lokalizacja",
+        "locating": "Lokalizowanie...",
+        "yourLocation": "Twoja lokalizacja",
+        "mapInfo": "Informacje o mapie",
+        "clickMapInstruction": "Kliknij na mapę, aby dodać znacznik",
+        "latitude": "Szerokość geograficzna:",
+        "longitude": "Długość geograficzna:",
+        "noResults": "Brak wyników",
+        "alertGeolocalization": "Nie można określić Twojej lokalizacji"
     }
 }

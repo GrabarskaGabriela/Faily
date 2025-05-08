@@ -16,6 +16,7 @@ class TestDataSeeder extends Seeder
     /**
      * To jest seeder udający factory XD
      */
+
     public function run(): void
     {
         $faker = Faker::create('pl_PL');
@@ -29,7 +30,14 @@ class TestDataSeeder extends Seeder
             'age' => '19',
             'phone' => '+48 777 777 777',
             'description' => 'testowe konto',
+            'role' => 'admin',
+            'status' => 'active',
         ]);
+
+        if ($mainUser->role !== 'admin') {
+            $mainUser->role = 'admin';
+            $mainUser->save();
+        }
 
         $users = [$mainUser];
         for ($i = 0; $i < 15; $i++) {
@@ -42,6 +50,8 @@ class TestDataSeeder extends Seeder
                 'age' => $faker->numberBetween(18, 60),
                 'phone' => $faker->phoneNumber,
                 'description' => $faker->sentence(10),
+                'role' => 'user',
+                'status' => 'active',
             ]);
             $users[] = $user;
         }
@@ -61,7 +71,6 @@ class TestDataSeeder extends Seeder
             throw new \Exception("Nie udało się utworzyć wydarzenia!");
         }
 
-        // Kilka dodatkowych wydarzeń
         $cities = [
             ['name' => 'Warszawa', 'lat' => 52.229676, 'lng' => 21.012229],
             ['name' => 'Gdańsk', 'lat' => 54.372158, 'lng' => 18.638306],
@@ -93,7 +102,7 @@ class TestDataSeeder extends Seeder
                 'latitude' => $city['lat'] + $latOffset,
                 'longitude' => $city['lng'] + $lngOffset,
                 'location_name' => $faker->randomElement(['Arena', 'Stadion', 'Hala', 'Centrum', 'Park']) . ' ' . $city['name'],
-                'has_ride_sharing' => $faker->boolean(70), // 70% szans na true
+                'has_ride_sharing' => $faker->boolean(70),
             ]);
 
             $events[] = $event;

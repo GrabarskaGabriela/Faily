@@ -81,6 +81,8 @@
             <input type="text" class="form-control" id="description" name="description"
                    value="{{ old('description', $user->description) }}" required autofocus autocomplete="description">
             @if ($errors->get('descriptione'))
+<<<<<<< HEAD
+=======
                 <div class="text-danger small mt-1">
                     {{ $errors->first('description') }}
                 </div>
@@ -108,12 +110,15 @@
             <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
 
             @if ($errors->get('avatar'))
+>>>>>>> origin/wodzu
                 <div class="text-danger small mt-1">
-                    {{ $errors->first('avatar') }}
+                    {{ $errors->first('description') }}
                 </div>
             @endif
         </div>
 
+<<<<<<< HEAD
+=======
 
         <script>
             function updateFileName(input) {
@@ -123,6 +128,7 @@
         </script>
 
 
+>>>>>>> origin/wodzu
         <div class="mb-3 text-color">
             <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.preferredLanguage') }}</label>
             <select class="form-select" id="preferred_language" name="preferred_language">

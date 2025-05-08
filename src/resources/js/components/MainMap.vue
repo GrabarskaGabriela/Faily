@@ -1,4 +1,36 @@
+<template>
+    <div class="page-container" id="app">
+        <main>
+            <LeafletMap :events="events" />
+        </main>
+    </div>
+</template>
 
+<script>
+import LeafletMap from './LeafletMap.vue';
+
+export default {
+    name: 'MainMap',
+
+    components: {
+        LeafletMap
+    },
+
+    data() {
+        return {
+            events: []
+        };
+    },
+
+    created() {
+        if (window.events && Array.isArray(window.events)) {
+            this.events = window.events;
+        }
+    }
+};
+</script>
+
+<style>
 .html, body {
     height: 100%;
     margin: 0;
@@ -68,3 +100,5 @@ main {
     .search-container { width: calc(100% - 120px); left: 10px; }
     .map-info { bottom: 10px; max-width: calc(100% - 20px); }
 }
+
+</style>

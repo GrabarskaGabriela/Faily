@@ -6,39 +6,45 @@ import 'bootstrap';
 
 import { createApp } from 'vue';
 import { createI18n} from "vue-i18n";
-
 import LeafletMap from './components/LeafletMap.vue';
+import MainMap from './components/MainMap.vue';
 import EventMap from "./components/EventMap.vue";
+import 'leaflet/dist/leaflet.css';
 import EventForm from "./components/EventForm.vue";
 import EventPlaceMap from "./components/EventPlaceMap.vue";
 import RideSharing from "./components/RideSharing.vue";
-import Test from "./components/Test.vue";
 
 import pl from './i18n/pl.json'
 import en from './i18n/en.json'
-import jp from './i18n/jp.json'
+import jpn from './i18n/jpn.json'
+import es from './i18n/es.json'
+import ua from './i18n/ua.json'
 
-const app = createApp({});
-
+const initialEvents = window.events || [];
+const app = createApp({
+    data() {
+        return {
+            initialEvents: window.events || []
+        };
+    }
+});
 const i18n = createI18n({
     legacy: false,
-    locale: window.locale || 'pl',
+    locale: window.locale || 'en',
     fallbackLocale: 'en',
     messages: {
         pl,
         en,
-        jp,
+        jpn,
+        es,
+        ua
     }
 });
-
-
 app.component('leaflet-map', LeafletMap);
+app.component('main-map', MainMap);
 app.component('event-map', EventMap);
 app.component('event-map-place', EventPlaceMap);
 app.component('ride-sharing', RideSharing);
 app.component('event-form', EventForm);
-app.component('test' ,Test);
-
 app.use(i18n);
-
 app.mount('#app');

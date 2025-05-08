@@ -18,9 +18,12 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('description')->nullable();
             $table->string('photo_path')->nullable();
-            $table->string('language')->default('pl');
-            $table->string('theme')->default('dark');
             $table->timestamp('last_login_at')->nullable();
+            $table->enum('role',  ['user', 'admin'])->default('user');
+            $table->enum('status', ['active', 'banned'])->default('active');
+            $table->integer('reports_count')->default(0);
+            $table->softDeletes();
+
 
             #może się kiedyś przyda
             $table->boolean('two_factor_enabled')->default(false)->nullable();
@@ -51,6 +54,7 @@ return new class extends Migration
                 'email_notifications',
                 'photo_updated_at',
                 'password_updated_at',
+                'role'
             ]);
         });
     }

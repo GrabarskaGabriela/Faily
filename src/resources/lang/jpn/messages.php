@@ -247,6 +247,7 @@ return [
         'noEventsMessage' => 'イベントはありません。最初のイベントを作成しましょう！',
         'addFirstEventButton' => 'イベントを作成',
         'upcomingEventsLabel' => '近日開催',
+        'resetFiltersButton' => 'フィルターをリセット',
     ],
 
     'eventattendeestable' => [

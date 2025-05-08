@@ -1,0 +1,13 @@
+{
+    "map.title": "Mapa",
+    "map.searchPlace": "Buscar lugar",
+    "map.myLocation": "Mi ubicación",
+    "map.locating": "Localizando...",
+    "map.yourLocation": "Tu ubicación",
+    "map.mapInfo": "Información del mapa",
+    "map.clickMapInstruction": "Haz clic en el mapa para agregar un marcador",
+    "map.latitude": "Latitud:",
+    "map.longitude": "Longitud:",
+    "map.noResults": "No se encontraron resultados",
+    "map.alertGeolocalization": "No se puede determinar tu ubicación"
+}

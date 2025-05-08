@@ -9,8 +9,10 @@ use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\RideController;
 use App\Http\Controllers\Api\RideRequestController;
 use App\Http\Controllers\Api\TestApiController;
+use Illuminate\Support\Facades\Http;
 
-Route::prefix('api')->name('api.')->group(function () {
+Route::prefix('api')->name('api.')->group(function ()
+{
     Route::get("/test", [TestApiController::class, "test"]);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
@@ -47,6 +49,41 @@ Route::prefix('api')->name('api.')->group(function () {
 
         Route::apiResource('ride-requests', RideRequestController::class)->except(['show', 'edit']);
         Route::get('/my-ride-requests', [RideRequestController::class, 'myRequests']);
+
+        Route::get('/geocode/search', 'GeocodingController@search');
+        Route::get('/geocode/reverse', 'GeocodingController@reverse');
+    });
+    Route::get('/nominatim/search', function (\Illuminate\Http\Request $request) {
+        $q = $request->query('q');
+        $limit = $request->query('limit', 5);
+
+        $response = Http::withHeaders([
+            'User-Agent' => 'YourAppName/1.0 (you@example.com)'
+        ])->get('https://nominatim.openstreetmap.org/search', [
+            'format' => 'json',
+            'q' => $q,
+            'limit' => $limit,
+        ]);
+
+        \Log::info("Response body: " . $response->body());
+        \Log::info("Response status: " . $response->status());
+
+        return $response->json();
+    });
+
+    Route::get('/nominatim/reverse', function (\Illuminate\Http\Request $request) {
+        $lat = $request->query('lat');
+        $lon = $request->query('lon');
+
+        $response = Http::withHeaders([
+            'User-Agent' => 'YourAppName/1.0 (you@example.com)'
+        ])->get('https://nominatim.openstreetmap.org/reverse', [
+            'format' => 'json',
+            'lat' => $lat,
+            'lon' => $lon,
+        ]);
+
+        return $response->json();
     });
 });
 

@@ -24,7 +24,7 @@
                         @foreach($event->photos as $key => $photo)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                 @if(isset($event->photos) && count($event->photos) > 0)
-                                    <img src="{{ asset('storage/' . $event->photos[0]->path) }}"
+                                    <img src="{{ asset('storage/' . $photo->path) }}"
                                          alt="{{ $event->title }}"
                                          class="card-img-top"
                                          style="height: 250px; object-fit: cover;">
@@ -355,7 +355,11 @@
         </div>
     </div>
 </main>
-
+@auth
+    @if(Auth::id() !== $event->user_id && $event->user->role !== 'admin')
+        @include('includes.report-user-modal', ['userId' => $event->user->id, 'userName' => $event->user->name])
+    @endif
+@endauth
 @include('includes.footer')
 </body>
 </html>

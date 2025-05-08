@@ -468,7 +468,20 @@ html, body
     .delay-2 {
         animation-delay: 1s;
     }
+.pagination {
+    justify-content: center;
+    margin-top: 2rem;
+}
 
+.page-item.active .page-link {
+    color: #8B5CF6 !important;
+    color: #8B5CF6 !important;
+    color: #fff;
+}
+
+.page-link {
+    color: #8B5CF6 !important;
+}
     /**Footer*/
 
     footer {
@@ -499,4 +512,3 @@ html, body
             height: 400px;
         }
     }
-

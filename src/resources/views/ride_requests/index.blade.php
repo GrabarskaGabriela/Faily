@@ -6,20 +6,20 @@
     <title>{{ __('messages.title.rideMenagement') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-main">
+<main class="bg-main">
 @include('includes.navbar')
 
-<div class="container mt-5 text-color">
+<div class="container mt-5 text-color ">
     <div class="row mb-4">
         <div class="col-md-8">
             <h2>{{ __('messages.riderequestindex.rideMenagement') }}</h2>
         </div>
         <div class="col-md-4 text-md-end">
-            <a href="{{ route('events.show', $ride->event) }}" class="btn btn-secondary">{{ __('messages.riderequestindex.backToEvent') }}</a>
+            <a href="{{ route('events.show', $ride->event) }}" class="btn btn-gradient">{{ __('messages.riderequestindex.backToEvent') }}</a>
         </div>
     </div>
 
-    <div class="card custom-card-bg text-color mb-4">
+    <div class="card custom-card-bg text-color mb-4 shadow-sm">
         <div class="card-header">
             <h4>{{ __('messages.riderequestindex.rideInfo') }}</h4>
         </div>
@@ -38,14 +38,14 @@
                     <p><strong>{{ __('messages.riderequestindex.availableSeats') }}</strong> {{ $availableSeats }} / {{ $ride->available_seats }}</p>
                     <p><strong>{{ __('messages.riderequestindex.eventLocation') }}</strong> {{ $ride->meeting_location_name }}</p>
                     <p>
-                        <a href="{{ route('rides.edit', $ride) }}" class="btn btn-sm btn-primary">{{ __('messages.riderequestindex.editRide') }}</a>
+                        <a href="{{ route('rides.edit', $ride) }}" class="btn btn-sm btn-gradient-secondary">{{ __('messages.riderequestindex.editRide') }}</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card custom-card-bg text-color">
+    <div class="card custom-card-bg text-color shadow-sm">
         <div class="card-header">
             <h4>{{ __('messages.riderequestindex.applicationList') }} ({{ $requests->count() }})</h4>
         </div>
@@ -124,7 +124,7 @@
         </div>
     </div>
 </div>
-
+</main>
 @include('includes.footer')
 </body>
 </html>

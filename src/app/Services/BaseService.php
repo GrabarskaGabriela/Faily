@@ -8,6 +8,11 @@ abstract class BaseService implements ServiceInterface
 {
     protected $repository;
 
+    public function __construct(RepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function getAll(array $columns = ['*'])
     {
         return $this->repository->all($columns);

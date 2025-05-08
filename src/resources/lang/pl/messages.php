@@ -247,6 +247,7 @@ return [
         'noEventsMessage' => 'Brak wydarzeń. Utwórz pierwsze!',
         'addFirstEventButton' => 'Utwórz wydarzenie',
         'upcomingEventsLabel' => 'Nadchodzące wkrótce',
+        'resetFiltersButton' => 'Resetuj filtry',
     ],
 
     'eventattendeestable' => [

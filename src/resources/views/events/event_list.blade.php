@@ -11,50 +11,8 @@
 
 <main class="container py-5 text-color">
     <div class="row g-4">
+        @include('includes.filters_menu')
 
-        <div class="col-md-3">
-            <div class="card shadow-sm mb-4 border-black">
-                <div class="card-header text-color">
-                    <h5>{{ __('messages.eventlist.filterTitle') }}</h5>
-                </div>
-                <div class="card-body shadow-sm text-color">
-                    <form action="{{ route('events.feed') }}" method="GET">
-                        <div class="mb-3">
-                            <label for="search" class="form-label">{{ __('messages.eventlist.searchButton') }}</label>
-                            <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="date_from" class="form-label">{{ __('messages.eventlist.startDateLabel') }}</label>
-                            <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="date_to" class="form-label">{{ __('messages.eventlist.endDateLabel') }}</label>
-                            <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
-                        </div>
-                        <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" id="has_ride_sharing" name="has_ride_sharing" value="1" {{ request('has_ride_sharing') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="has_ride_sharing">{{ __('messages.eventlist.withTransportCheckbox') }}</label>
-                        </div>
-                        <div class="form-check form-switch mb-3">
-                            <input class="form-check-input" type="checkbox" id="has_available_spots" name="has_available_spots" value="1" {{ request('has_available_spots') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="has_available_spots">{{ __('messages.eventlist.withFreeSpotsCheckbox') }}</label>
-                        </div>
-                        <button type="submit" class="btn btn-gradient text-color">{{ __('messages.eventlist.applyFiltersButton') }}</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card shadow-sm border-black">
-                <div class="card-header text-color">
-                    <h5>{{ __('messages.eventlist.quickLinksLabel') }}</h5>
-                </div>
-                <div class="card-body d-grid gap-2 text-color">
-                    <a href="{{ route('events.create') }}" class="btn text-color btn-gradient" >{{ __('messages.eventlist.createEventButton') }}</a>
-                    <a href="{{ route('my_events') }}" class="btn text-color btn-gradient">{{ __('messages.eventlist.myEventsButton') }}</a>
-                    <a href="{{ route('events.index') }}" class="btn text-color btn-gradient">{{ __('messages.eventlist.allEventsButton') }}</a>
-                </div>
-            </div>
-        </div>
         <div class="col-md-6">
             <h2 class="mb-4" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
             @forelse($events as $event)
@@ -145,43 +103,20 @@
             @empty
                 <div class="alert alert-info text-center">
                     {{ __('messages.eventlist.noEventsMessage') }}<br>
-                    <a href="{{ route('events.create') }}" class="btn btn-success mt-2">{{ __('messages.eventlist.addFirstEventButton') }}</a>
+                    <a href="{{ route('events.create') }}" class="btn btn-gradient mt-2">{{ __('messages.eventlist.addFirstEventButton') }}</a>
                 </div>
             @endforelse
-
-
-            <div class="d-flex justify-content-center mt-4">
-                {{ $events->links() }}
-            </div>
         </div>
-
-        <div class="col-md-3">
-
-            <div class="card shadow-sm border-black">
-                <div class="card-header text-color">
-                    <h5>{{ __('messages.eventlist.upcomingEventsLabel') }}</h5>
-                </div>
-                <div class="card-body">
-                    @foreach($upcomingEvents as $event)
-                        <div class="mb-3 d-flex align-items-center">
-                            <a href="{{ route('events.show', $event) }}" class="text-decoration-none text-light d-flex align-items-center">
-                                @if($event->photos->count())
-                                    <img src="{{ asset('storage/' . $event->photos->first()->path) }}" class="rounded me-2" width="50" alt="{{ $event->title }}">
-                                @else
-                                    <div class="bg-secondary rounded me-2" style="width:50px; height:50px;"></div>
-                                @endif
-                                <div>
-                                    <h6 class="mb-0">{{ $event->title }}</h6>
-                                    <small class="text-color">{{ \Carbon\Carbon::parse($event->date)->format('d.m.Y') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
+        @include('includes.upcoming_events')
 
     </div>
+    <div class="d-flex flex-column align-items-center mt-4">
+        <div class="mb-2 text-color">
+            {{ $events->links('pagination::bootstrap-5') }}
+        </div>
+    </div>
+
+
 </main>
 
 @include('includes.footer')

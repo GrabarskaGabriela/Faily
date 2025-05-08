@@ -31,6 +31,7 @@ chmod +x deploy.sh
 
 # Uruchomienie skryptu
 ./deploy.sh 
+
 ```
 
 Można też wykonać polecenia ze skryptu ręcznie:

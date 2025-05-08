@@ -13,4 +13,9 @@ interface UserServiceInterface extends ServiceInterface
     public function updatePhoto(UploadedFile $photo, $userId);
     public function toggle2FA($enabled, $userId);
     public function deleteAccount($password, $userId);
+    public function banUser($userId);
+    public function unbanUser($userId);
+    public function makeAdmin($userId);
+    public function removeAdmin($userId, $currentUserId);
+    public function countBannedUsers();
 }

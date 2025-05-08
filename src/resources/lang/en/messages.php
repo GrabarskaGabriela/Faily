@@ -246,6 +246,7 @@ return [
         'noEventsMessage' => 'No events. Create the first one!',
         'addFirstEventButton' => 'Create Event',
         'upcomingEventsLabel' => 'Coming Soon',
+        'resetFiltersButton' => 'Reset filters',
     ],
 
     'eventattendeestable' => [

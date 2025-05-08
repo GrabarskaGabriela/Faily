@@ -1,378 +1,208 @@
+// resources/js/components/AddEventForm.vue
 <template>
-    <div class="container">
-        <div class="main-container">
-            <h2 class="mb-4">Dodaj wydarzenie</h2>
+    <div>
+        <form @submit.prevent="submitForm" enctype="multipart/form-data" id="event-form">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">{{ $t('messages.addevent.eventTitle') }}</label>
+                        <input type="text" class="form-control" id="title" name="title" v-model="eventData.title" required>
+                    </div>
 
-            <form @submit.prevent="submitForm" enctype="multipart/form-data" id="event-form">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Tytuł wydarzenia</label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="title"
-                                v-model="eventData.title"
-                                required
-                            >
-                        </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">{{ $t('messages.addevent.eventDesc') }}</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" v-model="eventData.description" required></textarea>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Opis wydarzenia</label>
-                            <textarea
-                                class="form-control"
-                                id="description"
-                                v-model="eventData.description"
-                                rows="4"
-                                required
-                            ></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">{{ $t('messages.addevent.date') }}</label>
+                        <input type="datetime-local" class="form-control" id="date" name="date" v-model="eventData.date" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Data wydarzenia</label>
-                            <input
-                                type="datetime-local"
-                                class="form-control"
-                                id="date"
-                                v-model="eventData.date"
-                                required
-                            >
-                        </div>
+                    <div class="mb-3">
+                        <label for="peopleCount" class="form-label">{{ $t('messages.addevent.availablePersonNumber') }}</label>
+                        <input type="number" class="form-control" id="peopleCount" name="people_count" min="1" v-model="eventData.people_count" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="people-count" class="form-label">Ilość osób</label>
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="people-count"
-                                v-model="eventData.people_count"
-                                min="1"
-                                required
-                            >
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="event-photos" class="form-label">Dodaj zdjęcia</label>
-                            <input
-                                type="file"
-                                class="form-control"
-                                id="event-photos"
-                                ref="photos"
-                                @change="handleFileUpdate"
-                                multiple
-                            >
-                            <div id="file-list" class="mt-2 small text-muted">
-                                <div v-if="selectedFiles.length > 0">
-                                    <div>Wybrano plików: {{ selectedFiles.length }}</div>
-                                    <ul class="mt-1 ps-3">
-                                        <li v-for="(file, index) in selectedFiles" :key="index">
-                                            {{ file.name }}
-                                        </li>
-                                    </ul>
-                                </div>
+                    <div class="mb-3">
+                        <input type="file" class="d-none" id="eventPhotos" ref="eventPhotos" name="photos[]" multiple @change="updateFileList">
+                        <label for="eventPhotos" class="btn btn-gradient text-color mt-2">
+                            {{ $t('messages.addevent.addPhotos') }}
+                        </label>
+                        <div id="fileList" class="mt-2 small text-color">
+                            <div v-if="selectedFiles.length > 0">
+                                {{ $t('messages.addevent.fileSelection') }} {{ selectedFiles.length }}
+                                <ul class="mt-1 ps-3">
+                                    <li v-for="(file, index) in selectedFiles" :key="index">{{ file.name }}</li>
+                                </ul>
+                            </div>
+                            <div v-else>
+                                {{ $t('messages.addevent.fileNotChoosen') }}
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-6">
-                        <event-place-map
-                            ref="mainMap"
-                            :initial-latitude="locationData.latitude"
-                            :initial-longitude="locationData.longitude"
-                            :initial-location-name="locationData.locationName"
-                            @update="updateEventLocation"
-                        />
+                <div class="col-md-6">
+                    <main-map
+                        :initial-latitude="parseFloat(eventData.latitude)"
+                        :initial-longitude="parseFloat(eventData.longitude)"
+                        @update:latitude="eventData.latitude = $event"
+                        @update:longitude="eventData.longitude = $event"
+                        @update:location-name="eventData.location_name = $event"
+                    ></main-map>
 
-                        <ride-sharing
-                            ref="rideSharing"
-                            :initial-has-ride-sharing="rideSharingEnabled"
-                            :initial-vehicle-description="vehicleDescription"
-                            :initial-available-seats="availableSeats"
-                            :initial-meeting-location-data="meetingLocationData"
-                            @toggle-ride-sharing="toggleRideSharing"
-                            @update-meeting-location="updateMeetingLocation"
-                        />
+                    <div class="mb-3 form-check form-switch">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="has_ride_sharing"
+                            name="has_ride_sharing"
+                            v-model="eventData.has_ride_sharing"
+                            value="1"
+                        >
+                        <label class="form-check-label" for="has_ride_sharing">{{ $t('messages.addevent.enableCarSharing') }}</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                    <button
-                        type="submit"
-                        class="btn btn-lg px-4 text-white"
-                        style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);"
-                        :disabled="isSubmitting"
-                    >
-                        <i class="bi bi-check-circle me-2"></i>Dodaj wydarzenie
-                    </button>
+            <div v-if="eventData.has_ride_sharing" class="mt-4 mb-4 p-3" id="ride-sharing-form">
+                <h4 class="mb-3">{{ $t('messages.addevent.rideDetails') }}</h4>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="vehicle_description" class="form-label">{{ $t('messages.addevent.carDesc') }}</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="vehicle_description"
+                                name="vehicle_description"
+                                v-model="eventData.vehicle_description"
+                                :placeholder="$t('messages.addevent.carDescExample')"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="avalible_seats" class="form-label">{{ $t('messages.addevent.availableSeats') }}</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="avalible_seats"
+                                name="avalible_seats"
+                                min="1"
+                                v-model="eventData.avalible_seats"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <event-map
+                            :initial-latitude="parseFloat(eventData.meeting_latitude)"
+                            :initial-longitude="parseFloat(eventData.meeting_longitude)"
+                            @update:latitude="eventData.meeting_latitude = $event"
+                            @update:longitude="eventData.meeting_longitude = $event"
+                            @update:location-name="eventData.meeting_location_name = $event"
+                        ></event-map>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="submit" class="btn btn-lg px-4 btn-gradient text-color" id="submit-button">
+                    <i class="bi bi-check-circle me-2"></i>{{ $t('messages.addevent.addEvent') }}
+                </button>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
+import EventMap from './EventMap.vue';
 import EventPlaceMap from './EventPlaceMap.vue';
-import RideSharing from './RideSharing.vue';
+
 
 export default {
-    name: 'EventForm',
+    name: 'AddEventForm',
     components: {
-        'event-place-map': EventPlaceMap,
-        'ride-sharing': RideSharing
+        EventMap,
+        EventPlaceMap
     },
+
     data() {
         return {
             eventData: {
                 title: '',
                 description: '',
                 date: '',
-                people_count: 1
+                people_count: 1,
+                latitude: '52.069',
+                longitude: '19.480',
+                location_name: '',
+                has_ride_sharing: false,
+                vehicle_description: '',
+                avalible_seats: 1,
+                meeting_latitude: '52.069',
+                meeting_longitude: '19.480',
+                meeting_location_name: ''
             },
-            locationData: {
-                latitude: 52.069,
-                longitude: 19.480,
-                locationName: ''
-            },
-            rideSharingEnabled: false,
-            vehicleDescription: '',
-            availableSeats: 1,
-            meetingLocationData: {
-                latitude: 52.069,
-                longitude: 19.480,
-                locationName: ''
-            },
-            selectedFiles: [],
-            isSubmitting: false
+            selectedFiles: []
         };
     },
+
     methods: {
-        handleFileUpdate(event) {
-            this.selectedFiles = Array.from(event.target.files || []);
-        },
-
-        updateEventLocation(data) {
-            this.locationData = { ...data };
-        },
-
-        toggleRideSharing(enabled) {
-            this.rideSharingEnabled = enabled;
-        },
-
-        updateMeetingLocation(data) {
-            this.meetingLocationData = { ...data };
-        },
-
-        validateForm() {
-            if (!this.eventData.title.trim()) {
-                alert('Give the title of the event');
-                return false;
-            }
-
-            if (!this.eventData.description.trim()) {
-                alert('Give the description of the event');
-                return false;
-            }
-
-            if (!this.eventData.date) {
-                alert('Select the date of the event');
-                return false;
-            }
-
-            if (!this.eventData.people_count || this.eventData.people_count < 1) {
-                alert('Enter the correct number of people');
-                return false;
-            }
-
-            if (this.$refs.mainMap && !this.$refs.mainMap.validate()) {
-                return false;
-            }
-
-            if (this.rideSharingEnabled && this.$refs.rideSharing && !this.$refs.rideSharing.validate()) {
-                return false;
-            }
-
-            return true;
+        updateFileList() {
+            this.selectedFiles = Array.from(this.$refs.eventPhotos.files);
         },
 
         async submitForm() {
-            if (!this.validateForm()) {
-                return;
-            }
+            const formData = new FormData();
 
-            const hasFiles = this.$refs.photos && this.$refs.photos.files && this.$refs.photos.files.length > 0;
+            // Add all form fields to FormData
+            Object.keys(this.eventData).forEach(key => {
+                formData.append(key, this.eventData[key]);
+            });
 
-            if (hasFiles) {
-                await this.submitFormWithFiles();
-            } else {
-                this.submitFormWithoutFiles();
-            }
-        },
-
-        async submitFormWithFiles() {
-            try {
-                const formData = new FormData();
-
-                Object.entries(this.eventData).forEach(([key, value]) => {
-                    formData.append(key, value);
+            // Add files
+            if (this.selectedFiles.length > 0) {
+                this.selectedFiles.forEach(file => {
+                    formData.append('photos[]', file);
                 });
+            }
 
-                const locationName = this.locationData.locationName ||
-                    `Lokalizacja (${this.locationData.latitude.toFixed(6)}, ${this.locationData.longitude.toFixed(6)})`;
-                formData.append('location_name', locationName);
-                formData.append('latitude', this.locationData.latitude);
-                formData.append('longitude', this.locationData.longitude);
-
-                formData.append('has_ride_sharing', this.rideSharingEnabled ? 1 : 0);
-
-                if (this.rideSharingEnabled && this.$refs.rideSharing) {
-                    const rideSharingData = this.$refs.rideSharing.getRideSharingData();
-                    Object.entries(rideSharingData).forEach(([key, value]) => {
-                        if (key !== 'has_ride_sharing') {
-                            formData.append(key, value);
-                        }
-                    });
-                }
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                if (csrfToken) {
-                    formData.append('_token', csrfToken);
-                }
-
-                if (this.$refs.photos && this.$refs.photos.files.length > 0) {
-                    const files = Array.from(this.$refs.photos.files);
-                    files.forEach(file => {
-                        formData.append('photos[]', file);
-                    });
-                }
-
-                console.log('Sending a form with files. FormData content:');
-                for (let pair of formData.entries()) {
-                    if (pair[1] instanceof File) {
-                        console.log(`${pair[0]}: File (${pair[1].name}, ${pair[1].size} bytes)`);
-                    } else {
-                        console.log(`${pair[0]}: ${pair[1]}`);
-                    }
-                }
-
-                const response = await fetch('/events', {
+            try {
+                // Replace with your API endpoint
+                const response = await fetch(route('events.store'), {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
                 });
 
-                if (response.ok || (response.status >= 300 && response.status < 400)) {
-                    console.log('The form has been successfully submitted!');
-e
-                    const redirectUrl = response.headers.get('Location');
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
-                    } else {
-                        window.location.href = '/events';
-                    }
+                if (response.ok) {
+                    // Handle successful form submission
+                    window.location.href = route('events.index');
                 } else {
-                    const responseText = await response.text();
-                    try {
-                        const errorData = JSON.parse(responseText);
-                        if (errorData.errors) {
-                            const messages = Object.values(errorData.errors).flat().join('\n');
-                            alert(`Validation errors:\n${messages}`);
-                        } else if (errorData.message) {
-                            alert(errorData.message);
-                        } else {
-                            throw new Error('Unknown error format');
-                        }
-                    } catch (parseError) {
-                        console.error('Response parsing error:', parseError);
-                        if (responseText) {
-                            console.error('Server response:', responseText);
-                        }
-                        alert('An error occurred while submitting the form. Check the console for more information.');
-                    }
+                    // Handle errors
+                    const errorData = await response.json();
+                    console.error('Form submission failed:', errorData);
+                    // Display error messages to user
                 }
             } catch (error) {
-                console.error('Error while submitting form:', error);
-                alert('An unexpected error occurred while submitting the form.');
+                console.error('Error submitting form:', error);
             }
-        },
-
-        submitFormWithoutFiles() {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/events';
-            form.enctype = 'multipart/form-data';
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (csrfToken) {
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = '_token';
-                csrfInput.value = csrfToken;
-                form.appendChild(csrfInput);
-            }
-
-            Object.entries(this.eventData).forEach(([key, value]) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            });
-
-            const locationName = this.locationData.locationName ||
-                `Lokalizacja (${this.locationData.latitude.toFixed(6)}, ${this.locationData.longitude.toFixed(6)})`;
-
-            const locationNameInput = document.createElement('input');
-            locationNameInput.type = 'hidden';
-            locationNameInput.name = 'location_name';
-            locationNameInput.value = locationName;
-            form.appendChild(locationNameInput);
-
-            const latInput = document.createElement('input');
-            latInput.type = 'hidden';
-            latInput.name = 'latitude';
-            latInput.value = this.locationData.latitude;
-            form.appendChild(latInput);
-
-            const lngInput = document.createElement('input');
-            lngInput.type = 'hidden';
-            lngInput.name = 'longitude';
-            lngInput.value = this.locationData.longitude;
-            form.appendChild(lngInput);
-
-            const rideSharingInput = document.createElement('input');
-            rideSharingInput.type = 'hidden';
-            rideSharingInput.name = 'has_ride_sharing';
-            rideSharingInput.value = this.rideSharingEnabled ? 1 : 0;
-            form.appendChild(rideSharingInput);
-
-            if (this.rideSharingEnabled && this.$refs.rideSharing) {
-                const rideSharingData = this.$refs.rideSharing.getRideSharingData();
-                Object.entries(rideSharingData).forEach(([key, value]) => {
-                    if (key !== 'has_ride_sharing') {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = key;
-                        input.value = value;
-                        form.appendChild(input);
-                    }
-                });
-            }
-
-            form.style.display = 'none';
-            document.body.appendChild(form);
-            form.submit();
         }
     }
-}
+};
 </script>
 
 <style scoped>
-.main-container {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: .5rem;
-    padding: 2rem;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+#ride-sharing-form {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.02);
 }
 </style>

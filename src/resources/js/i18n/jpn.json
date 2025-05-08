@@ -1,0 +1,13 @@
+{
+    "map.title": "マップ",
+    "map.searchPlace": "場所を検索",
+    "map.myLocation": "私の位置",
+    "map.locating": "ロケーション中...",
+    "map.yourLocation": "あなたの位置",
+    "map.mapInfo": "マップ情報",
+    "map.clickMapInstruction": "マップをクリックしてマーカーを追加",
+    "map.latitude": "緯度:",
+    "map.longitude": "経度:",
+    "map.noResults": "結果なし",
+    "map.alertGeolocalization": "位置情報を取得できません"
+}
