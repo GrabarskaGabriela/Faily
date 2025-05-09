@@ -64,8 +64,8 @@ class RideRequestStatusChanged extends Notification implements ShouldQueue
             })
             ->action('See event details', url('/events/' . $this->ride->event_id))
             ->line('We remind you to be punctual and inform the driver of any changes in plans.')
-            ->line('Thank you for using our application!')
-            ->line('Team Faily');
+            ->salutation('Thank you for using our application!')
+            ->salutation('Team Faily');
     }
 
 

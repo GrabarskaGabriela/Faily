@@ -93,17 +93,37 @@ class ReportService extends BaseService implements ReportServiceInterface
         $report = $this->reportRepository->find($id);
 
         if (!$report) {
-            throw new \Exception('Zgłoszenie nie istnieje.');
+            throw new \Exception('Notification does not exist.');
         }
 
         $this->reportRepository->updateStatus($id, 'reviewed');
 
-        if ($this->useCache()) {
-            $this->cacheService->forget("{$this->cachePrefix}.pending.count");
-            $this->cacheService->flushTags(['reports']);
+        $user = $this->userRepository->incrementReportCount($report->reported_user_id);
+        $userWasBanned = false;
+
+        if ($user->reports_count >= 3 &&
+            $user->status !== 'banned' &&
+            $user->role !== 'admin')
+        {
+            $this->userRepository->updateStatus($user->id, 'banned');
+            $userWasBanned = true;
+
+            if ($user->email) {
+                $this->sendBanNotification($user, $report->reason);
+            }
         }
 
-        return $report;
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.pending.count");
+            $this->cacheService->forget("user.{$report->reported_user_id}");
+            $this->cacheService->forget("user.banned.count");
+            $this->cacheService->flushTags(['reports', 'users']);
+        }
+
+        return [
+            'report' => $report,
+            'user_banned' => $userWasBanned
+        ];
     }
 
     public function countPendingReports()
@@ -119,5 +139,14 @@ class ReportService extends BaseService implements ReportServiceInterface
             },
             60 * 10 //10min
         );
+    }
+
+    protected function sendBanNotification($user, $reason = null)
+    {
+        try {
+            Mail::to($user->email)->send(new UserBanned($user, $reason));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send ban notification email: ' . $e->getMessage());
+        }
     }
 }

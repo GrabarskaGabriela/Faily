@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Services\Interfaces\ReportServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -12,21 +12,40 @@ class ReportController extends Controller
 
     public function __construct(ReportServiceInterface $reportService)
     {
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
         $this->reportService = $reportService;
     }
 
-    public function reportUser(Request $request, $id)
+    public function index()
     {
-        $validated = $request->validate([
-            'reason' => 'required|string|min:10|max:500',
-        ]);
+        $pendingReports = $this->reportService->findPending();
+        return view('admin.reports.index', compact('pendingReports'));
+    }
 
+    public function approve($id)
+    {
         try {
-            $this->reportService->reportUser($request, $id, Auth::id());
-            return back()->with('success', 'Użytkownik został zgłoszony. Dziękujemy za pomoc w utrzymaniu jakości naszej społeczności.');
+            $result = $this->reportService->approveReport($id);
+
+            $message = 'The application has been approved.';
+
+            if ($result['user_banned']) {
+                $message .= 'The user was banned and notified via email.';
+            }
+
+            return redirect()->back()->with('success', $message);
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function reject($id)
+    {
+        try {
+            $this->reportService->rejectReport($id);
+            return redirect()->back()->with('success', 'The application was rejected.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }
