@@ -18,7 +18,7 @@ class RideRequestController extends Controller
 
         if (!$ride_id) {
             return response()->json([
-                'message' => 'Musisz podać ID przejazdu.'
+                'message' => 'You need to enter the ride ID.'
             ], 422);
         }
 
@@ -26,7 +26,7 @@ class RideRequestController extends Controller
 
         if (Auth::id() !== $ride->driver_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do przeglądania tych zgłoszeń.'
+                'message' => 'You do not have permission to view these submissions.'
             ], 403);
         }
 
@@ -48,7 +48,7 @@ class RideRequestController extends Controller
 
         if (Auth::id() === $ride->driver_id) {
             return response()->json([
-                'message' => 'Nie możesz wysłać zgłoszenia do własnego przejazdu.'
+                'message' => 'You can\'t send an application for your own ride.'
             ], 422);
         }
 
@@ -58,7 +58,7 @@ class RideRequestController extends Controller
 
         if ($existingRequest) {
             return response()->json([
-                'message' => 'Już wysłałeś zgłoszenie do tego przejazdu.'
+                'message' => 'Already sent an application for this passage.'
             ], 422);
         }
 
@@ -68,7 +68,7 @@ class RideRequestController extends Controller
 
         if ($existingRequestsCount >= $ride->available_seats) {
             return response()->json([
-                'message' => 'Brak dostępnych miejsc w tym przejeździe.'
+                'message' => 'No seats available on this ride.'
             ], 422);
         }
 
@@ -86,7 +86,7 @@ class RideRequestController extends Controller
 
         if (Auth::id() !== $ride->driver_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do zarządzania tym zgłoszeniem.'
+                'message' => 'You do not have the authority to manage this request.'
             ], 403);
         }
 
@@ -101,7 +101,7 @@ class RideRequestController extends Controller
 
             if ($acceptedCount >= $ride->available_seats) {
                 return response()->json([
-                    'message' => 'Brak dostępnych miejsc w tym przejeździe.'
+                    'message' => 'No seats available on this ride.'
                 ], 422);
             }
         }
@@ -115,13 +115,13 @@ class RideRequestController extends Controller
     {
         if (Auth::id() !== $rideRequest->passenger_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do anulowania tego zgłoszenia.'
+                'message' => 'You do not have the authority to cancel this request.'
             ], 403);
         }
 
         $rideRequest->delete();
 
-        return response()->json(['message' => 'Zgłoszenie zostało anulowane.']);
+        return response()->json(['message' => 'The application has been cancelled.']);
     }
 
     public function myRequests()

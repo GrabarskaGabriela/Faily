@@ -33,7 +33,7 @@ class RideController extends Controller
         $event = $this->eventService->findById($event_id);
 
         return redirect()->route('events.create', ['preset_event_id' => $event_id])
-            ->with('message', 'Dodaj przejazd dla wydarzenia: ' . $event->title);
+            ->with('message', 'Add a ride for the event: ' . $event->title);
     }
 
     public function create(Request $request)

@@ -51,9 +51,8 @@ use App\Services\Interfaces\EventAttendeeServiceInterface;
         try {
             $this->eventAttendeeService->registerForEvent($event, $validated, Auth::id());
 
-            // Dodaj wyraźny komunikat
             return redirect()->route('events.show', $event)
-                ->with('success', 'Zostałeś zapisany na wydarzenie! Twoje zgłoszenie oczekuje na akceptację.');
+                ->with('success', 'You have been signed up for the event! Your application is awaiting approval.');
         } catch (\Exception $e) {
             return redirect()->route('events.show', $event)
                 ->with('error', $e->getMessage());

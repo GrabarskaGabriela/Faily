@@ -16,7 +16,7 @@ class EventAttendeeController extends Controller
     {
         if (Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do przeglądania listy uczestników.'
+                'message' => 'You do not have permission to view the list of participants.'
             ], 403);
         }
 
@@ -34,20 +34,20 @@ class EventAttendeeController extends Controller
 
         if (Auth::id() === $event->user_id) {
             return response()->json([
-                'message' => 'Jesteś organizatorem tego wydarzenia.'
+                'message' => 'You are the organizer of this event.'
             ], 422);
         }
 
         if ($event->isUserAttending(Auth::id())) {
             return response()->json([
-                'message' => 'Jesteś już zapisany na to wydarzenie.'
+                'message' => 'You are already signed up for this event.'
             ], 422);
         }
 
         $availableSpots = $event->getAvailableSpotsCount();
         if ($availableSpots < $validated['attendees_count']) {
             return response()->json([
-                'message' => "Brak wystarczającej liczby miejsc. Dostępne miejsca: {$availableSpots}."
+                'message' => "Not enough seats available. Available seats: {$availableSpots}."
             ], 422);
         }
 
@@ -68,7 +68,7 @@ class EventAttendeeController extends Controller
     {
         if (Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do zarządzania zgłoszeniami.'
+                'message' => 'You don\'t have permission to manage notifications.'
             ], 403);
         }
 
@@ -80,7 +80,7 @@ class EventAttendeeController extends Controller
             $availableSpots = $event->getAvailableSpotsCount();
             if ($availableSpots < $attendee->attendees_count) {
                 return response()->json([
-                    'message' => "Brak wystarczającej liczby miejsc. Dostępne miejsca: {$availableSpots}."
+                    'message' => "Not enough seats available. Available seats: {$availableSpots}."
                 ], 422);
             }
         }
@@ -95,13 +95,13 @@ class EventAttendeeController extends Controller
     {
         if (Auth::id() !== $attendee->user_id && Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do anulowania tego zgłoszenia.'
+                'message' => 'You do not have the authority to cancel this request.'
             ], 403);
         }
 
         $attendee->delete();
 
-        return response()->json(['message' => 'Zgłoszenie zostało anulowane.']);
+        return response()->json(['message' => 'The application has been cancelled.']);
     }
 
     public function myAttendees()
