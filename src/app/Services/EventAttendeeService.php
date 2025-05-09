@@ -7,6 +7,7 @@ use App\Models\EventAttendee;
 use App\Notifications\EventAttendeeStatusChanged;
 use App\Repositories\Interfaces\EventAttendeeRepositoryInterface;
 use App\Repositories\Interfaces\EventRepositoryInterface;
+use App\Services\Interfaces\CacheServiceInterface;
 use App\Services\Interfaces\EventAttendeeServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Activitylog\Facades\Activity;
@@ -18,17 +19,34 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
 
     protected $eventRepository;
 
+    protected $cacheService;
+
     public function __construct(
         EventAttendeeRepositoryInterface $repository,
-        EventRepositoryInterface $eventRepository
+        EventRepositoryInterface $eventRepository,
+        ?CacheServiceInterface $cacheService = null
     ) {
-        $this->repository = $repository;
+        parent::__construct($repository, $cacheService);
+
         $this->eventRepository = $eventRepository;
+
+        $this->cacheTags = ['event_attendees', 'events'];
+        $this->cachePrefix = 'event_attendee';
     }
 
     public function getEventAttendees(Event $event)
     {
-        return $this->repository->getEventAttendees($event->id);
+        if (!$this->useCache()) {
+            return $this->repository->getEventAttendees($event->id);
+        }
+
+        return $this->cacheService->remember(
+            "{$this->cachePrefix}.event.{$event->id}",
+            function () use ($event) {
+                return $this->repository->getEventAttendees($event->id);
+            },
+            $this->cacheTimes['all']
+        );
     }
 
     public function canUserRegisterForEvent($eventId, $userId)
@@ -42,19 +60,19 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
 
         if ($event->user_id === $userId) {
             $result['canRegister'] = false;
-            $result['message'] = 'Jesteś organizatorem tego wydarzenia.';
+            $result['message'] = 'You are the organizer of this event.';
             return $result;
         }
 
         if ($this->repository->isUserAttending($eventId, $userId)) {
             $result['canRegister'] = false;
-            $result['message'] = 'Jesteś już zapisany na to wydarzenie.';
+            $result['message'] = 'You are already signed up for this event.';
             return $result;
         }
 
         if (!$this->eventRepository->hasAvailableSpots($eventId)) {
             $result['canRegister'] = false;
-            $result['message'] = 'Brak wolnych miejsc na to wydarzenie.';
+            $result['message'] = 'No vacancies for this event.';
             return $result;
         }
 
@@ -63,9 +81,10 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
 
     public function registerForEvent(Event $event, array $data, $userId)
     {
+
         $availableSpots = $this->eventRepository->getAvailableSpotsCount($event->id);
         if ($availableSpots < $data['attendees_count']) {
-            throw new \Exception("Nie wystarczająca liczba miejsc. Dostępne miejsca: {$availableSpots}.");
+            throw new \Exception("Not enough seats. Available seats: {$availableSpots}.");
         }
 
         $attendeeData = [
@@ -76,7 +95,16 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
             'attendees_count' => $data['attendees_count'],
         ];
 
-        return $this->repository->createAttendeeRequest($attendeeData);
+        $result = $this->repository->createAttendeeRequest($attendeeData);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.event.{$event->id}");
+            $this->cacheService->forget("event.{$event->id}.with_relations");
+            $this->cacheService->forget("user.{$userId}.attendances");
+            $this->cacheService->flushTags(['event_attendees']);
+        }
+
+        return $result;
     }
 
     public function updateAttendeeStatus(Event $event, EventAttendee $attendee, $status, $userId)
@@ -116,6 +144,13 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
             ])
             ->log("Changed the status of {$userName} participation in the \"{$event->title}\" event from \"{$oldStatus}\" to \"{$attendee->status}\"");
 
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.event.{$event->id}");
+            $this->cacheService->forget("event.{$event->id}.with_relations");
+            $this->cacheService->forget("user.{$attendee->user_id}.attendances");
+            $this->cacheService->flushTags(['event_attendees']);
+        }
+
         return $attendee;
     }
 
@@ -125,11 +160,30 @@ class EventAttendeeService extends BaseService implements EventAttendeeServiceIn
             throw new \Exception('You do not have permissions to cancel this application.');
         }
 
-        return $this->repository->delete($attendee->id);
+        $result = $this->repository->delete($attendee->id);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.event.{$event->id}");
+            $this->cacheService->forget("event.{$event->id}.with_relations");
+            $this->cacheService->forget("user.{$attendee->user_id}.attendances");
+            $this->cacheService->flushTags(['event_attendees']);
+        }
+
+        return $result;
     }
 
     public function getUserAttendances($userId)
     {
-        return $this->repository->getUserAttendees($userId);
+        if (!$this->useCache()) {
+            return $this->repository->getUserAttendees($userId);
+        }
+
+        return $this->cacheService->remember(
+            "user.{$userId}.attendances",
+            function () use ($userId) {
+                return $this->repository->getUserAttendees($userId);
+            },
+            $this->cacheTimes['all']
+        );
     }
 }

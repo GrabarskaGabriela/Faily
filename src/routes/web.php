@@ -12,13 +12,15 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 
-Route::get('/', function () {return view('welcome');})->name('welcome');
-Route::get('/about', function () {return view('about');});
-Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change');
+Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])
+    ->name('language.change')
+    ->middleware(['locale']);
+
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome')->middleware('locale');
+
 
 Route::get('/about', function () {
     return view('about');
@@ -81,7 +83,9 @@ Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->nam
     Route::post('/reports/{id}/reject', [AdminController::class, 'rejectReport'])->name('reports.reject');
 });
 
-Route::middleware(['auth'])->post('/users/{id}/report', [ReportController::class, 'reportUser'])->name('users.report');
+Route::middleware(['auth', 'locale'])->post('/users/{id}/report', [ReportController::class, 'reportUser'])->name('users.report');
+
+Route::get('/test-cache', [App\Http\Controllers\TestCacheController::class, 'testCache']);
 
 require __DIR__.'/auth.php';
 require __DIR__ . '/api.php';

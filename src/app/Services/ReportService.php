@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\CacheServiceInterface;
 use App\Services\Interfaces\ReportServiceInterface;
 use Illuminate\Http\Request;
 
@@ -11,15 +12,19 @@ class ReportService extends BaseService implements ReportServiceInterface
 {
     protected $reportRepository;
     protected $userRepository;
+    protected $cacheService;
 
     public function __construct(
         ReportRepositoryInterface $reportRepository,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        ?CacheServiceInterface $cacheService
     )
     {
-        $this->reportRepository = $reportRepository;
+        parent::__construct($reportRepository, $cacheService);
         $this->userRepository = $userRepository;
-        $this->repository = $reportRepository;
+
+        $this->cacheTags = ['reports'];
+        $this->cachePrefix = 'report';
     }
 
     public function reportUser(Request $request, $userId, $reporterId)
@@ -27,28 +32,35 @@ class ReportService extends BaseService implements ReportServiceInterface
         $user = $this->userRepository->find($userId);
 
         if (!$user) {
-            throw new \Exception('Użytkownik nie istnieje.');
+            throw new \Exception('User not found.');
         }
 
         if ($user->role === 'admin') {
-            throw new \Exception('Nie można zgłosić administratora.');
+            throw new \Exception('Unable to report admin.');
         }
 
         if ($userId == $reporterId) {
-            throw new \Exception('Nie możesz zgłosić samego siebie.');
+            throw new \Exception('You can\'t report yourself.');
         }
 
         $existingReport = $this->reportRepository->findByUserAndStatus($reporterId, $userId, 'pending');
 
         if ($existingReport) {
-            throw new \Exception('Już zgłosiłeś tego użytkownika. Poczekaj na weryfikację zgłoszenia.');
+            throw new \Exception('You have already reported this user. Wait for the report to be verified.');
         }
 
-        return $this->reportRepository->create([
+        $result = $this->reportRepository->create([
             'reporter_id' => $reporterId,
             'reported_user_id' => $userId,
             'reason' => $request->reason,
         ]);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.pending.count");
+            $this->cacheService->flushTags(['reports']);
+        }
+
+        return $result;
     }
 
     public function approveReport($id)
@@ -56,7 +68,7 @@ class ReportService extends BaseService implements ReportServiceInterface
         $report = $this->reportRepository->find($id);
 
         if (!$report) {
-            throw new \Exception('Zgłoszenie nie istnieje.');
+            throw new \Exception('Notification does not exist.');
         }
 
         $this->reportRepository->updateStatus($id, 'reviewed');
@@ -67,6 +79,12 @@ class ReportService extends BaseService implements ReportServiceInterface
             $this->userRepository->updateStatus($user->id, 'banned');
         }
 
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.pending.count");
+            $this->cacheService->forget("user.{$report->reported_user_id}");
+            $this->cacheService->forget("user.banned.count");
+            $this->cacheService->flushTags(['reports', 'users']);
+        }
         return $report;
     }
 
@@ -80,11 +98,26 @@ class ReportService extends BaseService implements ReportServiceInterface
 
         $this->reportRepository->updateStatus($id, 'reviewed');
 
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.pending.count");
+            $this->cacheService->flushTags(['reports']);
+        }
+
         return $report;
     }
 
     public function countPendingReports()
     {
-        return $this->reportRepository->countPending();
+        if (!$this->useCache()) {
+            return $this->repository->countPending();
+        }
+
+        return $this->cacheService->remember(
+            "{$this->cachePrefix}.pending.count",
+            function () {
+                return $this->repository->countPending();
+            },
+            60 * 10 //10min
+        );
     }
 }
