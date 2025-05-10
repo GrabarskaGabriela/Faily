@@ -55,7 +55,7 @@ class NewRideRequest extends Notification implements ShouldQueue
                 return $message->line('Message: ' . $this->rideRequest->message);
             })
             ->action('Manage travel requests', url('/ride-requests?ride_id=' . $this->ride->id))
-            ->line('Team Faily');
+            ->salutation('Team Faily');
     }
 
     /**

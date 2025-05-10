@@ -1,3 +1,20 @@
+@php
+use Illuminate\Support\Facades\Cache;
+
+$locale = app()->getLocale();
+$userId = auth()->id() ?? 'guest';
+$cacheKey = "navbar_{$locale}_{$userId}";
+$cacheTTL = 60 * 60; //1h
+@endphp
+
+@if (Cache::has($cacheKey) && !request()->has('refresh_cache'))
+    {!! Cache::get($cacheKey) !!}
+@else
+    @php
+        ob_start();
+    @endphp
+
+
 <header>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid nav-wrapper">
@@ -104,3 +121,15 @@
         </div>
     </nav>
 </header>
+    @php
+        $navbar = ob_get_clean();
+        Cache::put($cacheKey, $navbar, $cacheTTL);
+        echo $navbar;
+
+        $navbarKeys = Cache::get('navbar_keys', []);
+        if(!in_array($cacheKey, $navbarKeys)) {
+            $navbarKeys[] = $cacheKey;
+            Cache::put('navbar_keys', $navbarKeys, 60 * 60 * 24 * 30);
+        }
+    @endphp
+@endif

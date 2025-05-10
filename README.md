@@ -27,12 +27,6 @@ Po uruchomieniu kontenerów należy otworzyć terminal i wykonać poniższe pole
 docker exec -it faily-app-dev bash
 
 # Nadanie skryptowi uprawnień do uruchamiania
-
-chmod +x script.sh
-
-# Uruchomienie skryptu
-./script.sh 
-
 chmod +x deploy.sh
 
 # Uruchomienie skryptu

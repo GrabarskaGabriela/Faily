@@ -88,7 +88,7 @@ class EventController extends Controller
     {
         if (Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do edycji tego wydarzenia.'
+                'message' => 'You do not have permission to edit this event.'
             ], 403);
         }
 
@@ -112,13 +112,13 @@ class EventController extends Controller
     {
         if (Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do usunięcia tego wydarzenia.'
+                'message' => 'You do not have permission to delete this event.'
             ], 403);
         }
 
         $event->delete();
 
-        return response()->json(['message' => 'Wydarzenie zostało usunięte.']);
+        return response()->json(['message' => 'The event has been removed.']);
     }
 
     public function popular()

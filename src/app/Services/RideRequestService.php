@@ -7,23 +7,27 @@ use App\Models\RideRequest;
 use App\Notifications\RideRequestStatusChanged;
 use App\Repositories\Interfaces\RideRepositoryInterface;
 use App\Repositories\Interfaces\RideRequestRepositoryInterface;
+use App\Services\Interfaces\CacheServiceInterface;
 use App\Services\Interfaces\RideRequestServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Facades\Activity;
 
 class RideRequestService extends BaseService implements RideRequestServiceInterface
 {
-    protected $repository;
-
     protected $rideRepository;
-
+    protected $repository;
+    protected $cacheService;
 
     public function __construct(
         RideRequestRepositoryInterface $repository,
-        RideRepositoryInterface $rideRepository
+        RideRepositoryInterface $rideRepository,
+        ?CacheServiceInterface $cacheService = null
     ) {
-        $this->repository = $repository;
+        parent::__construct($repository, $cacheService);
         $this->rideRepository = $rideRepository;
+
+        $this->cacheTags = ['ride_requests', 'rides'];
+        $this->cachePrefix = 'ride_request';
     }
 
     public function getRideRequestsForDriver($rideId, $userId)
@@ -34,10 +38,23 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
             throw new \Exception('You do not have permission to view these requests.');
         }
 
-        return [
-            'requests' => $this->repository->getRideRequests($rideId),
-            'ride' => $ride
-        ];
+        if (!$this->useCache()) {
+            return [
+                'requests' => $this->repository->getRideRequests($rideId),
+                'ride' => $ride
+            ];
+        }
+
+        return $this->cacheService->remember(
+            "{$this->cachePrefix}.ride.{$rideId}",
+            function () use ($rideId, $ride) {
+                return [
+                    'requests' => $this->repository->getRideRequests($rideId),
+                    'ride' => $ride
+                ];
+            },
+            $this->cacheTimes['all']
+        );
     }
 
     public function canUserRequestRide(Ride $ride, $userId)
@@ -86,6 +103,12 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
 
         $ride->driver->notify(new RideRequestStatusChanged($rideRequest, $ride, Auth::user()));
 
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.ride.{$data['ride_id']}");
+            $this->cacheService->forget("ride.{$data['ride_id']}.with_relations");
+            $this->cacheService->flushTags(['ride_requests']);
+        }
+
         return $rideRequest;
     }
 
@@ -125,6 +148,20 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
             ])
             ->log("The status of the travel request from {$passengerName} to {$driverName} for the event \"{$eventTitle}\" changed from \"{$oldStatus}\" to \"{$status}\"");
 
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.ride.{$rideRequest->ride_id}");
+            $this->cacheService->forget("ride.{$rideRequest->ride_id}.with_relations");
+            $this->cacheService->forget("{$this->cachePrefix}.{$rideRequest->id}");
+            $this->cacheService->flushTags(['ride_requests']);
+
+            if ($status === 'accepted') {
+                $eventId = $ride->event_id;
+                if ($eventId) {
+                    $this->cacheService->forget("event.{$eventId}.with_relations");
+                }
+            }
+        }
+
         return $rideRequest;
     }
 
@@ -134,6 +171,15 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
             throw new \Exception('You do not have the authority to cancel this request.');
         }
 
-        return $this->repository->delete($rideRequest->id);
+        $result = $this->repository->delete($rideRequest->id);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.ride.{$rideRequest->ride_id}");
+            $this->cacheService->forget("ride.{$rideRequest->ride_id}.with_relations");
+            $this->cacheService->forget("{$this->cachePrefix}.{$rideRequest->id}");
+            $this->cacheService->flushTags(['ride_requests']);
+        }
+
+        return $result;
     }
 }

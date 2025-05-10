@@ -42,6 +42,12 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\UserRepository::class
         );
 
+        $this->app->bind(
+            \App\Repositories\Interfaces\ReportRepositoryInterface::class,
+            \App\Repositories\ReportRepository::class
+
+        );
+
         // Services
         $this->app->bind(
             \App\Services\Interfaces\EventServiceInterface::class,
@@ -71,6 +77,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Services\Interfaces\UserServiceInterface::class,
             \App\Services\UserService::class
+        );
+
+        $this->app->bind(
+            \App\Services\Interfaces\ReportServiceInterface::class,
+            \App\Services\ReportService::class
         );
     }
 

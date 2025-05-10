@@ -49,7 +49,7 @@ class RideController extends Controller
 
         if ($existingRide) {
             return response()->json([
-                'message' => 'Masz już utworzony przejazd dla tego wydarzenia.'
+                'message' => 'You already have a ride created for this event.'
             ], 422);
         }
 
@@ -75,7 +75,7 @@ class RideController extends Controller
     {
         if (Auth::id() !== $ride->driver_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do edycji tego przejazdu.'
+                'message' => 'You do not have permission to edit this passage.'
             ], 403);
         }
 
@@ -96,12 +96,12 @@ class RideController extends Controller
     {
         if (Auth::id() !== $ride->driver_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do usunięcia tego przejazdu.'
+                'message' => 'You do not have the authority to remove this passage.'
             ], 403);
         }
 
         $ride->delete();
 
-        return response()->json(['message' => 'Przejazd został usunięty.']);
+        return response()->json(['message' => 'The passage has been removed.']);
     }
 }

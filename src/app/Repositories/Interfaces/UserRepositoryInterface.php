@@ -13,4 +13,11 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function updatePhoto($userId, $photoPath);
 
     public function update2FASettings($userId, $enabled);
+
+    public function updateRole($userId, $role);
+    public function updateStatus($userId, $status);
+    public function incrementReportCount($userId);
+    public function resetReportCount($userId);
+    public function countByStatus($status);
+    public function getAdmins();
 }

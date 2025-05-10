@@ -7,26 +7,65 @@ use App\Repositories\Interfaces\EventRepositoryInterface;
 use App\Services\Interfaces\EventServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Psr\SimpleCache\CacheServiceInterface;
 
 class EventService extends BaseService implements EventServiceInterface
 {
     protected $repository;
+    protected $cacheService;
 
-    public function __construct(EventRepositoryInterface $repository)
+    public function __construct(
+        EventRepositoryInterface $repository,
+        ?CacheServiceInterface $cacheService = null
+    )
     {
-        $this->repository = $repository;
+        parent::__construct($repository ,$cacheService);
+
+        $this->cacheTags = ['events'];
+        $this->cachePrefix = 'events';
+
+        $this->cacheTimes = [
+            'all' => 900,        //15min
+            'find' => 1800,      //30min
+            'paginate' => 300,   //5min
+            'feed' => 300,       //5min
+            'map' => 1800,       //30min
+        ];
     }
 
     public function getEventsForListing()
     {
-        return $this->repository->getWithRelations(['user', 'photos']);
+        if (!$this->useCache()) {
+            return $this->repository->getWithRelations(['user', 'photos']);
+        }
+
+        return $this->cacheService->rememberWithTags(
+            ['events', 'listing'],
+            "{$this->cachePrefix}.listing",
+            function () {
+                return $this->repository->getWithRelations(['user', 'photos']);
+            },
+            $this->cacheTimes['all']
+        );
     }
 
     public function getEventWithRelations($eventId)
     {
-        $event = $this->repository->find($eventId);
-        $event->load(['user', 'rides.driver', 'rides.requests', 'photos', 'attendees.user']);
-        return $event;
+        if (!$this->useCache()) {
+            $event = $this->repository->find($eventId);
+            $event->load(['user', 'rides.driver', 'rides.requests', 'photos', 'attendees.user']);
+            return $event;
+        }
+
+        return $this->cacheService->remember(
+            "{$this->cachePrefix}.{$eventId}.with_relations",
+            function () use ($eventId) {
+                $event = $this->repository->find($eventId);
+                $event->load(['user', 'rides.driver', 'rides.requests', 'photos', 'attendees.user']);
+                return $event;
+            },
+            $this->cacheTimes['find']
+        );
     }
 
     public function storeWithRelations(array $data, $userId)
@@ -77,6 +116,10 @@ class EventService extends BaseService implements EventServiceInterface
             ]);
         }
 
+        if ($this->useCache()) {
+            $this->cacheService->flushTags(['events']);
+        }
+
         return $event;
     }
 
@@ -104,12 +147,36 @@ class EventService extends BaseService implements EventServiceInterface
 
         unset($data['photos']);
 
-        $event = $this->repository->update($eventId, $data);
+        $event = $this->repository->update($data, $eventId);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.{$eventId}");
+            $this->cacheService->forget("{$this->cachePrefix}.{$eventId}.with_relations");
+            $this->cacheService->flushTags(['events']);
+        }
 
         return $event;
     }
 
     public function getEventsForFeed(Request $request)
+    {
+        if (!$this->useCache()) {
+            return $this->buildFeedResponse($request);
+        }
+
+        $cacheKey = "{$this->cachePrefix}.feed." . md5(json_encode($request->all()));
+
+        return $this->cacheService->remember(
+            $cacheKey,
+            function () use ($request) {
+                return $this->buildFeedResponse($request);
+            },
+            $this->cacheTimes['feed']
+        );
+
+    }
+
+    private function buildFeedResponse(Request $request)
     {
         $filters = $request->only([
             'search',
@@ -136,15 +203,36 @@ class EventService extends BaseService implements EventServiceInterface
         return $event->user_id === $userId;
     }
 
-    public function getUserEvents($eventId)
+    public function getUserEvents($userId)
     {
-        return $this->repository->getUserEvents($eventId);
+        if (!$this->useCache()) {
+            return $this->repository->getUserEvents($userId);
+        }
+
+        return $this->cacheService->remember(
+            "user.{$userId}.events",
+            function () use ($userId) {
+                return $this->repository->getUserEvents($userId);
+            },
+            $this->cacheTimes['all']
+        );
     }
 
     public function getEventsForMap()
     {
-        return $this->repository->all(['title', 'description', 'latitude', 'longitude', 'location_name']);
+        if (!$this->useCache()) {
+            return $this->repository->all(['title', 'description', 'latitude', 'longitude', 'location_name']);
+        }
+
+        return $this->cacheService->remember(
+            "{$this->cachePrefix}.for_map",
+            function () {
+                return $this->repository->all(['title', 'description', 'latitude', 'longitude', 'location_name']);
+            },
+            $this->cacheTimes['map']
+        );
     }
+
 
     public function delete($id)
     {
@@ -154,6 +242,14 @@ class EventService extends BaseService implements EventServiceInterface
             Storage::disk('public')->delete($photo->path);
         }
 
-        return $this->repository->delete($id);
+        $result = $this->repository->delete($id);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("{$this->cachePrefix}.{$id}");
+            $this->cacheService->forget("{$this->cachePrefix}.{$id}.with_relations");
+            $this->cacheService->flushTags(['events']);
+        }
+
+        return $result;
     }
 }

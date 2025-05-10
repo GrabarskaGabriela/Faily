@@ -32,7 +32,7 @@ class PhotoController extends Controller
 
         if (Auth::id() !== $event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do dodawania zdjęć do tego wydarzenia.'
+                'message' => 'You do not have permission to add photos to this event.'
             ], 403);
         }
 
@@ -57,7 +57,7 @@ class PhotoController extends Controller
     {
         if (Auth::id() !== $photo->event->user_id) {
             return response()->json([
-                'message' => 'Nie masz uprawnień do usunięcia tego zdjęcia.'
+                'message' => 'You do not have permission to delete this photo.'
             ], 403);
         }
 
@@ -65,6 +65,6 @@ class PhotoController extends Controller
 
         $photo->delete();
 
-        return response()->json(['message' => 'Zdjęcie zostało usunięte.']);
+        return response()->json(['message' => 'The photo has been removed.']);
     }
 }

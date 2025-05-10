@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Event;
 use App\Repositories\Interfaces\PhotoRepositoryInterface;
+use App\Services\Interfaces\CacheServiceInterface;
 use App\Services\Interfaces\PhotoServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,10 +12,16 @@ use Illuminate\Support\Facades\Storage;
 class PhotoService extends BaseService implements PhotoServiceInterface
 {
     protected $repository;
+    protected $cacheService;
 
-    public function __construct(PhotoRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        PhotoRepositoryInterface $repository,
+        ?CacheServiceInterface $cacheService = null
+    ) {
+        parent::__construct($repository, $cacheService);
+
+        $this->cacheTags = ['photos', 'events'];
+        $this->cachePrefix = 'photo';
     }
 
     public function storeEventPhotos(Request $request, $userId)
@@ -31,11 +38,17 @@ class PhotoService extends BaseService implements PhotoServiceInterface
             throw new \Exception('You do not have permission to add photos to this event.');
         }
 
+        $result = [];
         if ($request->hasFile('photos')) {
-            return $this->repository->storeEventPhotos($event->id, $request->file('photos'));
+            $result = $this->repository->storeEventPhotos($event->id, $request->file('photos'));
         }
 
-        return [];
+        if ($this->useCache()) {
+            $this->cacheService->forget("event.{$event->id}.with_relations");
+            $this->cacheService->flushTags(['photos', 'events']);
+        }
+
+        return $result;
     }
 
     public function deletePhoto($photoId, $userId)
@@ -48,6 +61,13 @@ class PhotoService extends BaseService implements PhotoServiceInterface
 
         Storage::disk('public')->delete($photo->path);
 
-        return $this->repository->deletePhoto($photoId);
+        $result = $this->repository->deletePhoto($photoId);
+
+        if ($this->useCache()) {
+            $this->cacheService->forget("event.{$photo->event_id}.with_relations");
+            $this->cacheService->flushTags(['photos', 'events']);
+        }
+
+        return $result;
     }
 }

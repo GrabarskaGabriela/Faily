@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Podane dane logowania są nieprawidłowe.'
+                'message' => 'The login information provided is incorrect.'
             ], 401);
         }
 
@@ -66,7 +66,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Wylogowano pomyślnie.']);
+        return response()->json(['message' => 'Logged out successfully.']);
     }
 
     public function me()

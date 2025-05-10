@@ -526,4 +526,10 @@ return [
         'save' => 'Zapisz',
         'saved' => 'Zapisany',
     ],
+
+    'counter' => [
+        'title' => 'Licznik kliknięć',
+        'text' => 'Liczba kliknięć: :count',
+        'button' => 'Kliknij mnie!',
+    ],
 ];

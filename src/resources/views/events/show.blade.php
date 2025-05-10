@@ -355,7 +355,11 @@
         </div>
     </div>
 </main>
-
+@auth
+    @if(Auth::id() !== $event->user_id && $event->user->role !== 'admin')
+        @include('includes.report-user-modal', ['userId' => $event->user->id, 'userName' => $event->user->name])
+    @endif
+@endauth
 @include('includes.footer')
 </body>
 </html>

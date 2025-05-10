@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_login_at',
         'two_factor_enabled',
         'email_notifications',
+        'role'
     ];
 
     protected $hidden = [
@@ -115,4 +116,13 @@ class User extends Authenticatable implements MustVerifyEmail
             });
     }
 
+    public function isAdmin()
+    {
+        return $this->role ===  'admin';
+    }
+
+    public function isBanned()
+    {
+        return $this->status === 'banned';
+    }
 }

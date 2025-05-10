@@ -76,9 +76,9 @@ class UserController extends Controller
 
         if (!Hash::check($validated['current_password'], $user->password)) {
             return response()->json([
-                'message' => 'Aktualne hasło jest niepoprawne.',
+                'message' => 'Current password is incorrect.',
                 'errors' => [
-                    'current_password' => ['Aktualne hasło jest niepoprawne.']
+                    'current_password' => ['Current password is incorrect.']
                 ]
             ], 422);
         }
@@ -87,7 +87,7 @@ class UserController extends Controller
         $user->password_updated_at = now();
         $user->save();
 
-        return response()->json(['message' => 'Hasło zostało zmienione pomyślnie.']);
+        return response()->json(['message' => 'Password has been changed successfully.']);
     }
 
     public function updateSettings(Request $request)
