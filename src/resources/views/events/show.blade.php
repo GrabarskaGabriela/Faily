@@ -56,9 +56,9 @@
                     <h4>{{ __('messages.showevent.myEvents') }}</h4>
                 </div>
                 <div class="card-body border-black shadow-sm">
-                    <p class="text-color">{{ __('messages.showevent.eventTitle') }}  {{ $event->title }}</p>
-                    <p class="text-color">{{ __('messages.showevent.eventLocation') }} {{ $event->location_name }}</p>
-                    <p class="text-color">{{ __('messages.showevent.eventDesc') }} {{ $event->description}}</p>
+                    <p class="text-color"><strong>{{ __('messages.showevent.eventTitle') }}</strong> {{ $event->title }}</p>
+                    <p class="text-color"><strong>{{ __('messages.showevent.eventLocation') }}</strong> {{ $event->location_name }}</p>
+                    <p class="text-color"><strong>{{ __('messages.showevent.eventDesc') }}</strong> {{ $event->description}}</p>
                 </div>
             </div>
 

@@ -75,20 +75,6 @@
                 </div>
             @endif
         </div>
-
-        <div class="mb-3 text-color">
-            <label for="description" class="form-label"> {{ __('messages.account.aboutMe') }}</label>
-            <input type="text" class="form-control" id="description" name="description"
-                   value="{{ old('description', $user->description) }}" required autofocus autocomplete="description">
-            @if ($errors->get('descriptione'))
-<<<<<<< HEAD
-=======
-                <div class="text-danger small mt-1">
-                    {{ $errors->first('description') }}
-                </div>
-            @endif
-        </div>
-
         <div class="mb-3 text-color">
             <label class="form-label">{{ __('messages.profilepartialsupdateprofile.avatar') }}</label>
 
@@ -110,15 +96,11 @@
             <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
 
             @if ($errors->get('avatar'))
->>>>>>> origin/wodzu
                 <div class="text-danger small mt-1">
                     {{ $errors->first('description') }}
                 </div>
             @endif
         </div>
-
-<<<<<<< HEAD
-=======
 
         <script>
             function updateFileName(input) {
@@ -127,37 +109,17 @@
             }
         </script>
 
-
->>>>>>> origin/wodzu
         <div class="mb-3 text-color">
-            <label for="preferred_language" class="form-label"> {{ __('messages.profilepartialsupdateprofile.preferredLanguage') }}</label>
-            <select class="form-select" id="preferred_language" name="preferred_language">
-                <option value="pl" {{ $user->language == 'pl' ? 'selected' : '' }}>Polski</option>
-                <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
-                <option value="de" {{ $user->language == 'de' ? 'selected' : '' }}>Deutsch</option>
-                <option value="uk" {{ $user->language == 'uk' ? 'selected' : '' }}>Українська</option>
-                <option value="uk" {{ $user->language == 'jpn' ? 'selected' : '' }}>日本語</option>
-
-            </select>
-            @if ($errors->get('preferred_language'))
+            <label for="description" class="form-label"> {{ __('messages.account.aboutMe') }}</label>
+            <input type="text" class="form-control" id="description" name="description"
+                   value="{{ old('description', $user->description) }}" required autofocus autocomplete="description">
+            @if ($errors->get('descriptione'))
                 <div class="text-danger small mt-1">
-                    {{ $errors->first('preferred_language') }}
+                    {{ $errors->first('description') }}
                 </div>
             @endif
         </div>
 
-        <div class="mb-4 text-color">
-            <label for="theme" class="form-label"> {{ __('messages.profilepartialsupdateprofile.theme') }}</label>
-            <select class="form-select" id="theme" name="theme">
-                <option value="light" {{ $user->theme == 'light' ? 'selected' : '' }}>{{ __('messages.profilepartialsupdateprofile.light') }}</option>
-                <option value="dark" {{ $user->theme == 'dark' ? 'selected' : '' }}>{{ __('messages.profilepartialsupdateprofile.dark') }}</option>
-            </select>
-            @if ($errors->get('theme'))
-                <div class="text-danger small mt-1">
-                    {{ $errors->first('theme') }}
-                </div>
-            @endif
-        </div>
 
         <div class="d-flex align-items-center gap-3">
             <button type="submit" class="btn-gradient text-color"> {{ __('messages.profilepartialsupdateprofile.save') }}

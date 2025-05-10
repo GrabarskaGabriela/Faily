@@ -1,6 +1,6 @@
 <div class="col-md-3 mb-4" >
     <div class="card shadow-sm">
-        <div class="card-header shadow-sm">
+        <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>{{ __('messages.profilemenu.myAccount') }}</h5>
         </div>
         <div class="list-group list-group-flush">
