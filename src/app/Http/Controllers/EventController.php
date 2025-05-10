@@ -106,13 +106,13 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         if (!$this->eventService->canUserManageEvent($event->id, Auth::id())) {
-            return redirect()->route('events.index')
+            return redirect()->route('my_events')
                 ->with('error', 'You do not have permission to delete this event.');
         }
 
         $this->eventService->delete($event->id);
 
-        return redirect()->route('events.index')
+        return redirect()->route('my_events')
             ->with('success', 'Event deleted successfully');
     }
     public function getEventsForFeed(Request $request)

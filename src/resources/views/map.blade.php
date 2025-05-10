@@ -23,7 +23,6 @@
     <main>
         <leaflet-map :initial-events="initialEvents"></leaflet-map>
     </main>
-
     @include('includes.footer')
 </div>
 

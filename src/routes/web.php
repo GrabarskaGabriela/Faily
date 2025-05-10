@@ -12,19 +12,11 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 
-Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])
-    ->name('language.change')
-    ->middleware(['locale']);
+Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change')->middleware(['locale']);
 
+Route::get('/', function () {return view('welcome');})->name('welcome')->middleware('locale');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome')->middleware('locale');
-
-
-Route::get('/about', function () {
-    return view('about');
-})->middleware('locale');
+Route::get('/about', function () {return view('about');})->middleware('locale');
 
 Route::middleware(['auth', 'verified', 'locale'])->group(function ()
 {
@@ -63,11 +55,10 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::get('/map', [MainMapController::class, 'showMap']);
     Route::get('/help', function () {return view('help');});
     Route::get('/my-attendances', [UserAttendancesController::class, 'index'])->name('user.attendances');
-
 });
 
-
-Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->name('admin.')->group(function ()
+{
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/users', [AdminController::class, 'users'])->name('users');

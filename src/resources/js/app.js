@@ -8,10 +8,8 @@ import { createApp } from 'vue';
 import { createI18n} from "vue-i18n";
 import LeafletMap from './components/LeafletMap.vue';
 import MainMap from './components/MainMap.vue';
-import EventMap from "./components/EventMap.vue";
 import 'leaflet/dist/leaflet.css';
 import EventForm from "./components/EventForm.vue";
-import EventPlaceMap from "./components/EventPlaceMap.vue";
 import RideSharing from "./components/RideSharing.vue";
 
 import pl from './i18n/pl.json'
@@ -42,8 +40,6 @@ const i18n = createI18n({
 });
 app.component('leaflet-map', LeafletMap);
 app.component('main-map', MainMap);
-app.component('event-map', EventMap);
-app.component('event-map-place', EventPlaceMap);
 app.component('ride-sharing', RideSharing);
 app.component('event-form', EventForm);
 app.use(i18n);

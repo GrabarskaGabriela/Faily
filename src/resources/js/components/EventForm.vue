@@ -1,118 +1,133 @@
-// resources/js/components/AddEventForm.vue
 <template>
-    <div>
+    <div class="main-container">
+        <h2 class="mb-4">{{ $t('addevent.addEvent') }}</h2>
+
         <form @submit.prevent="submitForm" enctype="multipart/form-data" id="event-form">
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="title" class="form-label">{{ $t('messages.addevent.eventTitle') }}</label>
-                        <input type="text" class="form-control" id="title" name="title" v-model="eventData.title" required>
+                        <label for="title" class="form-label">{{ $t('addevent.eventTitle') }}</label>
+                        <input type="text" class="form-control" id="title" v-model="formData.title" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">{{ $t('messages.addevent.eventDesc') }}</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" v-model="eventData.description" required></textarea>
+                        <label for="description" class="form-label">{{ $t('addevent.eventDesc') }}</label>
+                        <textarea class="form-control" id="description" v-model="formData.description" rows="4" required></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label for="date" class="form-label">{{ $t('messages.addevent.date') }}</label>
-                        <input type="datetime-local" class="form-control" id="date" name="date" v-model="eventData.date" required>
+                        <label for="date" class="form-label">{{ $t('addevent.date') }}</label>
+                        <input type="datetime-local" class="form-control" id="date" v-model="formData.date" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="peopleCount" class="form-label">{{ $t('messages.addevent.availablePersonNumber') }}</label>
-                        <input type="number" class="form-control" id="peopleCount" name="people_count" min="1" v-model="eventData.people_count" required>
+                        <label for="peopleCount" class="form-label">{{ $t('addevent.availablePersonNumber') }}</label>
+                        <input type="number" class="form-control" id="peopleCount" v-model="formData.peopleCount" min="1" required>
                     </div>
 
                     <div class="mb-3">
-                        <input type="file" class="d-none" id="eventPhotos" ref="eventPhotos" name="photos[]" multiple @change="updateFileList">
+                        <input type="file" class="d-none" id="eventPhotos" ref="photoInput" multiple @change="updateFileList">
                         <label for="eventPhotos" class="btn btn-gradient text-color mt-2">
-                            {{ $t('messages.addevent.addPhotos') }}
+                            {{ $t('addevent.addPhotos') }}
                         </label>
                         <div id="fileList" class="mt-2 small text-color">
                             <div v-if="selectedFiles.length > 0">
-                                {{ $t('messages.addevent.fileSelection') }} {{ selectedFiles.length }}
+                                {{ $t('addevent.fileSelection') }} {{ selectedFiles.length }}
                                 <ul class="mt-1 ps-3">
                                     <li v-for="(file, index) in selectedFiles" :key="index">{{ file.name }}</li>
                                 </ul>
                             </div>
-                            <div v-else>
-                                {{ $t('messages.addevent.fileNotChoosen') }}
-                            </div>
+                            <div v-else>{{ $t('addevent.fileNotChoosen') }}</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <main-map
-                        :initial-latitude="parseFloat(eventData.latitude)"
-                        :initial-longitude="parseFloat(eventData.longitude)"
-                        @update:latitude="eventData.latitude = $event"
-                        @update:longitude="eventData.longitude = $event"
-                        @update:location-name="eventData.location_name = $event"
-                    ></main-map>
+                    <div class="mb-3">
+                        <label for="location_name" class="form-label">{{ $t('addevent.locationName') }}</label>
+                        <input type="text" class="form-control" id="location_name" v-model="formData.locationName" :placeholder="$t('addevent.placeName')" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="search-address" class="form-label">{{ $t('addevent.address') }}</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="search-address" v-model="searchAddress" :placeholder="$t('addevent.addressExample')" required>
+                            <button class="btn btn-outline-secondary" type="button" @click="searchLocation">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        <div class="address-suggestions" v-if="suggestions.length > 0">
+                            <div class="address-suggestion" v-for="(suggestion, index) in suggestions" :key="index" @click="selectSuggestion(suggestion)">
+                                {{ suggestion.display_name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div ref="mapContainer" class="map-container"></div>
+                        <div class="coordinate-display">
+                            {{ $t('addevent.selectedLocation') }} <strong>{{ formData.latitude.toFixed(6) }}, {{ formData.longitude.toFixed(6) }}</strong>
+                        </div>
+                    </div>
 
                     <div class="mb-3 form-check form-switch">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="has_ride_sharing"
-                            name="has_ride_sharing"
-                            v-model="eventData.has_ride_sharing"
-                            value="1"
-                        >
-                        <label class="form-check-label" for="has_ride_sharing">{{ $t('messages.addevent.enableCarSharing') }}</label>
+                        <input class="form-check-input" type="checkbox" id="has_ride_sharing" v-model="formData.hasRideSharing">
+                        <label class="form-check-label" for="has_ride_sharing">{{ $t('addevent.enableCarSharing') }}</label>
                     </div>
                 </div>
             </div>
 
-            <div v-if="eventData.has_ride_sharing" class="mt-4 mb-4 p-3" id="ride-sharing-form">
-                <h4 class="mb-3">{{ $t('messages.addevent.rideDetails') }}</h4>
+            <div v-if="formData.hasRideSharing" class="mt-4 mb-4 p-3">
+                <h4 class="mb-3">{{ $t('addevent.rideDetails') }}</h4>
 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="vehicle_description" class="form-label">{{ $t('messages.addevent.carDesc') }}</label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="vehicle_description"
-                                name="vehicle_description"
-                                v-model="eventData.vehicle_description"
-                                :placeholder="$t('messages.addevent.carDescExample')"
-                            >
+                            <label for="vehicle_description" class="form-label">{{ $t('addevent.carDesc') }}</label>
+                            <input type="text" class="form-control" id="vehicle_description" v-model="formData.vehicleDescription" :placeholder="$t('addevent.carDescExample')">
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="avalible_seats" class="form-label">{{ $t('messages.addevent.availableSeats') }}</label>
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="avalible_seats"
-                                name="avalible_seats"
-                                min="1"
-                                v-model="eventData.avalible_seats"
-                            >
+                            <label for="avalible_seats" class="form-label">{{ $t('addevent.availableSeats') }}</label>
+                            <input type="number" class="form-control" id="avalible_seats" v-model="formData.availableSeats" min="1">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="meeting_location_name" class="form-label">{{ $t('addevent.meetingPlace') }}</label>
+                            <input type="text" class="form-control" id="meeting_location_name" v-model="formData.meetingLocationName" :placeholder="$t('addevent.meetingPlaceExample')">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="search-meeting-address" class="form-label">{{ $t('addevent.searchMeetingPlace') }}</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="search-meeting-address" v-model="searchMeetingAddress" :placeholder="$t('addevent.enterAddress')">
+                                <button class="btn btn-outline-secondary" type="button" @click="searchMeetingLocation">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-12">
-                        <event-map
-                            :initial-latitude="parseFloat(eventData.meeting_latitude)"
-                            :initial-longitude="parseFloat(eventData.meeting_longitude)"
-                            @update:latitude="eventData.meeting_latitude = $event"
-                            @update:longitude="eventData.meeting_longitude = $event"
-                            @update:location-name="eventData.meeting_location_name = $event"
-                        ></event-map>
+                        <div class="mb-3">
+                            <div ref="meetingMapContainer" class="map-container"></div>
+                            <div class="coordinate-display">
+                                {{ $t('addevent.selectedMeetingLocation') }} <strong>{{ formData.meetingLatitude.toFixed(6) }}, {{ formData.meetingLongitude.toFixed(6) }}</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                <button type="submit" class="btn btn-lg px-4 btn-gradient text-color" id="submit-button">
-                    <i class="bi bi-check-circle me-2"></i>{{ $t('messages.addevent.addEvent') }}
+                <button type="submit" class="btn btn-lg px-4 btn-gradient text-color">
+                    <i class="bi bi-check-circle me-2"></i>{{ $t('addevent.addEvent') }}
                 </button>
             </div>
         </form>
@@ -120,89 +135,373 @@
 </template>
 
 <script>
-import EventMap from './EventMap.vue';
-import EventPlaceMap from './EventPlaceMap.vue';
-
+import { onMounted, onUpdated, ref, reactive, watch } from 'vue';
+import L from 'leaflet';
 
 export default {
-    name: 'AddEventForm',
-    components: {
-        EventMap,
-        EventPlaceMap
-    },
-
-    data() {
-        return {
-            eventData: {
-                title: '',
-                description: '',
-                date: '',
-                people_count: 1,
-                latitude: '52.069',
-                longitude: '19.480',
-                location_name: '',
-                has_ride_sharing: false,
-                vehicle_description: '',
-                avalible_seats: 1,
-                meeting_latitude: '52.069',
-                meeting_longitude: '19.480',
-                meeting_location_name: ''
-            },
-            selectedFiles: []
-        };
-    },
-
-    methods: {
-        updateFileList() {
-            this.selectedFiles = Array.from(this.$refs.eventPhotos.files);
+    name: 'EventForm',
+    props: {
+        csrfToken: {
+            type: String,
+            required: true
         },
-
-        async submitForm() {
-            const formData = new FormData();
-
-            // Add all form fields to FormData
-            Object.keys(this.eventData).forEach(key => {
-                formData.append(key, this.eventData[key]);
-            });
-
-            // Add files
-            if (this.selectedFiles.length > 0) {
-                this.selectedFiles.forEach(file => {
-                    formData.append('photos[]', file);
-                });
-            }
-
-            try {
-                // Replace with your API endpoint
-                const response = await fetch(route('events.store'), {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                });
-
-                if (response.ok) {
-                    // Handle successful form submission
-                    window.location.href = route('events.index');
-                } else {
-                    // Handle errors
-                    const errorData = await response.json();
-                    console.error('Form submission failed:', errorData);
-                    // Display error messages to user
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-            }
+        storeRoute: {
+            type: String,
+            required: true
         }
+    },
+    setup(props) {
+        // Main form data
+        const formData = reactive({
+            title: '',
+            description: '',
+            date: '',
+            peopleCount: 1,
+            latitude: 52.069,
+            longitude: 19.480,
+            locationName: '',
+            hasRideSharing: false,
+
+            vehicleDescription: '',
+            availableSeats: 1,
+            meetingLocationName: '',
+            meetingLatitude: 52.069,
+            meetingLongitude: 19.480
+        });
+
+        const photoInput = ref(null);
+        const selectedFiles = ref([]);
+
+        const mapContainer = ref(null);
+        const meetingMapContainer = ref(null);
+        let map = null;
+        let mapMarker = null;
+        let meetingMap = null;
+        let meetingMapMarker = null;
+
+        const searchAddress = ref('');
+        const searchMeetingAddress = ref('');
+        const suggestions = ref([]);
+        const meetingSuggestions = ref([]);
+        const initMap = () => {
+            if (!mapContainer.value) return;
+
+            console.log('Initializing main map');
+            if (!map) {
+                map = L.map(mapContainer.value).setView([formData.latitude, formData.longitude], 6);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                mapMarker = L.marker([formData.latitude, formData.longitude], {
+                    draggable: true
+                }).addTo(map);
+
+                mapMarker.on('dragend', () => {
+                    const position = mapMarker.getLatLng();
+                    updateCoordinates(position.lat, position.lng);
+                });
+
+                map.on('click', (e) => {
+                    mapMarker.setLatLng(e.latlng);
+                    updateCoordinates(e.latlng.lat, e.latlng.lng);
+                });
+
+                // Force map to recalculate its size
+                setTimeout(() => {
+                    map.invalidateSize();
+                    console.log('Map redrawn');
+                }, 500);
+            }
+        };
+
+        // Initialize meeting point map
+        const initMeetingMap = () => {
+            if (!meetingMapContainer.value) return;
+
+            console.log('Initializing meeting map');
+
+            // Create map if it doesn't exist
+            if (!meetingMap) {
+                meetingMap = L.map(meetingMapContainer.value).setView([formData.meetingLatitude, formData.meetingLongitude], 6);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(meetingMap);
+
+                meetingMapMarker = L.marker([formData.meetingLatitude, formData.meetingLongitude], {
+                    draggable: true
+                }).addTo(meetingMap);
+
+                // Set up meeting map event listeners
+                meetingMapMarker.on('dragend', () => {
+                    const position = meetingMapMarker.getLatLng();
+                    updateMeetingCoordinates(position.lat, position.lng);
+                });
+
+                meetingMap.on('click', (e) => {
+                    meetingMapMarker.setLatLng(e.latlng);
+                    updateMeetingCoordinates(e.latlng.lat, e.latlng.lng);
+                });
+
+                // Force map to recalculate its size
+                setTimeout(() => {
+                    meetingMap.invalidateSize();
+                    console.log('Meeting map redrawn');
+                }, 500);
+            }
+        };
+
+        // Update main coordinates
+        const updateCoordinates = async (lat, lng) => {
+            formData.latitude = lat;
+            formData.longitude = lng;
+
+            const endpoints = [
+                `/api/nominatim/reverse?lat=${lat}&lon=${lng}`,
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+            ];
+
+            let data = null;
+
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        headers: endpoint.includes('openstreetmap') ? {
+                            'User-Agent': 'YourAppName'  // Zamień na nazwę aplikacji
+                        } : {}
+                    });
+
+                    if (response.ok) {
+                        data = await response.json();
+                        break;
+                    }
+                } catch (err) {
+                    console.warn(`Błąd przy pobieraniu z ${endpoint}:`, err);
+                }
+            }
+
+            if (data && data.display_name) {
+                formData.locationName = data.display_name.split(',').slice(0, 3).join(', ');
+            } else {
+                console.warn('Nie udało się pobrać danych geolokalizacji');
+                formData.locationName = 'Nieznana lokalizacja';
+            }
+        };
+        const updateMeetingCoordinates = (lat, lng) => {
+            formData.meetingLatitude = lat;
+            formData.meetingLongitude = lng;
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        formData.meetingLocationName = data.display_name.split(',').slice(0, 3).join(', ');
+                    }
+                })
+                .catch(error => console.error('Meeting geocoding error', error));
+        };
+        const searchLocation = () => {
+            if (!searchAddress.value.trim()) return;
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchAddress.value)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const location = data[0];
+                        const lat = parseFloat(location.lat);
+                        const lng = parseFloat(location.lon);
+
+                        map.setView([lat, lng], 16);
+                        mapMarker.setLatLng([lat, lng]);
+                        updateCoordinates(lat, lng);
+                        suggestions.value = [];
+                    } else {
+                        alert('Location not found. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Search error', error);
+                    alert('Error searching for location. Please try again.');
+                });
+        };
+        const searchMeetingLocation = () => {
+            if (!searchMeetingAddress.value.trim()) return;
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchMeetingAddress.value)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const location = data[0];
+                        const lat = parseFloat(location.lat);
+                        const lng = parseFloat(location.lon);
+
+                        meetingMap.setView([lat, lng], 16);
+                        meetingMapMarker.setLatLng([lat, lng]);
+                        updateMeetingCoordinates(lat, lng);
+                    } else {
+                        alert('Meeting location not found. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Meeting search error', error);
+                    alert('Error searching for meeting location. Please try again.');
+                });
+        };
+        const fetchSuggestions = (query) => {
+            if (query.length < 3) {
+                suggestions.value = [];
+                return;
+            }
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestions.value = data || [];
+                })
+                .catch(error => console.error('Suggestions error', error));
+        };
+
+        const selectSuggestion = (suggestion) => {
+            const lat = parseFloat(suggestion.lat);
+            const lng = parseFloat(suggestion.lon);
+
+            searchAddress.value = suggestion.display_name;
+            map.setView([lat, lng], 16);
+            mapMarker.setLatLng([lat, lng]);
+            updateCoordinates(lat, lng);
+            suggestions.value = [];
+        };
+
+        const updateFileList = () => {
+            selectedFiles.value = Array.from(photoInput.value.files);
+        };
+        const submitForm = () => {
+            const formDataToSubmit = new FormData();
+
+            formDataToSubmit.append('_token', props.csrfToken);
+            formDataToSubmit.append('title', formData.title);
+            formDataToSubmit.append('description', formData.description);
+            formDataToSubmit.append('date', formData.date);
+            formDataToSubmit.append('people_count', formData.peopleCount);
+            formDataToSubmit.append('latitude', formData.latitude);
+            formDataToSubmit.append('longitude', formData.longitude);
+            formDataToSubmit.append('location_name', formData.locationName);
+            formDataToSubmit.append('has_ride_sharing', formData.hasRideSharing ? 1 : 0);
+
+            if (formData.hasRideSharing) {
+                formDataToSubmit.append('vehicle_description', formData.vehicleDescription);
+                formDataToSubmit.append('avalible_seats', formData.availableSeats);
+                formDataToSubmit.append('meeting_location_name', formData.meetingLocationName);
+                formDataToSubmit.append('meeting_latitude', formData.meetingLatitude);
+                formDataToSubmit.append('meeting_longitude', formData.meetingLongitude);
+            }
+
+            for (const file of selectedFiles.value) {
+                formDataToSubmit.append('photos[]', file);
+            }
+
+            fetch(props.storeRoute, {
+                method: 'POST',
+                body: formDataToSubmit,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        alert('Event created successfully!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                    alert('There was a problem creating your event. Please try again.');
+                });
+        };
+
+
+        watch(searchAddress, (newVal) => {
+            fetchSuggestions(newVal);
+        });
+
+        watch(() => formData.hasRideSharing, (newVal) => {
+            if (newVal) {
+                setTimeout(() => {
+                    initMeetingMap();
+                }, 300);
+            }
+        });
+
+        onMounted(() => {
+            setTimeout(() => {
+                initMap();
+                if (formData.hasRideSharing) {
+                    initMeetingMap();
+                }
+            }, 300);
+        });
+
+        onUpdated(() => {
+            if (map) map.invalidateSize();
+            if (meetingMap) meetingMap.invalidateSize();
+        });
+
+        return {
+            formData,
+            photoInput,
+            selectedFiles,
+            mapContainer,
+            meetingMapContainer,
+            searchAddress,
+            searchMeetingAddress,
+            suggestions,
+            updateFileList,
+            searchLocation,
+            searchMeetingLocation,
+            selectSuggestion,
+            submitForm
+        };
     }
 };
 </script>
 
 <style scoped>
-#ride-sharing-form {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.02);
+.map-container {
+    height: 300px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.address-suggestions {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.address-suggestion {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.address-suggestion:hover {
+    background-color: #f0f0f0;
+}
+
+.coordinate-display {
+    font-size: 0.9rem;
+    margin-top: 5px;
 }
 </style>
