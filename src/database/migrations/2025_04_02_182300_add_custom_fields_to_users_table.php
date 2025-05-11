@@ -47,14 +47,15 @@ return new class extends Migration
                 'phone',
                 'description',
                 'photo_path',
-                'language',
-                'theme',
                 'last_login_at',
+                'role',
+                'status',
+                'reports_count',
                 'two_factor_enabled',
                 'email_notifications',
                 'photo_updated_at',
                 'password_updated_at',
-                'role'
+                'deleted_at'
             ]);
         });
     }

@@ -28,31 +28,22 @@ class UserService extends BaseService implements UserServiceInterface
         $this->cachePrefix = 'user';
     }
 
-    public function updateProfile(array $data, $userId, ?UploadedFile $avatar = null)
+    public function updateProfile(array $data, $userId, ?UploadedFile $photoFile = null)
     {
         $user = $this->repository->find($userId);
 
-        if ($avatar) {
+        if ($photoFile) {
             if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
                 Storage::disk('public')->delete($user->photo_path);
             }
 
-            $photoPath = $avatar->store('profile-photos', 'public');
+            $photoPath = $photoFile->store('profile-photos', 'public');
             $data['photo_path'] = $photoPath;
             $data['photo_updated_at'] = now();
         }
 
-        if (isset($data['preferred_language'])) {
-            $data['language'] = $data['preferred_language'];
-            unset($data['preferred_language']);
-        }
-
-        if (isset($data['avatar'])) {
-            unset($data['avatar']);
-        }
-
-        if (isset($data['photo'])) {
-            unset($data['photo']);
+        if (isset($data['photo_file'])) {
+            unset($data['photo_file']);
         }
 
         $result = $this->repository->updateProfile($userId, $data);
@@ -78,7 +69,7 @@ class UserService extends BaseService implements UserServiceInterface
         return $this->repository->updatePassword($userId, $hashedPassword);
     }
 
-    public function updatePhoto(UploadedFile $photo, $userId)
+    public function updatePhoto(UploadedFile $photoFile, $userId)
     {
         $user = $this->repository->find($userId);
 
@@ -86,7 +77,7 @@ class UserService extends BaseService implements UserServiceInterface
             Storage::disk('public')->delete($user->photo_path);
         }
 
-        $photoPath = $photo->store('profile-photos', 'public');
+        $photoPath = $photoFile->store('profile-photos', 'public');
         $result = $this->repository->updatePhoto($userId, $photoPath);
 
         if ($this->useCache()) {

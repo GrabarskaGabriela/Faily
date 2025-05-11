@@ -35,18 +35,18 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'age' => 'nullable|integer|min:1|max:120',
             'description' => 'nullable|string',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'preferred_language' => 'nullable|string|in:en,pl,de,uk',
-            'theme' => 'nullable|string|in:light,dark',
+            'photo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
-            $this->userService->updateProfile($validated, Auth::id(), $request->hasFile('avatar') ? $request->file('avatar') : null);
-            return redirect()->route('profile.show')->with('success', 'Profil został zaktualizowany.');
+            $photo = $request->hasFile('photo_file') ? $request->file('photo_file') : null;
+            $this->userService->updateProfile($validated, Auth::id(), $photo);
+            return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
 
     public function edit(Request $request): View
     {
@@ -63,12 +63,12 @@ class ProfileController extends Controller
     public function updatePhoto(Request $request)
     {
         $request->validate([
-            'photo' => 'required|image|max:2048',
+            'photo_file' => 'required|image|max:2048',
         ]);
 
         try {
-            $this->userService->updatePhoto($request->file('photo'), Auth::id());
-            return redirect()->route('profile.show')->with('success', 'Zdjęcie profilowe zostało zaktualizowane.');
+            $this->userService->updatePhoto($request->file('photo_file'), Auth::id());
+            return redirect()->route('profile.show')->with('success', 'Profile photo has been updated.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
