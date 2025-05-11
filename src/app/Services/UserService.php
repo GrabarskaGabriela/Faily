@@ -133,7 +133,7 @@ class UserService extends BaseService implements UserServiceInterface
             throw new \Exception('You can\'t ban other admin user.');
         }
 
-        $result = $this->repository->update($userId, 'banned');
+        $result = $this->repository->updateStatus($userId, 'banned');
 
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
@@ -163,7 +163,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function unbanUser($userId)
     {
-        $result = $this->repository->updateStatus($userId, 'banned');
+        $result = $this->repository->updateStatus($userId, 'active');
         $this->repository->resetReportCount($userId);
 
         if ($this->useCache()) {
@@ -177,7 +177,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function makeAdmin($userId)
     {
-        $result = $this->repository->updateStatus($userId, 'admin');
+        $result = $this->repository->updateRole($userId, 'admin');
 
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
@@ -193,7 +193,8 @@ class UserService extends BaseService implements UserServiceInterface
             throw new \Exception('You can\'t take away admin privileges yourself.');
         }
 
-        $result = $this->repository->updateStatus($userId, 'user');
+        $result = $this->repository->updateRole($userId, 'user');
+
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
             $this->cacheService->flushTags(['users', 'admins']);
