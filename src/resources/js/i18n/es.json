@@ -1,7 +1,7 @@
 {
 "map": {
     "title": "Mapa",
-    "searchPlace": "Buscar lugar",
+    "searchPlace": "Buscar lugar ej. Spotify Camp Nou, Avinguda de Joan XXIII, Sant Ramon, la Maternitat i Sant Ramon, les Corts, Barcelona, Barcelonès, Barcelona, Catalunya, 08028, España",
     "myLocation": "Mi ubicación",
     "locating": "Localizando...",
     "yourLocation": "Tu ubicación",
@@ -19,7 +19,7 @@
         "placeName": "Nombre del sitio",
         "date": "Fecha del evento",
         "address": "Buscar dirección",
-        "addressExample": "ej. Varsovia, Calle Marszałkowska 1",
+        "addressExample": "ej. Spotify Camp Nou, Avinguda de Joan XXIII, Sant Ramon, la Maternitat i Sant Ramon, les Corts, Barcelona, Barcelonès, Barcelona, Catalunya, 08028, España",
         "eventDesc": "Descripción del evento",
         "availablePersonNumber": "Número de personas",
         "addPhotos": "Añadir fotos",

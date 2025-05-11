@@ -37,7 +37,7 @@
 
         <div class="map-controls border-dark">
             <button
-                class="btn text-white border-dark"
+                class="btn btn-gradient text-white border-dark"
                 @click="locateMe"
                 :disabled="isLocating"
             >
@@ -359,7 +359,6 @@ export default {
     max-height: 200px;
     color: white;
     overflow-y: auto;
-    /* Removed display: none; */
 }
 .search-result-item {
     padding: 8px 12px;

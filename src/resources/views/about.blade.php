@@ -107,7 +107,7 @@
             </h2>
 
             <div class="text-center my-4">
-                <a href="{{ asset('Faily-book.pdf') }}" target="_blank" class="btn btn-gradient text-color px-5 py-2 shadow">
+                <a href="{{ asset('Faily-book.pdf') }}" target="_blank" class="btn btn-gradient text-color_2 px-5 py-2 shadow">
                     {{ __('messages.developers.book') }}
                 </a>
             </div>

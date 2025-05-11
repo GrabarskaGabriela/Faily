@@ -11,7 +11,7 @@
 <div class="page-container">
     @include('includes.navbar')
 
-        <section class="hero py-5 text-color text-center">
+        <section class="hero py-5 text-color_2 text-center">
             <div class="container">
                 <h1 class="display-3 fw-bold mb-3">{{ __('messages.welcome.mainTitle') }}</h1>
                 <p class="lead mb-4">{{ __('messages.welcome.mainSubtitle') }}</p>
@@ -22,19 +22,19 @@
             <div class="container text-center">
                 <div class="row justify-content-center mb-4">
                     <div class="col-4 col-md-2">
-                        <button class="btn btn-gradient btn-outline-dark w-100 py-3" onclick="showInfo('people')">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('people')">
                             <i class="bi bi-people-fill fs-3"></i>
                             <div class="small mt-2">{{ __('messages.welcome.explore') }}</div>
                         </button>
                     </div>
                     <div class="col-4 col-md-2">
-                        <button class="btn btn-gradient btn-outline-dark w-100 py-3" onclick="showInfo('calendar')">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('calendar')">
                             <i class="bi bi-calendar-plus-fill fs-3"></i>
                             <div class="small mt-2">{{ __('messages.welcome.events') }}</div>
                         </button>
                     </div>
                     <div class="col-4 col-md-2">
-                        <button class="btn btn-gradient btn-outline-dark w-100 py-3" onclick="showInfo('car')">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('car')">
                             <i class="bi bi-car-front-fill fs-3"></i>
                             <div class="small mt-2">{{ __('messages.welcome.rides') }}</div>
                         </button>
@@ -60,7 +60,7 @@
 
         <section class="py-5 bg-transparent">
             <div class="container">
-                <h2 class="text-center mb-5">{{ __('messages.welcome.seeHowItWorks') }}</h2>
+                <h2 class="text-center mb-5 text-color_2">{{ __('messages.welcome.seeHowItWorks') }}</h2>
                 <div class="row justify-content-center g-4">
                     <div class="col-10 col-sm-6 col-md-4 d-flex justify-content-center">
                         <img src="{{ asset('images/includes/zdjecie1.png') }}" class="img-fluid rounded shadow" alt="Wydarzenie 1">

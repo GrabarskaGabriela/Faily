@@ -11,7 +11,7 @@
 @include('includes.navbar')
 
 <main class="container mt-5 mb-5">
-    <h1 class="fw-bold mb-4 text-color">{{ __('messages.myevents.myEvents') }}</h1>
+    <h1 class="fw-bold mb-4 text-color_2">{{ __('messages.myevents.myEvents') }}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -51,8 +51,8 @@
                         <p class="text-truncate">{{ Str::limit($event->description, 100) }}</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <a href="{{ route('events.show', $event->id) }}"  class="btn btn-gradient text-color">{{ __('messages.myevents.check') }}</a>
-                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-gradient-secondary">{{ __('messages.myevents.edit') }}</a>
+                        <a href="{{ route('events.show', $event->id) }}"  class="btn btn-gradient text-color_2">{{ __('messages.myevents.check') }}</a>
+                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-gradient-secondary text-color_2">{{ __('messages.myevents.edit') }}</a>
                     </div>
                 </div>
             </div>

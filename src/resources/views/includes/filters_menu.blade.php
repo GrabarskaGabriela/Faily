@@ -1,6 +1,6 @@
 <div class="col-md-3">
     <div class="card shadow-sm mb-4 border-black">
-        <div class="card-header text-color">
+        <div class="card-header text-color_2">
             <h5>{{ __('messages.eventlist.filterTitle') }}</h5>
         </div>
         <div class="card-body shadow-sm text-color">
@@ -25,8 +25,8 @@
                     <input class="form-check-input" type="checkbox" id="has_available_spots" name="has_available_spots" value="1" {{ request('has_available_spots') ? 'checked' : '' }}>
                     <label class="form-check-label" for="has_available_spots">{{ __('messages.eventlist.withFreeSpotsCheckbox') }}</label>
                 </div>
-                <button type="submit" class="btn btn-gradient text-color">{{ __('messages.eventlist.applyFiltersButton') }}</button>
-                <a href="{{ route('events.feed') }}" class="btn btn-gradient-secondary text-color">
+                <button type="submit" class="btn btn-gradient text-color_2">{{ __('messages.eventlist.applyFiltersButton') }}</button>
+                <a href="{{ route('events.feed') }}" class="btn btn-gradient-secondary text-color_2">
                     {{ __('messages.eventlist.resetFiltersButton') }}
                 </a>
             </form>
@@ -34,13 +34,13 @@
     </div>
 
     <div class="card shadow-sm border-black">
-        <div class="card-header text-color">
+        <div class="card-header text-color_2">
             <h5>{{ __('messages.eventlist.quickLinksLabel') }}</h5>
         </div>
         <div class="card-body d-grid gap-2 text-color">
-            <a href="{{ route('events.create') }}" class="btn text-color btn-gradient" >{{ __('messages.eventlist.createEventButton') }}</a>
-            <a href="{{ route('my_events') }}" class="btn text-color btn-gradient">{{ __('messages.eventlist.myEventsButton') }}</a>
-            <a href="{{ route('all_events') }}" class="btn text-color btn-gradient">{{ __('messages.eventlist.allEventsButton') }}</a>
+            <a href="{{ route('events.create') }}" class="btn text-color_2 btn-gradient" >{{ __('messages.eventlist.createEventButton') }}</a>
+            <a href="{{ route('my_events') }}" class="btn text-color_2 btn-gradient">{{ __('messages.eventlist.myEventsButton') }}</a>
+            <a href="{{ route('all_events') }}" class="btn text-color_2 btn-gradient">{{ __('messages.eventlist.allEventsButton') }}</a>
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 {
     "map": {
         "title": "Mapa",
-        "searchPlace": "Wyszukaj miejsce",
+        "searchPlace": "Wyszukaj miejsce, np. 2, Grabarska, Dzielnica Czterech Wyznań, Stare Miasto, Wrocław, województwo dolnośląskie, 50-079, Polska",
         "myLocation": "Moja lokalizacja",
         "locating": "Lokalizowanie...",
         "yourLocation": "Twoja lokalizacja",
@@ -19,7 +19,7 @@
         "placeName": "Nazwa miejsca",
         "date": "Data wydarzenia",
         "address": "Wyszukaj adres",
-        "addressExample": "np. Warszawa, ul. Marszałkowska 1",
+        "addressExample": "np. 2, Grabarska, Dzielnica Czterech Wyznań, Stare Miasto, Wrocław, województwo dolnośląskie, 50-079, Polska",
         "eventDesc": "Opis wydarzenia",
         "availablePersonNumber": "Ilość osób",
         "addPhotos": "Dodaj zdjęcia",

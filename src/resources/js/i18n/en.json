@@ -1,7 +1,7 @@
 {
     "map": {
         "title": "Map",
-        "searchPlace": "Search place",
+        "searchPlace": "Search place, e.g Buckingham Palace, Ambassador's Court, Victoria, London, Greater London, England, SW1A 1AA, United Kingdom",
         "myLocation": "My location",
         "locating": "Locating...",
         "yourLocation": "Your location",
@@ -19,7 +19,7 @@
         "placeName": "Place Name",
         "date": "Event Date",
         "address": "Search Address",
-        "addressExample": "e.g. Warsaw, Marszałkowska Street 1",
+        "addressExample": "e.g. 2, Buckingham Palace, Ambassador's Court, Victoria, London, Greater London, England, SW1A 1AA, United Kingdom",
         "eventDesc": "Event Description",
         "availablePersonNumber": "Number of People",
         "addPhotos": "Add Photos",

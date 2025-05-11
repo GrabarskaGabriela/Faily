@@ -1,7 +1,7 @@
 {
 "map": {
     "title": "マップ",
-    "searchPlace": "場所を検索",
+    "searchPlace": "場所を検索, 例：明治通り, 夢の島二丁目, 新木場, 江東区, 東京都, 136-0082, 日本",
     "myLocation": "私の位置",
     "locating": "ロケーション中...",
     "yourLocation": "あなたの位置",
@@ -19,7 +19,7 @@
         "placeName": "施設名",
         "date": "イベントの日付",
         "address": "住所を検索",
-        "addressExample": "例：東京都千代田区丸の内1-1-1",
+        "addressExample": "例：明治通り, 夢の島二丁目, 新木場, 江東区, 東京都, 136-0082, 日本",
         "eventDesc": "イベントの説明",
         "availablePersonNumber": "人数",
         "addPhotos": "写真を追加",

@@ -15,7 +15,7 @@
             <div class="col-12 mb-4">
                 <div class="profile-header position-relative mb-4"></div>
 
-                <div class="text-center text-color fade-in-up">
+                <div class="text-center text-color_2 fade-in-up">
                     <div class="position-relative d-inline-block">
                         @if(Auth::user()->photo_path)
                             <img src="{{ asset('storage/' . Auth::user()->photo_path) }}"
@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="about-me-highlight p-3 rounded-4 shadow-lg fade-in-up delay-1">
-                                <h3 class="text-color mb-3">{{ __('messages.account.aboutMe') }}</h3>
+                                <h3 class="text-color_2 mb-3">{{ __('messages.account.aboutMe') }}</h3>
                                 <p class="about-me-text lead m-0">„{{ Auth::user()->description ?: '-' }}”</p>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">{{ __('messages.account.fullName') }}:</div>
                                 <div class="col-md-8">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                                    <small class="text-muted">ps. '{{ Auth::user()->name }}'</small>
+                                    <small class="text-color">ps. '{{ Auth::user()->name }}'</small>
                                 </div>
                             </div>
                             <div class="row mb-3">

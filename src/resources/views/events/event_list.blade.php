@@ -14,7 +14,7 @@
         @include('includes.filters_menu')
 
         <div class="col-md-6">
-            <h2 class="mb-4" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
+            <h2 class="mb-4 text-color_2" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
             @forelse($events as $event)
                 <div class="card shadow-sm mb-4 text-color">
                     <div class="card-header d-flex align-items-center gap-3">
@@ -73,7 +73,7 @@
 
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <a href="{{ route('events.show', $event) }}"
-                               class="btn btn-gradient text-color">
+                               class="btn btn-gradient text-color_2">
                                 {{ __('messages.eventlist.detailsLabel') }}
                             </a>
 

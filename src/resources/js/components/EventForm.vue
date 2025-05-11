@@ -27,7 +27,7 @@
 
                     <div class="mb-3">
                         <input type="file" class="d-none" id="eventPhotos" ref="photoInput" multiple @change="updateFileList">
-                        <label for="eventPhotos" class="btn btn-gradient text-color mt-2">
+                        <label for="eventPhotos" class="btn btn-gradient text-color_2 mt-2">
                             {{ $t('addevent.addPhotos') }}
                         </label>
                         <div id="fileList" class="mt-2 small text-color">
@@ -90,8 +90,8 @@
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="avalible_seats" class="form-label">{{ $t('addevent.availableSeats') }}</label>
-                            <input type="number" class="form-control" id="avalible_seats" v-model="formData.availableSeats" min="1">
+                            <label for="available_seats" class="form-label">{{ $t('addevent.availableSeats') }}</label>
+                            <input type="number" class="form-control" id="available_seats" v-model="formData.availableSeats" min="1">
                         </div>
                     </div>
 
@@ -126,8 +126,9 @@
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                <button type="submit" class="btn btn-lg px-4 btn-gradient text-color">
-                    <i class="bi bi-check-circle me-2"></i>{{ $t('addevent.addEvent') }}
+                <button type="submit" class="btn btn-lg px-4 btn-gradient text-color_2" :disabled="isSubmitting">
+                    <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    <i v-else class="bi bi-check-circle me-2"></i>{{ $t('addevent.addEvent') }}
                 </button>
             </div>
         </form>
@@ -151,7 +152,13 @@ export default {
         }
     },
     setup(props) {
-        // Main form data
+        const customIcon = L.icon({
+            iconUrl: '/images/includes/custom_marker.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
+        });
+
         const formData = reactive({
             title: '',
             description: '',
@@ -171,9 +178,9 @@ export default {
 
         const photoInput = ref(null);
         const selectedFiles = ref([]);
-
         const mapContainer = ref(null);
         const meetingMapContainer = ref(null);
+        const isSubmitting = ref(false);
         let map = null;
         let mapMarker = null;
         let meetingMap = null;
@@ -186,7 +193,7 @@ export default {
         const initMap = () => {
             if (!mapContainer.value) return;
 
-            console.log('Initializing main map');
+            console.log('Initialization of the event map');
             if (!map) {
                 map = L.map(mapContainer.value).setView([formData.latitude, formData.longitude], 6);
 
@@ -196,7 +203,8 @@ export default {
                 }).addTo(map);
 
                 mapMarker = L.marker([formData.latitude, formData.longitude], {
-                    draggable: true
+                    draggable: true,
+                    icon: customIcon
                 }).addTo(map);
 
                 mapMarker.on('dragend', () => {
@@ -209,21 +217,16 @@ export default {
                     updateCoordinates(e.latlng.lat, e.latlng.lng);
                 });
 
-                // Force map to recalculate its size
                 setTimeout(() => {
                     map.invalidateSize();
                     console.log('Map redrawn');
                 }, 500);
             }
         };
-
-        // Initialize meeting point map
         const initMeetingMap = () => {
             if (!meetingMapContainer.value) return;
 
-            console.log('Initializing meeting map');
-
-            // Create map if it doesn't exist
+            console.log('Initialization of the meeting place map');
             if (!meetingMap) {
                 meetingMap = L.map(meetingMapContainer.value).setView([formData.meetingLatitude, formData.meetingLongitude], 6);
 
@@ -233,10 +236,10 @@ export default {
                 }).addTo(meetingMap);
 
                 meetingMapMarker = L.marker([formData.meetingLatitude, formData.meetingLongitude], {
-                    draggable: true
+                    draggable: true,
+                    icon: customIcon
                 }).addTo(meetingMap);
 
-                // Set up meeting map event listeners
                 meetingMapMarker.on('dragend', () => {
                     const position = meetingMapMarker.getLatLng();
                     updateMeetingCoordinates(position.lat, position.lng);
@@ -247,31 +250,26 @@ export default {
                     updateMeetingCoordinates(e.latlng.lat, e.latlng.lng);
                 });
 
-                // Force map to recalculate its size
                 setTimeout(() => {
                     meetingMap.invalidateSize();
-                    console.log('Meeting map redrawn');
+                    console.log('Map of the meeting place redrawn');
                 }, 500);
             }
         };
-
-        // Update main coordinates
         const updateCoordinates = async (lat, lng) => {
             formData.latitude = lat;
             formData.longitude = lng;
-
             const endpoints = [
                 `/api/nominatim/reverse?lat=${lat}&lon=${lng}`,
                 `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
             ];
 
             let data = null;
-
             for (const endpoint of endpoints) {
                 try {
                     const response = await fetch(endpoint, {
                         headers: endpoint.includes('openstreetmap') ? {
-                            'User-Agent': 'YourAppName'  // Zamień na nazwę aplikacji
+                            'User-Agent': 'Faily'
                         } : {}
                     });
 
@@ -280,157 +278,217 @@ export default {
                         break;
                     }
                 } catch (err) {
-                    console.warn(`Błąd przy pobieraniu z ${endpoint}:`, err);
+                    console.warn(`Error while downloading data from the ${endpoint}:`, err);
                 }
             }
 
             if (data && data.display_name) {
                 formData.locationName = data.display_name.split(',').slice(0, 3).join(', ');
             } else {
-                console.warn('Nie udało się pobrać danych geolokalizacji');
-                formData.locationName = 'Nieznana lokalizacja';
+                console.warn('Failed to retrieve geolocation data');
+                formData.locationName = 'Unknown location';
             }
         };
-        const updateMeetingCoordinates = (lat, lng) => {
+        const updateMeetingCoordinates = async (lat, lng) => {
             formData.meetingLatitude = lat;
             formData.meetingLongitude = lng;
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.display_name) {
-                        formData.meetingLocationName = data.display_name.split(',').slice(0, 3).join(', ');
+            try {
+                const endpoints = [
+                    `/api/nominatim/reverse?lat=${lat}&lon=${lng}`,
+                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+                ];
+
+                let data = null;
+                for (const endpoint of endpoints) {
+                    try {
+                        const response = await fetch(endpoint, {
+                            headers: endpoint.includes('openstreetmap') ? {
+                                'User-Agent': 'Faily'
+                            } : {}
+                        });
+
+                        if (response.ok) {
+                            data = await response.json();
+                            break;
+                        }
+                    } catch (err) {
+                        console.warn(`Error while downloading data from the ${endpoint}:`, err);
                     }
-                })
-                .catch(error => console.error('Meeting geocoding error', error));
+                }
+
+                if (data && data.display_name) {
+                    formData.meetingLocationName = data.display_name.split(',').slice(0, 3).join(', ');
+                } else {
+                    console.warn('Failed to retrieve geolocation data for the meeting place');
+                    formData.meetingLocationName = 'Unknown location';
+                }
+            } catch (error) {
+                console.error('Geocoding error for the meeting place', error);
+                formData.meetingLocationName = 'Unknown location';
+            }
         };
-        const searchLocation = () => {
+        const searchLocation = async () => {
             if (!searchAddress.value.trim()) return;
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchAddress.value)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.length > 0) {
-                        const location = data[0];
-                        const lat = parseFloat(location.lat);
-                        const lng = parseFloat(location.lon);
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchAddress.value)}`);
+                const data = await response.json();
 
-                        map.setView([lat, lng], 16);
-                        mapMarker.setLatLng([lat, lng]);
-                        updateCoordinates(lat, lng);
-                        suggestions.value = [];
-                    } else {
-                        alert('Location not found. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Search error', error);
-                    alert('Error searching for location. Please try again.');
-                });
+                if (data && data.length > 0) {
+                    const location = data[0];
+                    const lat = parseFloat(location.lat);
+                    const lng = parseFloat(location.lon);
+
+                    map.setView([lat, lng], 16);
+                    mapMarker.setLatLng([lat, lng]);
+                    await updateCoordinates(lat, lng);
+                    suggestions.value = [];
+                } else {
+                    alert('Location not found. Please try again.');
+                }
+            } catch (error) {
+                console.error('Search error', error);
+                alert('An error occurred while searching for a location. Please try again.');
+            }
         };
-        const searchMeetingLocation = () => {
+        const searchMeetingLocation = async () => {
             if (!searchMeetingAddress.value.trim()) return;
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchMeetingAddress.value)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.length > 0) {
-                        const location = data[0];
-                        const lat = parseFloat(location.lat);
-                        const lng = parseFloat(location.lon);
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchMeetingAddress.value)}`);
+                const data = await response.json();
 
-                        meetingMap.setView([lat, lng], 16);
-                        meetingMapMarker.setLatLng([lat, lng]);
-                        updateMeetingCoordinates(lat, lng);
-                    } else {
-                        alert('Meeting location not found. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Meeting search error', error);
-                    alert('Error searching for meeting location. Please try again.');
-                });
+                if (data && data.length > 0) {
+                    const location = data[0];
+                    const lat = parseFloat(location.lat);
+                    const lng = parseFloat(location.lon);
+
+                    meetingMap.setView([lat, lng], 16);
+                    meetingMapMarker.setLatLng([lat, lng]);
+                    await updateMeetingCoordinates(lat, lng);
+                } else {
+                    alert('Meeting place not found. Please try again.');
+                }
+            } catch (error) {
+                console.error('Meeting place search error', error);
+                alert('An error occurred while searching for a meeting place. Please try again.');
+            }
         };
-        const fetchSuggestions = (query) => {
+        const fetchSuggestions = async (query) => {
             if (query.length < 3) {
                 suggestions.value = [];
                 return;
             }
 
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
-                .then(response => response.json())
-                .then(data => {
-                    suggestions.value = data || [];
-                })
-                .catch(error => console.error('Suggestions error', error));
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+                const data = await response.json();
+                suggestions.value = data || [];
+            } catch (error) {
+                console.error('Error downloading suggestions', error);
+                suggestions.value = [];
+            }
         };
-
-        const selectSuggestion = (suggestion) => {
+        const selectSuggestion = async (suggestion) => {
             const lat = parseFloat(suggestion.lat);
             const lng = parseFloat(suggestion.lon);
 
             searchAddress.value = suggestion.display_name;
             map.setView([lat, lng], 16);
             mapMarker.setLatLng([lat, lng]);
-            updateCoordinates(lat, lng);
+            await updateCoordinates(lat, lng);
             suggestions.value = [];
         };
-
         const updateFileList = () => {
             selectedFiles.value = Array.from(photoInput.value.files);
         };
-        const submitForm = () => {
-            const formDataToSubmit = new FormData();
+        const submitForm = async () => {
+            try {
+                isSubmitting.value = true;
+                const formDataToSubmit = new FormData();
+                formDataToSubmit.append('_token', props.csrfToken);
+                formDataToSubmit.append('title', formData.title);
+                formDataToSubmit.append('description', formData.description);
+                formDataToSubmit.append('date', formData.date);
+                formDataToSubmit.append('people_count', formData.peopleCount);
+                formDataToSubmit.append('latitude', formData.latitude);
+                formDataToSubmit.append('longitude', formData.longitude);
+                formDataToSubmit.append('location_name', formData.locationName);
+                formDataToSubmit.append('has_ride_sharing', formData.hasRideSharing ? 1 : 0);
 
-            formDataToSubmit.append('_token', props.csrfToken);
-            formDataToSubmit.append('title', formData.title);
-            formDataToSubmit.append('description', formData.description);
-            formDataToSubmit.append('date', formData.date);
-            formDataToSubmit.append('people_count', formData.peopleCount);
-            formDataToSubmit.append('latitude', formData.latitude);
-            formDataToSubmit.append('longitude', formData.longitude);
-            formDataToSubmit.append('location_name', formData.locationName);
-            formDataToSubmit.append('has_ride_sharing', formData.hasRideSharing ? 1 : 0);
+                if (formData.hasRideSharing) {
+                    formDataToSubmit.append('vehicle_description', formData.vehicleDescription);
+                    formDataToSubmit.append('available_seats', formData.availableSeats);
+                    formDataToSubmit.append('meeting_location_name', formData.meetingLocationName);
+                    formDataToSubmit.append('meeting_latitude', formData.meetingLatitude);
+                    formDataToSubmit.append('meeting_longitude', formData.meetingLongitude);
+                }
+                for (const file of selectedFiles.value) {
+                    formDataToSubmit.append('photos[]', file);
+                }
+                console.log('Data sent:', {
+                    title: formData.title,
+                    description: formData.description,
+                    date: formData.date,
+                    people_count: formData.peopleCount,
+                    latitude: formData.latitude,
+                    longitude: formData.longitude,
+                    location_name: formData.locationName,
+                    has_ride_sharing: formData.hasRideSharing,
+                    vehicle_description: formData.vehicleDescription,
+                    available_seats: formData.availableSeats,
+                    meeting_location_name: formData.meetingLocationName,
+                    meeting_latitude: formData.meetingLatitude,
+                    meeting_longitude: formData.meetingLongitude
+                });
+                const response = await fetch(props.storeRoute, {
+                    method: 'POST',
+                    body: formDataToSubmit,
+                });
 
-            if (formData.hasRideSharing) {
-                formDataToSubmit.append('vehicle_description', formData.vehicleDescription);
-                formDataToSubmit.append('avalible_seats', formData.availableSeats);
-                formDataToSubmit.append('meeting_location_name', formData.meetingLocationName);
-                formDataToSubmit.append('meeting_latitude', formData.meetingLatitude);
-                formDataToSubmit.append('meeting_longitude', formData.meetingLongitude);
-            }
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Server response:', errorText);
+                    throw new Error(`Server error: ${response.status}. Content: ${errorText.substring(0, 200)}...`);
+                }
+                const contentType = response.headers.get('content-type');
 
-            for (const file of selectedFiles.value) {
-                formDataToSubmit.append('photos[]', file);
-            }
-
-            fetch(props.storeRoute, {
-                method: 'POST',
-                body: formDataToSubmit,
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Network response was not ok');
-                })
-                .then(data => {
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
                     if (data.redirect) {
                         window.location.href = data.redirect;
                     } else {
-                        alert('Event created successfully!');
+                        alert('The event has been successfully created!');
                     }
-                })
-                .catch(error => {
-                    console.error('Error submitting form:', error);
-                    alert('There was a problem creating your event. Please try again.');
-                });
+                } else {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        const text = await response.text();
+                        if (text.includes('redirect')) {
+                            try {
+                                const matches = text.match(/window\.location\.href\s*=\s*['"]([^'"]+)['"]/);
+                                if (matches && matches[1]) {
+                                    window.location.href = matches[1];
+                                    return;
+                                }
+                            } catch (e) {
+                                console.warn('Error when analysing the responses', e);
+                            }
+                        }
+                        alert('The event has been successfully created!');
+                    }
+                }
+            } catch (error) {
+                console.error('Error during form submission:', error);
+                alert('There was a problem when creating the event. Please try again.');
+            } finally {
+                isSubmitting.value = false;
+            }
         };
-
-
         watch(searchAddress, (newVal) => {
             fetchSuggestions(newVal);
         });
-
         watch(() => formData.hasRideSharing, (newVal) => {
             if (newVal) {
                 setTimeout(() => {
@@ -438,7 +496,6 @@ export default {
                 }, 300);
             }
         });
-
         onMounted(() => {
             setTimeout(() => {
                 initMap();
@@ -462,6 +519,7 @@ export default {
             searchAddress,
             searchMeetingAddress,
             suggestions,
+            isSubmitting,
             updateFileList,
             searchLocation,
             searchMeetingLocation,
