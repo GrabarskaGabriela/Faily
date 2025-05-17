@@ -6,7 +6,9 @@ use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\CacheServiceInterface;
 use App\Services\Interfaces\ReportServiceInterface;
+use App\Models\Report;
 use Illuminate\Http\Request;
+
 
 class ReportService extends BaseService implements ReportServiceInterface
 {
@@ -140,7 +142,13 @@ class ReportService extends BaseService implements ReportServiceInterface
             60 * 10 //10min
         );
     }
-
+    public function findPending()
+    {
+        return Report::where('status', 'pending')
+            ->with(['reporter', 'reportedUser'])
+            ->latest()
+            ->paginate(9);
+    }
     protected function sendBanNotification($user, $reason = null)
     {
         try {

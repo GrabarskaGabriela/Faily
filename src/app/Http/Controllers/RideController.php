@@ -84,7 +84,7 @@ class RideController extends Controller
                 ->with('error', 'You do not have permission to edit this passage.');
         }
 
-        return view('rides.edit', compact('ride'));
+        return view('ride.edit', compact('ride'));
     }
 
     public function update(Request $request, Ride $ride)
@@ -99,7 +99,7 @@ class RideController extends Controller
 
         try {
             $this->rideService->updateRide($ride->id, $validated, Auth::id());
-            return redirect()->route('rides.show', $ride)
+            return redirect()->route('rides.show.blade.php', $ride)
                 ->with('success', 'The passage has been updated!');
         } catch (\Exception $e) {
             return redirect()->route('events.show', $ride->event_id)

@@ -10,7 +10,7 @@
 @include('includes.navbar')
 
 <main class="container flex-grow-1 my-5">
-    <div class="card shadow-sm mx-auto border-dark" style="max-width: 400px;">
+    <div class="card shadow-sm mx-auto " style="max-width: 400px;">
         <div class="card-body shadow-sm">
             <h3 class="card-title text-center mb-4 text-color">{{ __('auth.authforgotpassword.titleLabel') }}</h3>
 
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-gradient text-color">
+                    <button type="submit" class="btn btn-gradient text-color_2">
                         {{ __('auth.authforgotpassword.submitButton') }}
                     </button>
                 </div>

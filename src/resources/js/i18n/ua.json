@@ -10,7 +10,8 @@
         "latitude": "Широта:",
         "longitude": "Довгота:",
         "noResults": "Результатів не знайдено",
-        "alertGeolocalization": "Не вдалося визначити ваше місцезнаходження"
+        "alertGeolocalization": "Не вдалося визначити ваше місцезнаходження",
+        "checkEvent": "Перевір"
     },
 
     "addevent": {

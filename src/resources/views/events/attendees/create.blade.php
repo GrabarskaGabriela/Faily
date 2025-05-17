@@ -31,7 +31,7 @@
                             <label for="attendees_count" class="form-label">{{ __('messages.eventattendeescreate.currentParticipantsLabel') }}</label>
                             <input type="number" class="form-control " id="attendees_count" name="attendees_count"
                                    min="1" max="100" value="1" required>
-                            <small class="form-text text-light">{{ __('messages.eventattendeescreate.maxParticipantsLabel') }}</small>
+                            <small class="form-text text-color">{{ __('messages.eventattendeescreate.maxParticipantsLabel') }}</small>
                         </div>
 
                         <div class="mb-4">
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-gradient text-color">
+                            <button type="submit" class="btn btn-gradient text-color_2">
                                 {{ __('messages.eventattendeescreate.submitButton') }}
                             </button>
                         </div>

@@ -3,6 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import i18n from 'laravel-vue-i18n/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
     plugins: [
@@ -21,12 +22,32 @@ export default defineConfig({
                 },
             },
         }),
-        i18n()
+        i18n(),
+        visualizer({
+            filename: './build-stats.html',
+            open: true,
+        }),
+
     ],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'resources'),
             'vue': 'vue/dist/vue.esm-bundler.js',
+        },
+    },
+    build: {
+        chunkSizeWarningLimit: 300,
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('vue')) return 'vendor_vue';
+                        if (id.includes('lodash')) return 'vendor_lodash';
+                        if (id.includes('moment')) return 'vendor_moment';
+                        return 'vendor';
+                    }
+                },
+            },
         },
     },
 });

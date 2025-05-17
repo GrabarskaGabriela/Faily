@@ -47,7 +47,7 @@ Route::prefix('api')->name('api.')->group(function ()
 
         Route::apiResource('rides', RideController::class);
 
-        Route::apiResource('ride-requests', RideRequestController::class)->except(['show', 'edit']);
+        Route::apiResource('ride-requests', RideRequestController::class)->except(['show.blade.php', 'edit']);
         Route::get('/my-ride-requests', [RideRequestController::class, 'myRequests']);
 
         Route::get('/geocode/search', 'GeocodingController@search');

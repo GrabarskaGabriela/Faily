@@ -9,7 +9,7 @@
         </p>
     </header>
     <div class="d-flex align-items-center gap-3">
-        <button type="submit" class="btn-gradient-danger text-color" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">  {{ __('messages.profilepartialsdelete.deleteAccount') }}
+        <button type="submit" class="btn-gradient-danger text-color_2" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">  {{ __('messages.profilepartialsdelete.deleteAccount') }}
         </button>
     </div>
 
@@ -50,11 +50,11 @@
 
                     <div class="modal-footer">
                         <div class="d-flex align-items-center gap-3">
-                            <button type="submit" class="btn-gradient-secondary text-color" data-bs-toggle="modal"> {{ __('messages.profilepartialsdelete.cancel') }}
+                            <button type="submit" class="btn-gradient-secondary text-color_2" data-bs-toggle="modal"> {{ __('messages.profilepartialsdelete.cancel') }}
                             </button>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <button type="submit" class="btn-gradient-danger text-color" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">{{ __('messages.profilepartialsdelete.deleteAccount') }}
+                            <button type="submit" class="btn-gradient-danger text-color_2" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">{{ __('messages.profilepartialsdelete.deleteAccount') }}
                             </button>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faily - Pomoc</title>
+    <title>{{ __('messages.help.title') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-main">
@@ -14,20 +14,23 @@
         <div class="col-lg-9">
             <div class="card shadow shadow-sm border-0 rounded-4 overflow-hidden">
                 <div class="card-body text-color">
-                    <h1 class="card-title text-center mb-5 display-5 fw-bold">Centrum pomocy</h1>
-                    <p class="text-center text-color mb-4 fst-italic">Strona jest w trakcie przebudowy – dziękujemy za cierpliwość!</p>
-
+                    <h1 class="card-title text-center mb-5 display-5 fw-bold">{{ __('messages.help.text') }}</h1>
                     <div class="mb-5">
-                        <h3 class="mb-4">Najczęściej zadawane pytania</h3>
+                        <h3 class="mb-4">{{ __('messages.help.faq_title') }}</h3>
                         <div class="accordion" id="faqAccordion">
                             @foreach ([
-                                ['title' => 'Jak zmienić zdjęcie profilowe?', 'content' => 'Przejdź do swojego profilu, kliknij przycisk "Edytuj zdjęcie" i wybierz nowe zdjęcie z dysku.'],
-                                ['title' => 'Jak zaktualizować dane profilowe?', 'content' => 'W sekcji "Informacje" na swoim profilu możesz edytować wszystkie dane. Pamiętaj aby zapisać zmiany.'],
-                                ['title' => 'Jak skontaktować się z supportem?', 'content' => 'Napisz do nas na adres: <a href="mailto:support@faily.pl" class="text-color text-decoration-underline">support@faily.pl</a>.']
-                            ] as $index => $faq)
-                                <div class="accordion-item bg-dark text-color border-0 mb-3 rounded-3 shadow-sm">
+                                 ['title' => __('messages.help.faq_1_title') , 'content' => __('messages.help.faq_1_text')],
+                                 ['title' =>__('messages.help.faq_2_title'), 'content' => __('messages.help.faq_2_text')],
+                                 ['title' =>__('messages.help.faq_3_title'), 'content' => __('messages.help.faq_3_text')],
+                                 ['title' =>__('messages.help.faq_4_title'), 'content' => __('messages.help.faq_4_text')],
+                                 ['title' =>__('messages.help.faq_5_title'), 'content' => __('messages.help.faq_5_text')],
+                                 ['title' =>__('messages.help.faq_6_title'), 'content' => __('messages.help.faq_6_text')],
+                                 ['title' =>__('messages.help.faq_7_title'), 'content' => __('messages.help.faq_7_text')],
+                                 ['title' =>__('messages.help.faq_8_title'), 'content' => __('messages.help.faq_8_text')],
+                             ] as $index => $faq)
+                                <div class="accordion-item text-color border-0 mb-3 rounded-3 shadow-sm">
                                     <h2 class="accordion-header" id="heading{{ $index }}">
-                                        <button class="accordion-button bg-dark text-color collapsed" type="button"
+                                        <button class="accordion-button text-color collapsed" type="button"
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#collapse{{ $index }}"
                                                 aria-expanded="false"
@@ -47,21 +50,20 @@
                     </div>
 
                     <div class="mb-4">
-                        <h3 class="mb-3">Przydatne linki</h3>
+                        <h3 class="mb-3">{{ __('messages.help.links_title') }}</h3>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item bg-transparent border-secondary">
-                                <a href="#" class="text-decoration-none text-light">Regulamin serwisu</a>
+                                <a href="#" class="text-decoration-none text-color">{{ __('messages.help.rules') }}</a>
                             </li>
                             <li class="list-group-item bg-transparent border-secondary">
-                                <a href="#" class="text-decoration-none text-light">Polityka prywatności</a>
+                                <a href="#" class="text-decoration-none color">{{ __('messages.help.terms') }}</a>
                             </li>
                         </ul>
                     </div>
                     <div class="text-center mt-5">
-                        <h3 class="mb-3">Potrzebujesz dodatkowej pomocy?</h3>
-                        <a href="mailto:support@faily.pl" class="btn border-0 px-4 py-2 fw-semibold text-color"
-                           style="background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%); border-radius: 30px;">
-                            Napisz do nas
+                        <h3 class="mb-3">{{ __('messages.help.needHelp') }}</h3>
+                        <a href="mailto:support@faily.pl" class="btn btn-gradient border-0 px-4 py-2 fw-semibold text-color_2">
+                            {{ __('messages.help.email') }}
                         </a>
                     </div>
                 </div>

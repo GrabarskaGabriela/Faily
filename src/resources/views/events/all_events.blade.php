@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ __('messages.title.allEvents') }}</title>
+    <title>{{ __('messages.eventlist.allEventsButton') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-main">
@@ -11,7 +11,7 @@
 @include('includes.navbar')
 
 <main class="container mt-5 mb-5">
-    <h1 class="fw-bold mb-4 text-color">{{ __('messages.eventlist.allEvents') }}</h1>
+    <h1 class="fw-bold mb-4 text-color_2">{{ __('messages.eventlist.allEventsButton') }}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -20,8 +20,8 @@
     @endif
     <div class="row">
         @forelse ($events as $event)
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm text-color">
+            <div class="col-md-4 mb-4 fade-in-up">
+                <div class="card h-100 shadow-sm text-color lift-card">
                     <a href="{{ route('events.show', $event->id) }}">
                         @if(isset($event->photos) && count($event->photos) > 0)
                             <img src="{{ asset('storage/' . $event->photos[0]->path) }}"
@@ -50,13 +50,8 @@
 
                         <p class="text-truncate">{{ Str::limit($event->description, 100) }}</p>
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <a href="{{ route('events.show', $event->id) }}"  class="btn btn-gradient text-color">{{ __('messages.myevents.check') }}</a>
-                        @if(Auth::id() === $event->user_id)
-                            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-gradient-secondary">
-                                {{ __('messages.myevents.edit') }}
-                            </a>
-                        @endif
+                    <div class="card-body d-grid gap-2 text-color">
+                        <a href="{{ route('events.show', $event->id) }}"  class="btn btn-gradient text-color_2">{{ __('messages.myevents.check') }}</a>
                     </div>
                 </div>
             </div>

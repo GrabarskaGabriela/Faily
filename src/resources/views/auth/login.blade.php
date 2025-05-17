@@ -11,7 +11,7 @@
 <main class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm border-black">
+            <div class="card shadow-sm">
                 <div class="card-body shadow-sm" >
                     <h3 class="card-title text-center text-color mb-4">{{ __('auth.authlogin.login') }}</h3>
 
@@ -51,11 +51,11 @@
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="btn btn-gradient text-color">{{ __('auth.authlogin.forgotPasswordLink') }}</a>
+                                <a href="{{ route('password.request') }}" class="btn btn-gradient text-color_2">{{ __('auth.authlogin.forgotPasswordLink') }}</a>
                             @else
                                 <a href="#" class="btn btn-outline-primary">{{ __('auth.authlogin.forgotPasswordLink') }}</a>
                             @endif
-                            <button type="submit" class="btn btn-gradient text-color">{{ __('auth.authlogin.loginButton') }}</button>
+                            <button type="submit" class="btn btn-gradient text-color_2">{{ __('auth.authlogin.loginButton') }}</button>
                         </div>
                     </form>
 
@@ -64,7 +64,7 @@
                     <div class="d-grid gap-2 text-center">
                         <p class="mb-3 text-color">{{ __('auth.authlogin.noAccountText') }}</p>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-gradient text-color">{{ __('auth.authlogin.registerLink') }}</a>
+                            <a href="{{ route('register') }}" class="btn btn-gradient text-color_2">{{ __('auth.authlogin.registerLink') }}</a>
                         @else
                             <a href="#" class="btn btn-gradient text-color">{{ __('auth.authlogin.registerLink') }}</a>
                         @endif

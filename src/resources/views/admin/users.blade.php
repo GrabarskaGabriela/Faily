@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Zarządzanie użytkownikami</title>
+    <title>{{ __('messages.admin.usersMenagement') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,25 +12,7 @@
 
 <main class="container flex-grow-1 my-5">
     <div class="row">
-        <div class="col-md-3">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Menu Administratora</h5>
-                </div>
-                <div class="list-group list-group-flush">
-                    <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="fas fa-tachometer-alt me-2"></i>Podsumowanie
-                    </a>
-                    <a href="{{ route('admin.users') }}" class="list-group-item list-group-item-action {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                        <i class="fas fa-users me-2"></i>Użytkownicy
-                    </a>
-                    <a href="{{ route('admin.reports') }}" class="list-group-item list-group-item-action {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
-                        <i class="fas fa-flag me-2"></i>Zgłoszenia
-                    </a>
-                </div>
-            </div>
-        </div>
-
+        @include('includes.admin_menu')
         <div class="col-md-9">
             @if (session('success'))
                 <div class="alert alert-success mb-4">
@@ -46,7 +28,7 @@
 
             <div class="card shadow-sm mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0"><i class="fas fa-users me-2"></i>Zarządzanie użytkownikami</h4>
+                    <h4 class="mb-0"><i class="fas fa-users me-2"></i>{{ __('messages.admin.menageUsers') }}</h4>
                 </div>
 
                 <div class="card-body">
@@ -54,12 +36,12 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Nazwa</th>
-                                <th>Email</th>
-                                <th>Rola</th>
-                                <th>Status</th>
-                                <th>Zgłoszenia</th>
-                                <th>Akcje</th>
+                                <th>{{ __('messages.admin.name') }}</th>
+                                <th>{{ __('messages.admin.email') }}</th>
+                                <th>{{ __('messages.admin.role') }}</th>
+                                <th>{{ __('messages.admin.status') }}</th>
+                                <th>{{ __('messages.admin.reports') }}</th>
+                                <th>{{ __('messages.admin.actions') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,16 +51,16 @@
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         @if ($user->role === 'admin')
-                                            <span class="badge bg-purple">Administrator</span>
+                                            <span class="badge bg-purple">{{ __('messages.admin.admin') }}</span>
                                         @else
-                                            <span class="badge bg-primary">Użytkownik</span>
+                                            <span class="badge bg-primary">{{ __('messages.admin.user') }}</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($user->status === 'banned')
-                                            <span class="badge bg-danger">Zablokowany</span>
+                                            <span class="badge bg-danger">{{ __('messages.admin.block') }}</span>
                                         @else
-                                            <span class="badge bg-success">Aktywny</span>
+                                            <span class="badge bg-success">{{ __('messages.admin.active') }}</span>
                                         @endif
                                     </td>
                                     <td>{{ $user->reports_count ?? 0 }}</td>
@@ -87,7 +69,7 @@
                                             @if ($user->status !== 'banned' && $user->role !== 'admin')
                                                 <form action="{{ route('admin.users.ban', $user->id) }}" method="POST" class="me-2">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Czy na pewno chcesz zablokować tego użytkownika?')">
+                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{{ __('messages.admin.blockQuestion') }}')">
                                                         <i class="fas fa-ban"></i>
                                                     </button>
                                                 </form>
@@ -103,14 +85,14 @@
                                             @if ($user->role !== 'admin' && $user->status !== 'banned')
                                                 <form action="{{ route('admin.users.make-admin', $user->id) }}" method="POST">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Czy na pewno chcesz nadać uprawnienia administratora?')">
+                                                    <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('{{ __('messages.admin.adminAddQuestion') }}')">
                                                         <i class="fas fa-user-shield"></i>
                                                     </button>
                                                 </form>
                                             @elseif ($user->role === 'admin' && $user->id !== Auth::id())
                                                 <form action="{{ route('admin.users.remove-admin', $user->id) }}" method="POST">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Czy na pewno chcesz odebrać uprawnienia administratora?')">
+                                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('{{ __('messages.admin.adminDeleteQuestion') }}')">
                                                         <i class="fas fa-user-minus"></i>
                                                     </button>
                                                 </form>
@@ -124,7 +106,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center mt-4">
-                        {{ $users->links() }}
+                        {{ $users->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

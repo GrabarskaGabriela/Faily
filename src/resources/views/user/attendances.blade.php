@@ -12,7 +12,7 @@
 
 <main class="container mt-5 mb-5">
     <div class="col-md-4 text-md-end">
-        <a href="{{ route('events.show', $event) }}" class="btn text-color " style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.editevent.backToEvent') }}</a>
+        <a href="{{ route('events.show.blade.php', $event) }}" class="btn text-color " style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.editevent.backToEvent') }}</a>
     </div>
     <h1 class="fw-bold mb-4 text-color">{{ __('messages.userattendances.title') }}</h1>
 
@@ -34,7 +34,7 @@
                 <div class="card text-black h-100 shadow text-color
                          {{ $attendance->status == 'rejected' ? 'border border-danger border-3' : '' }}"
                      style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                    <a href="{{ route('events.show', $attendance->event->id) }}">
+                    <a href="{{ route('events.show.blade.php', $attendance->event->id) }}">
                         @if(isset($attendance->event->photos) && count($attendance->event->photos) > 0)
                             <img src="{{ asset('storage/' . $attendance->event->photos[0]->path) }}"
                                  alt="{{ $attendance->event->title }}"
@@ -86,7 +86,7 @@
                         @endif
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <a href="{{ route('events.show', $attendance->event->id) }}" class="btn text-color" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.userattendances.view') }}</a>
+                        <a href="{{ route('events.show.blade.php', $attendance->event->id) }}" class="btn text-color" style="background: linear-gradient(135deg, #5a00a0 0%, #7f00d4 100%);">{{ __('messages.userattendances.view') }}</a>
 
                         @if($attendance->status != 'rejected')
                             <form action="{{ route('events.attendees.destroy', [$attendance->event->id, $attendance->id]) }}" method="POST">

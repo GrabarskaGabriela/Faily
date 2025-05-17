@@ -10,7 +10,8 @@
         "latitude": "Latitude:",
         "longitude": "Longitude:",
         "noResults": "No results",
-        "alertGeolocalization": "Cannot determine your location"
+        "alertGeolocalization": "Cannot determine your location",
+        "checkEvent": "Check"
     },
     "addevent": {
         "addEvent": "Add Event",

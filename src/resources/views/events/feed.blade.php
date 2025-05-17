@@ -9,7 +9,7 @@
 <body class="bg-main">
 @include('includes.navbar')
 
-<main class="container py-5 text-color">
+<main class="container py-5 text-color_2">
     <div class="row g-4">
 
         @include('includes.filters_menu')
@@ -73,7 +73,7 @@
 
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <a href="{{ route('events.show', $event) }}"
-                               class="btn btn-gradient text-color">
+                               class="btn btn-gradient text-color_2">
                                 {{ __('messages.eventlist.detailsLabel') }}
                             </a>
 
