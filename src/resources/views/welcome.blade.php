@@ -58,23 +58,6 @@
             </div>
         </section>
 
-        <section class="py-5 bg-transparent">
-            <div class="container">
-                <h2 class="text-center mb-5 text-color_2">{{ __('messages.welcome.seeHowItWorks') }}</h2>
-                <div class="row justify-content-center g-4">
-                    <div class="col-10 col-sm-6 col-md-4 d-flex justify-content-center">
-                        <img src="{{ asset('images/includes/zdjecie1.png') }}" class="img-fluid rounded shadow" alt="Wydarzenie 1">
-                    </div>
-                    <div class="col-10 col-sm-6 col-md-4 d-flex justify-content-center">
-                        <img src="{{ asset('images/includes/zdjecie2.png') }}" class="img-fluid rounded shadow" alt="Wydarzenie 2">
-                    </div>
-                    <div class="col-10 col-sm-6 col-md-4 d-flex justify-content-center">
-                        <img src="{{ asset('images/includes/zdjecie3.png') }}" class="img-fluid rounded shadow" alt="Wydarzenie 3">
-                    </div>
-                </div>
-            </div>
-        </section>
-
 </div>
 
 <script>

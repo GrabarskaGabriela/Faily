@@ -10,7 +10,8 @@
         "latitude": "Szerokość geograficzna:",
         "longitude": "Długość geograficzna:",
         "noResults": "Brak wyników",
-        "alertGeolocalization": "Nie można określić Twojej lokalizacji"
+        "alertGeolocalization": "Nie można określić Twojej lokalizacji",
+        "checkEvent": "Sprawdź"
     },
     "addevent": {
         "addEvent": "Dodaj wydarzenie",

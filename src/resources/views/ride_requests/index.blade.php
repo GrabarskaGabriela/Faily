@@ -9,7 +9,7 @@
 <main class="bg-main">
 @include('includes.navbar')
 
-<div class="container mt-5 text-color ">
+<div class="container mt-5 text-color_2 ">
     <div class="row mb-4">
         <div class="col-md-8">
             <h2>{{ __('messages.riderequestindex.rideMenagement') }}</h2>
@@ -28,7 +28,7 @@
                 <div class="col-md-6">
                     <p><strong>{{ __('messages.riderequestindex.eventName') }}</strong> {{ $ride->event->title }}</p>
                     <p><strong>{{ __('messages.riderequestindex.eventDate') }}</strong> {{ \Carbon\Carbon::parse($ride->event->date)->format('d.m.Y H:i') }}</p>
-                    <p><strong>{{ __('messages.riderequestindex.eventInfo') }}</strong> {{ $ride->vehicle_description }}</p>
+                    <p><strong>{{ __('messages.riderequestindex.carInfo') }}</strong> {{ $ride->vehicle_description }}</p>
                 </div>
                 <div class="col-md-6">
                     @php

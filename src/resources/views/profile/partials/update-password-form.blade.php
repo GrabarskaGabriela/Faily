@@ -65,7 +65,7 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn-gradient text-color"> {{ __('messages.profilepartialspassword.save') }}
+            <button type="submit" class="btn-gradient text-color_2"> {{ __('messages.profilepartialspassword.save') }}
             </button>
 
             @if (session('status') === 'password-updated')

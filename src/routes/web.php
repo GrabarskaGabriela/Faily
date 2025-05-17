@@ -13,6 +13,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 
 Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change')->middleware(['locale']);
+Route::post('/toggle-theme', [ThemeController::class, 'toggleTheme'])->name('toggle.theme');
+Route::get('/get-theme', [ThemeController::class, 'getTheme'])->name('get.theme');
 
 Route::get('/', function () {return view('welcome');})->name('welcome')->middleware('locale');
 
@@ -22,7 +24,7 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
 {
     Route::get('/profile/dashboard', function () {return view('profile.dashboard');})->name('profile.dashboard');
     Route::match(['put', 'patch'],'/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show.blade.php');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');

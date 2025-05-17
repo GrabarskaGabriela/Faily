@@ -13,7 +13,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm">
-                <div class="card-body" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);" >
+                <div class="card-body">
                     <h3 class="card-title text-center mb-4 text-color">{{ __('auth.authregister.titleLabel') }}</h3>
 
                     @if ($errors->any())
@@ -79,15 +79,27 @@
 
                         <div class="mb-3">
                             <input type="file" class="d-none" id="eventPhoto" name="photo" onchange="updateFileName()">
-                            <label for="eventPhoto" class="btn text-color btn-gradient mt-2">
+                            <label for="eventPhoto" class="btn text-color_2 btn-gradient mt-2">
                                 {{ __('auth.authregister.profilePhotoLabel') }}
                             </label>
-                            <div id="fileName" class="mt-2 text-color small">{{ __('auth.authregister.fileNotChoosen') }}</div>
+                            <div id="fileName" class="mt-2 text-color small">
+                                {{ __('auth.authregister.fileNotChoosen') }}
+                            </div>
                         </div>
 
-
+                        <script>
+                            function updateFileName() {
+                                const input = document.getElementById('eventPhoto');
+                                const fileNameDiv = document.getElementById('fileName');
+                                if (input.files.length > 0) {
+                                    fileNameDiv.textContent = input.files[0].name;
+                                } else {
+                                    fileNameDiv.textContent = '{{ __('auth.authregister.fileNotChoosen') }}';
+                                }
+                            }
+                        </script>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn text-color btn-gradient">{{ __('auth.authregister.registerButton') }}</button>
+                            <button type="submit" class="btn text-color_2 btn-gradient">{{ __('auth.authregister.registerButton') }}</button>
                         </div>
                     </form>
 
@@ -95,7 +107,7 @@
 
                     <div class="text-center">
                         <p class="mb-3 text-color">{{ __('auth.authregister.alreadyHaveAccountText') }}</p>
-                        <a href="{{ route('login') }}" class="btn btn-gradient text-color" >{{ __('auth.authregister.loginLink') }}</a>
+                        <a href="{{ route('login') }}" class="btn btn-gradient text-color_2" >{{ __('auth.authregister.loginLink') }}</a>
                     </div>
                 </div>
             </div>

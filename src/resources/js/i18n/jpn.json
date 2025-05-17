@@ -10,7 +10,8 @@
     "latitude": "緯度:",
     "longitude": "経度:",
     "noResults": "結果なし",
-    "alertGeolocalization": "位置情報を取得できません"
+    "alertGeolocalization": "位置情報を取得できません",
+    "checkEvent": "チェック"
 },
     "addevent": {
         "addEvent": "イベントを追加",

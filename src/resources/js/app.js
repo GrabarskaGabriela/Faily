@@ -10,7 +10,6 @@ import LeafletMap from './components/LeafletMap.vue';
 import MainMap from './components/MainMap.vue';
 import 'leaflet/dist/leaflet.css';
 import EventForm from "./components/EventForm.vue";
-import RideSharing from "./components/RideSharing.vue";
 
 import pl from './i18n/pl.json'
 import en from './i18n/en.json'
@@ -40,7 +39,6 @@ const i18n = createI18n({
 });
 app.component('leaflet-map', LeafletMap);
 app.component('main-map', MainMap);
-app.component('ride-sharing', RideSharing);
 app.component('event-form', EventForm);
 app.use(i18n);
 app.mount('#app');

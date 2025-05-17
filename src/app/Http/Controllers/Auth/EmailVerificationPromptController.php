@@ -12,7 +12,7 @@ class EmailVerificationPromptController extends Controller
     public function __invoke(Request $request): RedirectResponse|View
     {
         return $request->user()->hasVerifiedEmail()
-                    ? redirect()->intended(route('profile.show', absolute: false))
+                    ? redirect()->intended(route('profile.show.blade.php', absolute: false))
                     : view('auth.verify-email');
     }
 }

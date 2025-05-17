@@ -12,7 +12,7 @@
 <div>
     <div class="container py-5">
         <div class="row">
-            <div class="col-12 mb-4">
+            <div class="col-12">
                 <div class="profile-header position-relative mb-4"></div>
 
                 <div class="text-center text-color_2 fade-in-up">
@@ -29,7 +29,7 @@
                     <p class="mb-3">{{ Auth::user()->age }} {{ __('messages.account.years') }}</p>
 
                     <div class="row">
-                        <div class="col">
+                        <div class="col-12 mb-4 lift-card">
                             <div class="about-me-highlight p-3 rounded-4 shadow-lg fade-in-up delay-1">
                                 <h3 class="text-color_2 mb-3">{{ __('messages.account.aboutMe') }}</h3>
                                 <p class="about-me-text lead m-0">„{{ Auth::user()->description ?: '-' }}”</p>
@@ -39,9 +39,9 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center mt-4">
+            <div class="row justify-content-center mt-4 ">
                 <div class="col-md-8">
-                    <div class="card shadow-sm mb-5 fade-in-up delay-2">
+                    <div class="card shadow-sm mb-5 fade-in-up delay-2 ">
                         <div class="card-header bg-white">
                             <h4 class="mb-0">{{ __('messages.account.info') }}</h4>
                         </div>

@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-gradient text-color mt-2">
+                    <button type="submit" class="btn btn-gradient text-color_2 mt-2">
                         {{ __('auth.authresetpassword.submitButton') }}
                     </button>
                 </div>

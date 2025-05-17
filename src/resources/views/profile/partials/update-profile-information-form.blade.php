@@ -90,7 +90,7 @@
                 </div>
             @endif
             <input type="file" class="d-none" id="avatar" name="avatar" onchange="updateFileName(this)">
-            <label for="avatar" href="{{ route('profile.edit') }}" class="btn btn-gradient text-color">
+            <label for="avatar" href="{{ route('profile.edit') }}" class="btn btn-gradient text-color_2">
                 {{ __('messages.profilepartialsupdateprofile.chooseFile')}}
             </label>
             <span id="file-name" class="ms-2">{{ __('messages.profilepartialsupdateprofile.fileNotChoosen') }}</span>
@@ -122,7 +122,7 @@
 
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn-gradient text-color"> {{ __('messages.profilepartialsupdateprofile.save') }}
+            <button type="submit" class="btn-gradient text-color_2"> {{ __('messages.profilepartialsupdateprofile.save') }}
             </button>
 
             @if (session('status') === 'password-updated')

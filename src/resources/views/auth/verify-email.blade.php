@@ -27,14 +27,14 @@
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <button type="submit" class="btn btn-gradient text-color">
+                    <button type="submit" class="btn btn-gradient text-color_2">
                         {{ __('auth.authverifyemail.resendButtonLabel') }}
                     </button>
                 </form>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn btn-gradient btn-link text-decoration-none text-color">
+                    <button type="submit" class="btn btn-gradient btn-link text-decoration-none text-color_2">
                         {{ __('auth.authverifyemail.logoutButtonLabel') }}
                     </button>
                 </form>

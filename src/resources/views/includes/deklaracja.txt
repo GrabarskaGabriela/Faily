@@ -1,7 +1,0 @@
-trzeba to wkleić tam gdzie ma to być
-
-@include('includes.report-user-modal', ['userId' => $event->user->id, 'userName' => $event->user->name])
-
-to zawiera wszystko. tylko nwm gdzie to dać. na razie daje to do profil
-sry ale wygląd też trzeba poprawić
-

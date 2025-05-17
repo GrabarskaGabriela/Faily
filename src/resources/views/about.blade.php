@@ -115,17 +115,17 @@
             <div class="creator-tabs">
                 <ul class="nav nav-tabs justify-content-center border-0 mb-3" id="creatorTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav text-color dev-desc" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab">
+                        <button class="btn-gradient-nav text-color_2 dev-desc" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab">
                             {{ __('messages.developers.wodz') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav text-color dev-desc" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab" >
+                        <button class="btn-gradient-nav text-color_2 dev-desc" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab" >
                             {{ __('messages.developers.gabi') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav  text-color dev-desc" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab">
+                        <button class="btn-gradient-nav  text-color_2 dev-desc" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab">
                             {{ __('messages.developers.chimek') }}
                         </button>
                     </li>

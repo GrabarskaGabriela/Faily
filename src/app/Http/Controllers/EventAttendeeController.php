@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Interfaces\EventAttendeeServiceInterface;
 
-#[AllowDynamicProperties] class EventAttendeeController extends Controller
+class EventAttendeeController extends Controller
 {
     public function __construct(EventAttendeeServiceInterface $eventAttendeeService)
     {

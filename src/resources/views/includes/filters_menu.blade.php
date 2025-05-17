@@ -1,9 +1,9 @@
 <div class="col-md-3">
-    <div class="card shadow-sm mb-4 border-black">
+    <div class="card shadow-sm mb-4 fade-in-up">
         <div class="card-header text-color_2">
             <h5>{{ __('messages.eventlist.filterTitle') }}</h5>
         </div>
-        <div class="card-body shadow-sm text-color">
+        <div class="card-body shadow-sm text-color ">
             <form action="{{ route('events.feed') }}" method="GET">
                 <div class="mb-3">
                     <label for="search" class="form-label">{{ __('messages.eventlist.searchButton') }}</label>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="card shadow-sm border-black">
+    <div class="card shadow-sm fade-in-up">
         <div class="card-header text-color_2">
             <h5>{{ __('messages.eventlist.quickLinksLabel') }}</h5>
         </div>

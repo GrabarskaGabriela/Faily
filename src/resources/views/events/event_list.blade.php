@@ -9,14 +9,14 @@
 <body class="bg-main">
 @include('includes.navbar')
 
-<main class="container py-5 text-color">
+<main class="container py-5 text-color fade-in-up">
     <div class="row g-4">
         @include('includes.filters_menu')
 
         <div class="col-md-6">
             <h2 class="mb-4 text-color_2" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
             @forelse($events as $event)
-                <div class="card shadow-sm mb-4 text-color">
+                <div class="card shadow-sm mb-4 text-color lift-card">
                     <div class="card-header d-flex align-items-center gap-3">
                         @if($event->user->photo_path)
                             <img src="{{ asset('storage/' . $event->user->photo_path) }}"

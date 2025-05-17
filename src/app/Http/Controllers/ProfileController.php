@@ -42,7 +42,7 @@ class ProfileController extends Controller
 
         try {
             $this->userService->updateProfile($validated, Auth::id(), $request->hasFile('avatar') ? $request->file('avatar') : null);
-            return redirect()->route('profile.show')->with('success', 'Profil został zaktualizowany.');
+            return redirect()->route('profile.show.blade.php')->with('success', 'Profil został zaktualizowany.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -68,7 +68,7 @@ class ProfileController extends Controller
 
         try {
             $this->userService->updatePhoto($request->file('photo'), Auth::id());
-            return redirect()->route('profile.show')->with('success', 'Zdjęcie profilowe zostało zaktualizowane.');
+            return redirect()->route('profile.show.blade.php')->with('success', 'Zdjęcie profilowe zostało zaktualizowane.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

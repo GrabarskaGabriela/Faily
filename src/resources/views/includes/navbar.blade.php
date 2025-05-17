@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Cache;
 $locale = app()->getLocale();
 $userId = auth()->id() ?? 'guest';
 $cacheKey = "navbar_{$locale}_{$userId}";
-$cacheTTL = 60 * 60; //1h
+$cacheTTL = 60 * 60;
 @endphp
 
 @if (Cache::has($cacheKey) && !request()->has('refresh_cache'))
@@ -19,8 +19,8 @@ $cacheTTL = 60 * 60; //1h
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid nav-wrapper">
 
-            <a class="navbar-brand fs-3 text-color me-3" href="{{ url('/') }}" style="text-decoration: none;">
-                <img src="{{ asset('images/includes/logo.png') }}" alt="Logo" width="50" height="50" class="d-inline-block align-text-top"> Faily
+            <a class="navbar-brand text-color fs-3 me-3" href="{{ url('/') }}" style="text-decoration: none;">
+                <img src="{{ asset('images/includes/logo.png') }}" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">Faily
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -79,6 +79,13 @@ $cacheTTL = 60 * 60; //1h
                             <li><a class="dropdown-item text-color" href="{{ url('/my_events') }}">{{ __('messages.navbar.myEvents') }}</a></li>
                             <li><a class="dropdown-item text-color" href="{{ url('/help') }}">{{ __('messages.navbar.help') }}</a></li>
                             <li><a class="dropdown-item text-color" href="{{ url('/profile/dashboard') }}">{{ __('messages.navbar.settings') }}</a></li>
+                            @auth
+                                @if(Auth::user()->role === 'admin')
+                                    <li class="nav-item">
+                                        <a class="dropdown-item text-color" href="{{ route('admin.dashboard') }}">{{ __('messages.title.adminDashboard') }}</a></li>
+                                    </li>
+                                @endif
+                            @endauth
                             <li><hr class="dropdown-divider bg-white"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
@@ -112,7 +119,6 @@ $cacheTTL = 60 * 60; //1h
                             <li><a class="dropdown-item text-color {{ app()->getLocale() == 'ua' ? 'active' : '' }}" href="{{ route('language.change', 'ua') }}"><img src="{{ asset('images/includes/ua.png') }}" alt="Ukraine" width="20" height="15"> Українська</a></li>
                         </ul>
                     </div>
-
                     <a href="{{ route('login') }}" class="btn btn-gradient-nav ms-auto">
                         {{ __('messages.navbar.signIn') }}
                     </a>
