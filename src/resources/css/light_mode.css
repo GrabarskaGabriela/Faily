@@ -1,5 +1,5 @@
 @import 'bootstrap/dist/css/bootstrap.css';
-
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 html, body
 {
     background-image: url('/images/includes/light_bg.png');
@@ -14,10 +14,14 @@ html, body
     overflow-x: hidden;
 }
 /**Navbar*/
+.faily
+{
+    font-family: "Copperplate", "Papyrus", fantasy;
+}
 .navbar
 {
-    /**background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;*/
-    background: transparent !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
+    /** background: transparent !important;*/
     height: auto;
     color: whitesmoke !important;
     flex-shrink: 0;
@@ -28,7 +32,7 @@ html, body
     flex-grow: 1;
 }
 .dropdown-menu {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%)!important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     min-width: 200px;
     border: none;
 }
@@ -138,10 +142,14 @@ html, body
 
 .bg-welcome
 {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%)!important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
 }
-
+.bg-welcome_2
+{
+    background: linear-gradient(135deg, #a1a4af 0%, #6da5c1 50%)!important;
+    color: #0066cc !important;
+}
 /**Menu w ustawieniach*/
 
 .card
@@ -151,7 +159,7 @@ html, body
     border-radius: 12px 12px 0 0;
 }
 .shadow-sm {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
 }
 .card-header {
     background: linear-gradient(to right, #4da6ff, #0088cc, #0066cc);
@@ -163,12 +171,12 @@ html, body
 }
 
 .list-group {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
 }
 
 .list-group-item {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
 }
 
@@ -176,7 +184,7 @@ html, body
 /**Formsy w ustawieniach*/
 
 .modal-content {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
 }
 
@@ -255,7 +263,7 @@ html, body
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     border: 1px solid #dee2e6;
     border-top: none;
     border-radius: 0 0 .375rem .375rem;
@@ -292,7 +300,7 @@ html, body
 }
 
 .main-container {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     border-radius: .5rem;
     padding: 2rem;
     box-shadow: 0 .5rem 1rem rgba(0, 102, 204, 0.1);
@@ -306,7 +314,7 @@ html, body
 /**About*/
 
 .creator-section {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%);
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
     border-radius: 15px;
     overflow: hidden;
@@ -417,7 +425,7 @@ html, body
 }
 
 .creator-full-descriptions {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%);
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
 }
 
 .dev-desc {
@@ -493,7 +501,7 @@ html, body
 /**Footer*/
 
 footer {
-    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 100%) !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
     color: #0066cc !important;
     text-align: center;
     padding: 1rem 0;
@@ -521,8 +529,6 @@ main {
 }
 */
 .lift-card {
-    background-color: #444;
-    color: #fff;
     border: none;
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -531,6 +537,44 @@ main {
 .lift-card:hover {
     transform: translateY(-1rem);
     box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
+}
+
+/** Mapa 2*/
+.map-controls, .map-info, .search-container {
+    position: absolute;
+    z-index: 1000;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.map-controls { top: 10px; right: 10px; }
+.map-info { bottom: 30px; left: 10px; max-width: 300px; }
+.search-container { top: 10px; left: 60px; width: 300px; }
+.search-results {
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
+    border: 1px solid #000000;
+    max-height: 200px;
+    color: black;
+    overflow-y: auto;
+    display: none;
+}
+.search-result-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #ffffff;
+}
+.search-result-item:hover {
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
+}
+.leaflet-control-zoom a {
+    color: black !important;
+    background: linear-gradient(135deg, #e6f2ff 0%, #b3d9ff 50%)!important;
+    border: none;
+}
+
+.leaflet-control-zoom a:hover {
+    background-color: #c4c4ec;
 }
 
 @media (max-width: 768px) {
