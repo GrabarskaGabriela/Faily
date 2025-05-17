@@ -77,4 +77,4 @@ Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->nam
 Route::middleware(['auth', 'locale'])->post('/users/{id}/report', [ReportController::class, 'reportUser'])->name('users.report');
 
 require __DIR__.'/auth.php';
-require __DIR__ . '/api.php';
+
