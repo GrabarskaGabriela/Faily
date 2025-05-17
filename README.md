@@ -1,4 +1,4 @@
-# Instrukcja uruchomienia projektu
+# Instrukcja uruchomienia projektu Faily
 
 ## Wymagania wstępne
 - Docker i Docker Compose
@@ -6,8 +6,8 @@
 
 ## Krok 1: Klonowanie repozytorium
 ```bash
-git clone [link-do-repozytorium]
-cd [nazwa-folderu]
+git clone https://github.com/mateusz-bogacz-collegiumwitelona/Faily/
+cd Faily
 ```
 
 ## Krok 2: Przygotowanie środowiska
@@ -15,18 +15,30 @@ cd [nazwa-folderu]
 
 2. Uruchom kontenery Docker:
 ```bash
-docker-compose up -d
+docker-compose build 
+docker-compose up 
 ```
 
 ## Krok 3: Konfiguracja projektu
-Po uruchomieniu kontenerów wykonaj następujące polecenia:
+Po uruchomieniu kontenerów należy otworzyć terminal i wykonać poniższe polecenia w celu uruchominia specjalnie przygotowane skryptu ułatwiającego przygotowanie środowiska:
+
+```shell
+# Wejdź do kontenera aplikacji
+docker exec -it faily-app-dev bash
+
+# Nadanie skryptowi uprawnień do uruchamiania
+chmod +x deploy.sh
+
+# Uruchomienie skryptu
+./deploy.sh 
+
+```
+
+Można też wykonać polecenia ze skryptu ręcznie:
 
 ```bash
 # Wejdź do kontenera aplikacji
 docker exec -it faily-app-dev bash
-
-# Przejdź do katalogu aplikacji
-cd /application
 
 # Zainstaluj zależności Composer
 composer install
@@ -37,14 +49,17 @@ npm install
 # Skompiluj zasoby (dla produkcji)
 npm run build
 
-# LUB uruchom serwer dev (dla rozwoju)
-npm run dev -- --host
-```
-
-## Krok 4: Konfiguracja bazy danych
-```bash
-# Nadal wewnątrz kontenera
+# Włącz migracje w celu utworzenia tabel relacyjnej bazy danych
 php artisan migrate
+
+# Wygeneruj klucz aplikacji 
+php artisan key:generate
+
+# Wtłocz testowe dane do aplikacji
+php artisan db:seed
+
+# Stwórz link symboliczny dla zdjęć profilowych
+php artisan storage:link
 ```
 
 ## Krok 5: Dostęp do aplikacji
@@ -75,31 +90,18 @@ cd /application
 php artisan migrate:fresh
 ```
 
+### Remedium na całe złp
+Stworzyłem skrypt który rozwiązuje znaczącą większość problemów po stronie Laravela
+```shell
+docker exec -it faily-app-dev bash
+chmod +x deploy.sh
+./deploy.sh 
+```
+
 ## Uruchamianie projektu
 
 ### Pierwsze uruchomienie
 Wykonaj kroki 1-4 z powyższej instrukcji. Pierwsze uruchomienie wymaga pełnej konfiguracji środowiska.
-
-### Ponowne uruchomienie (jeśli projekt był już wcześniej skonfigurowany)
-```bash
-# Uruchom kontenery
-docker-compose up -d
-
-# Opcjonalnie: Uruchom serwer deweloperski Vite
-docker exec -it faily-app-dev bash
-cd /application
-npm run dev -- --host
-```
-
-## Rozwój projektu
-
-### Uruchamianie serwera deweloperskiego Vite
-```bash
-docker exec -it faily-app-dev bash
-cd /application
-npm run dev -- --host
-```
-To polecenie uruchomi serwer, który będzie automatycznie odświeżał zmiany w plikach JavaScript i CSS.
 
 ### Zatrzymywanie środowiska
 ```bash
@@ -113,7 +115,7 @@ docker-compose down -v
 
 ## Struktura projektu
 - `environment/dev/app/` - pliki konfiguracyjne Docker
-- `src/` - kod źródłowy Laravel 
+- `src/` - kod źródłowy Laravel
 - `src/resources/js/components/` - komponenty Vue.js
 - `src/resources/css/` - pliki CSS i SCSS
 
