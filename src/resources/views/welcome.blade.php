@@ -17,19 +17,6 @@
         object-fit: cover;
         object-position: center;
         }
-
-        .img-gallery
-        {
-            height: 25vh;
-            width: 45vh;
-        }
-
-        .img-gallery img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        }
     </style>
 </head>
 <body class="bg-dark text-color d-flex flex-column min-vh-100">
@@ -61,43 +48,49 @@
       </div>
     </section>
 
-    {{-- FEATURES --}}
-    <section class="py-5 bg-welcome text-center">
-      <div class="container">
-        <h2 class="mb-5">{{ __('messages.welcome.mainTitle') }}</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="card bg-transparent border-0 text-color fade-in-up delay-1">
-              <div class="card-body">
-                <i class="bi bi-people-fill fs-1 mb-3"></i>
-                <h5 class="card-title">{{ __('messages.welcome.explore') }}</h5>
-                <p class="card-text">{{ __('messages.welcome.createEventsDesc') }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card bg-transparent border-0 text-color fade-in-up delay-2">
-              <div class="card-body">
-                <i class="bi bi-calendar-plus-fill fs-1 mb-3"></i>
-                <h5 class="card-title">{{ __('messages.welcome.events') }}</h5>
-                <p class="card-text">{{ __('messages.welcome.meetPeopleDesc') }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card bg-transparent border-0 text-color fade-in-up delay-3">
-              <div class="card-body">
-                <i class="bi bi-car-front-fill fs-1 mb-3"></i>
-                <h5 class="card-title">{{ __('messages.welcome.rides') }}</h5>
-                <p class="card-text">{{ __('messages.welcome.needRide') }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="py-5 bg-welcome">
+            <div class="container text-center">
+                <div class="row justify-content-center mb-4">
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('people')">
+                            <i class="bi bi-people-fill fs-3"></i>
+                            <div class="small mt-2">{{ __('messages.welcome.explore') }}</div>
+                        </button>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('calendar')">
+                            <i class="bi bi-calendar-plus-fill fs-3"></i>
+                            <div class="small mt-2">{{ __('messages.welcome.events') }}</div>
+                        </button>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <button class="btn btn-gradient w-100 py-3" onclick="showInfo('car')">
+                            <i class="bi bi-car-front-fill fs-3"></i>
+                            <div class="small mt-2">{{ __('messages.welcome.rides') }}</div>
+                        </button>
+                    </div>
+                </div>
 
-    {{-- GALLERY --}}
+                <div class="info-section mt-4">
+                    <div id="people" class="info-text active">
+                        <h4>{{ __('messages.welcome.meetPeople') }}</h4>
+                        <p>{{ __('messages.welcome.meetPeopleDesc') }}</p>
+                    </div>
+                    <div id="calendar" class="info-text d-none">
+                        <h4>{{ __('messages.welcome.createEvents') }}</h4>
+                        <p>{{ __('messages.welcome.createEventsDesc') }}</p>
+                    </div>
+                    <div id="car" class="info-text d-none">
+                        <h4>{{ __('messages.welcome.rides') }}</h4>
+                        <p>{{ __('messages.welcome.needRide') }}</p>
+                    </div>
+                </div>
+            </div>
+    </section>
+        
+
+
+     {{-- GALLERY --}}
     <section class="py-5 text-center">
       <div class="container">
         <h2 class="mb-4">{{ __('messages.welcome.seeHowItWorks') }}</h2>
@@ -105,9 +98,9 @@
         <div class="row g-3">
           @for($i = 1; $i <= 6; $i++)
             <div class="col-6 col-md-4">
-              <div class="img-gallery overflow-hidden rounded floating delay-{{ $i % 2 + 1 }}">
+              <div class="ratio ratio-4x3 overflow-hidden rounded floating delay-{{ $i % 2 + 1 }}">
                 <img src="{{ asset('images/welcome/gallery'.$i.'.png') }}"
-                     class="img-fluid" alt="Gallery {{ $i }}">
+                     class="img-fluid object-fit-cover" alt="Gallery {{ $i }}">
               </div>
             </div>
           @endfor
@@ -125,6 +118,13 @@
       </div>
     </section>
   </main>
+
+  <script>
+    function showInfo(id) {
+      document.querySelectorAll('.info-text').forEach(el => el.classList.add('d-none'));
+      document.getElementById(id).classList.remove('d-none');
+    }
+  </script>
 
   @include('includes.footer')
 </body>
