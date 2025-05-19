@@ -33,7 +33,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover table-dark">
                             <thead>
                             <tr>
                                 <th>{{ __('messages.admin.name') }}</th>

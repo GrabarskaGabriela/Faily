@@ -49,6 +49,7 @@ return [
         'usersMenagement' => 'Управління користувачами',
         'ridesEdit' => 'Редагувати деталі поїздки',
         'ridesCreate' => 'Додати нову поїздку',
+        'attendeesList' => 'Список заявок'
     ],
 
     'navbar' => [
@@ -83,7 +84,7 @@ return [
         'mainSubtitle' => 'Зустрічайтеся з іншими на спільних виходах – від кіно до велосипеда!',
         'meetDevelopers' => 'Хочеш дізнатися про творців?',
         'meetDevelopersButton' => 'Зайди на сторінку!',
-        'explore' => 'Досліджуйте',
+        'explore' => 'Люди',
         'events' => 'Події',
         'rides' => 'Поїздки',
         'meetPeople' => 'Знайомтеся з людьми',

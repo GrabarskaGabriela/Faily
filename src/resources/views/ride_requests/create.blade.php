@@ -15,7 +15,7 @@
             <h2>{{ __('messages.riderequestscreate.applyEvent') }}</h2>
         </div>
         <div class="col-md-4 text-md-end">
-            <a href="{{ route('events.show.blade.php', $ride->event) }}" class="btn btn-gradient text-color_2">{{ __('messages.riderequestscreate.backToEvent') }}</a>
+            <a href="{{ route('events.show', $ride->event) }}" class="btn btn-gradient text-color_2">{{ __('messages.riderequestscreate.backToEvent') }}</a>
         </div>
     </div>
 
@@ -55,7 +55,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         @if($ride->driver->photo_path)
-                            <img src="{{ asset('storage/' . $event->user->photo_path) }}"
+                            <img src="{{ asset('storage/' . $ride->driver->photo_path) }}"
                                  class="rounded-circle border border-2 border-light"
                                  alt="{{ __('messages.eventlist.profilePhotoLabel') }}" width="80" height="80" style="object-fit: cover;">
                         @else

@@ -47,6 +47,7 @@ return [
         'rideDetails'=>'Información sobre la cabalgata',
         'ridesEdit' => 'Editar detalles del viaje',
         'ridesCreate' => 'Añadir nuevo viaje',
+        'attendeesList' => 'Lista de aplicaciones'
     ],
 
     'navbar' => [
@@ -81,7 +82,7 @@ return [
         'mainSubtitle' => 'Encuentra a otros para salidas juntos - ¡desde cine hasta ciclismo!',
         'meetDevelopers' => 'Vuoi conoscere i creatori?',
         'meetDevelopersButton' => 'Visita la pagina!',
-        'explore' => 'Explora',
+        'explore' => 'Personas',
         'events' => 'Eventos',
         'rides' => 'Viajes compartidos',
         'meetPeople' => 'Conoce gente',

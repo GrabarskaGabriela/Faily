@@ -47,7 +47,8 @@ return [
         'rideDetails'=>'Informacje o przejeździe',
         'adminDashboard' => 'Panel administratora',
         'usersReports' => 'Zgłoszenia użytkowników',
-        'usersMenagement' => 'Zarządzanie użytkownikami'
+        'usersMenagement' => 'Zarządzanie użytkownikami',
+        'attendeesList' => 'Lista zgłoszeń'
 
     ],
 
@@ -83,7 +84,7 @@ return [
         'mainSubtitle' => 'Spotkaj się z innymi na wspólnych wyjściach – od kina po rower!',
         'meetDevelopers' => 'Chcesz poznać twórców?',
         'meetDevelopersButton' => 'Wejdź na tą stronę!',
-        'explore' => 'Poznawaj ludzi!',
+        'explore' => 'Ludzie',
         'events' => 'Wydarzenia',
         'rides' => 'Podwózki',
         'meetPeople' => 'Poznawaj ludzi',

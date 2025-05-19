@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
         }
         else
         {
-            $photoPath = 'images/includes/default-avatar.png';
+            $photoPath = asset('images/includes/default-avatar.png');
         }
 
         $user = User::create([

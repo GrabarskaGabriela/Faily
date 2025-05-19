@@ -17,7 +17,7 @@ class GeocodingController extends Controller
             'q' => $query,
             'limit' => $limit,
             'headers' => [
-                'User-Agent' => 'YourAppName/1.0'
+                'User-Agent' => 'Faily/1.0'
             ]
         ]);
 
@@ -34,7 +34,7 @@ class GeocodingController extends Controller
             'lat' => $lat,
             'lon' => $lon,
             'headers' => [
-                'User-Agent' => 'YourAppName/1.0'
+                'User-Agent' => 'Faily/1.0'
             ]
         ]);
 

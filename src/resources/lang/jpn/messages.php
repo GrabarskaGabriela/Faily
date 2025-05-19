@@ -49,6 +49,7 @@ return [
         'usersMenagement' => 'ユーザー管理',
         'ridesEdit' => 'ライドの詳細を編集する',
         'ridesCreate' => '新しい乗り物を追加する',
+        'attendeesList' => 'アプリケーションのリスト'
     ],
 
     'navbar' => [
@@ -83,7 +84,7 @@ return [
         'mainSubtitle' => '映画からサイクリングまで、共通の外出で他の人と出会おう！',
         'meetDevelopers' => 'クリエイターを知りたい？',
         'meetDevelopersButton' => 'ページをチェックしよう！',
-        'explore' => '探検する',
+        'explore' => '人々',
         'events' => 'イベント',
         'rides' => '送迎',
         'meetPeople' => '人々と出会う',

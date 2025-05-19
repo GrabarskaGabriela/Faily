@@ -14,7 +14,7 @@ class EventController extends Controller
 
     public function __construct(EventServiceInterface $eventService)
     {
-        $this->middleware('auth')->except(['index', 'show.blade.php']);
+        $this->middleware('auth')->except(['index', 'show']);
         $this->eventService = $eventService;
     }
 

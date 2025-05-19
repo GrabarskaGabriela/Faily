@@ -91,14 +91,14 @@
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="accepted">
-                                            <button type="submit" class="btn btn-sm btn-success" {{ $availableSeats < 1 ? 'disabled' : '' }}>{{ __('messages.riderequestindex.accept') }}</button>
+                                            <button type="submit" class="btn btn-sm btn-gradient-check" {{ $availableSeats < 1 ? 'disabled' : '' }}>{{ __('messages.riderequestindex.accept') }}</button>
                                         </form>
 
                                         <form action="{{ route('ride-requests.update', $request) }}" method="POST" class="ms-1">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="rejected">
-                                            <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.riderequestindex.decline') }}</button>
+                                            <button type="submit" class="btn btn-sm btn-gradient-danger">{{ __('messages.riderequestindex.decline') }}</button>
                                         </form>
                                     </div>
                                 @elseif($request->status == 'accepted' || $request->status == 'rejected')
@@ -106,7 +106,7 @@
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="{{ $request->status == 'accepted' ? 'rejected' : 'accepted' }}">
-                                        <button type="submit" class="btn btn-sm {{ $request->status == 'accepted' ? 'btn-danger' : 'btn-success' }}" {{ $request->status == 'rejected' && $availableSeats < 1 ? 'disabled' : '' }}>
+                                        <button type="submit" class="btn btn-sm {{ $request->status == 'accepted' ? 'btn-gradient-danger' : 'btn-gradient-chack' }}" {{ $request->status == 'rejected' && $availableSeats < 1 ? 'disabled' : '' }}>
                                             {{ $request->status == 'accepted' ? __('messages.riderequestindex.declineAcceptance') : __('messages.riderequestindex.accept') }}
                                         </button>
                                     </form>

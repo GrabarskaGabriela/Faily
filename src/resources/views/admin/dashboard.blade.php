@@ -17,7 +17,6 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>{{ __('messages.admin.dashboard') }}</h4>
-                    <span class="badge">{{ __('messages.admin.lastUpdate') }} {{ now()->format('d.m.Y H:i') }}</span>
                 </div>
 
                 <div class="card-body">
@@ -31,7 +30,7 @@
 
                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <div class="card bg-primary text-color_2">
+                            <div class="card text-color_2" style="background-color: #651fff">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -45,7 +44,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <div class="card bg-danger text-color_2">
+                            <div class="card text-color_2"  style="background-color: #7c40ff">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -59,7 +58,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <div class="card bg-warning text-color_2">
+                            <div class="card text-color_2"  style="background-color: #9b6dff">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -75,25 +74,25 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="card">
+                            <div class="card shadow-sm text-color_2">
                                 <div class="card-header">
                                     <h5 class="mb-0"><i class="fas fa-users me-2"></i>{{ __('messages.admin.menageUsers') }}</h5>
                                 </div>
                                 <div class="card-body">
                                     <p>{{ __('messages.admin.actionInfo') }}</p>
-                                    <a href="{{ route('admin.users') }}" class="btn btn-gradient-nav w-100">{{ __('messages.admin.goToUsers') }}</a>
+                                    <a href="{{ route('admin.users') }}" class="btn btn-gradient w-100 text-color_2">{{ __('messages.admin.goToUsers') }}</a>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <div class="card">
+                            <div class="card shadow-sm text-color_2">
                                 <div class="card-header">
                                     <h5 class="mb-0"><i class="fas fa-flag me-2"></i>{{ __('messages.admin.reports') }}</h5>
                                 </div>
                                 <div class="card-body">
                                     <p>{{ __('messages.admin.menageUsersButton') }}</p>
-                                    <a href="{{ route('admin.reports') }}" class="btn btn-gradient-nav w-100">{{ __('messages.admin.goToReports') }}</a>
+                                    <a href="{{ route('admin.reports') }}" class="btn btn-gradient w-100 text-color_2">{{ __('messages.admin.goToReports') }}</a>
                                 </div>
                             </div>
                         </div>
