@@ -47,7 +47,8 @@ return [
         'rideDetails'=>'Information about the ride',
         'adminDashboard' => 'Admin Panel',
         'usersReports' => 'User Reports',
-        'usersMenagement' => 'User Management'
+        'usersMenagement' => 'User Management',
+        'attendeesList' => 'Attendees List'
     ],
 
     'navbar' => [
@@ -76,10 +77,13 @@ return [
     ],
 
     'welcome' => [
+        'heroTitle' => 'What is Faily?',
+        'heroSubtitle' => 'You will find out on this page!',
         'mainTitle' => 'Meet People. Create Events.',
         'mainSubtitle' => 'Meet others for outings - from cinema to cycling!',
-        'meetDevelopers' => 'Meet the Creators',
-        'explore' => 'Explore',
+        'meetDevelopers' => 'Want to meet the creators?',
+        'meetDevelopersButton' => 'Visit the page!',
+        'explore' => 'People',
         'events' => 'Events',
         'rides' => 'Rides',
         'meetPeople' => 'Meet People',

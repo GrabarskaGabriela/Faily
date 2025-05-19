@@ -25,7 +25,12 @@ class Event extends Model
         'date' => 'datetime',
         'has_ride_sharing' => 'boolean',
     ];
+    protected $dates = ['date'];
 
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

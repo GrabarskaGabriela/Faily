@@ -33,9 +33,7 @@ class UserSettingsController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore(Auth::id()),
             ],
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'preferred_language' => 'required|in:pl,en',
-            'theme' => 'required|in:light,dark',
+            'photo_file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'current_password' => 'nullable|required_with:password|string',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
@@ -48,7 +46,8 @@ class UserSettingsController extends Controller
                 ], Auth::id());
             }
 
-            $this->userService->updateProfile($request, Auth::id());
+            $photo = $request->hasFile('photo_file') ? $request->file('photo_file') : null;
+            $this->userService->updateProfile($validated, Auth::id(), $photo);
 
             return redirect()->route('user.settings.edit')
                 ->with('success', 'Settings have been updated!');
@@ -56,6 +55,7 @@ class UserSettingsController extends Controller
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
 
     public function editPhoto()
     {
@@ -66,11 +66,11 @@ class UserSettingsController extends Controller
     public function updatePhoto(Request $request)
     {
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'photo_file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         try {
-            $this->userService->updatePhoto($request, Auth::id());
+            $this->userService->updatePhoto($request->file('photo_file'), Auth::id());
             return redirect()->route('user.settings.edit')
                 ->with('success', 'Photo updated');
         } catch (\Exception $e) {

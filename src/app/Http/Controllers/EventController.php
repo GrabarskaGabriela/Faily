@@ -14,7 +14,7 @@ class EventController extends Controller
 
     public function __construct(EventServiceInterface $eventService)
     {
-        $this->middleware('auth')->except(['index', 'show.blade.php']);
+        $this->middleware('auth')->except(['index', 'show']);
         $this->eventService = $eventService;
     }
 
@@ -39,7 +39,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id'=> 'required',
             'title' => 'required|max:255',
             'description' => 'required',
             'date' => 'required|date',

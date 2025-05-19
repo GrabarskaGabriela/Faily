@@ -113,6 +113,60 @@ html, body
 {
     background: linear-gradient(135deg, #ff468e, #ff4343) !important;
 }
+.btn-gradient-check
+{
+    background: linear-gradient(135deg, #28a000 0%, #557c4e 100%) !important;
+    color: whitesmoke !important;
+    border: none ;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+.btn-gradient-check:hover
+{
+    background: linear-gradient(135deg, #6ecc4e 0%, #668361 100%)!important;
+}
+.btn-gradient-pending
+{
+    background: linear-gradient(135deg, #ff9346, #ffbd43) !important;
+    color: whitesmoke !important;
+    border: none ;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+.btn-gradient-pending:hover
+{
+    background: linear-gradient(135deg, #fbad7a, #f4d37c) !important;
+}
+.btn-gradient-info
+{
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: whitesmoke !important;
+    border: none ;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+.btn-gradient-info:hover
+{
+    background: linear-gradient(135deg, #2788f6 0%, #2a7fdd 100%) !important;
+}
 
 .btn-gradient-secondary
 {
@@ -477,8 +531,6 @@ html, body
 }
 
 .page-item.active .page-link {
-    color: #8B5CF6 !important;
-    color: #8B5CF6 !important;
     color: #ffffff !important;
 }
 
@@ -494,19 +546,13 @@ html, body
     border: 2px solid rgb(138,43,226) !important;
     width: 2rem;
     height: 1rem;
-    background-color: #a276e3 !important;
+    background-color: whitesmoke !important;
     border-radius: 1rem;
     position: relative;
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/** lift card testowo
-.lift-card-container {
-    background-color: rgb(100, 0, 255);
-    border-radius: 10px;
-}
-*/
 .lift-card {
     border: none;
     border-radius: 10px;
@@ -546,7 +592,7 @@ html, body
 }
 
 .form-check-input:checked::before {
-    background-color: #a276e3 !important;
+    background-color: whitesmoke !important;
     left: calc(100% - 0.8rem - 0.125rem);
     box-shadow: none ;
 }
@@ -590,7 +636,7 @@ main {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 80%);
     border: 1px solid #000000;
     max-height: 200px;
-    color: black;
+    color: whitesmoke!important;
     overflow-y: auto;
     display: none;
 }
@@ -617,3 +663,4 @@ main {
         height: 400px;
     }
 }
+

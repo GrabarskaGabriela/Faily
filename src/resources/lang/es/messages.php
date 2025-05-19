@@ -47,6 +47,7 @@ return [
         'rideDetails'=>'Información sobre la cabalgata',
         'ridesEdit' => 'Editar detalles del viaje',
         'ridesCreate' => 'Añadir nuevo viaje',
+        'attendeesList' => 'Lista de aplicaciones'
     ],
 
     'navbar' => [
@@ -75,10 +76,13 @@ return [
     ],
 
     'welcome' => [
+        'heroTitle' => 'Che cosè Faily?',
+        'heroSubtitle' => 'Lo scoprirai su questa pagina!',
         'mainTitle' => 'Conoce gente. Crea eventos.',
         'mainSubtitle' => 'Encuentra a otros para salidas juntos - ¡desde cine hasta ciclismo!',
-        'meetDevelopers' => 'Conoce a los creadores',
-        'explore' => 'Explora',
+        'meetDevelopers' => 'Vuoi conoscere i creatori?',
+        'meetDevelopersButton' => 'Visita la pagina!',
+        'explore' => 'Personas',
         'events' => 'Eventos',
         'rides' => 'Viajes compartidos',
         'meetPeople' => 'Conoce gente',

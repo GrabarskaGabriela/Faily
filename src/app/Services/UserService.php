@@ -28,31 +28,22 @@ class UserService extends BaseService implements UserServiceInterface
         $this->cachePrefix = 'user';
     }
 
-    public function updateProfile(array $data, $userId, ?UploadedFile $avatar = null)
+    public function updateProfile(array $data, $userId, ?UploadedFile $photoFile = null)
     {
         $user = $this->repository->find($userId);
 
-        if ($avatar) {
+        if ($photoFile) {
             if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
                 Storage::disk('public')->delete($user->photo_path);
             }
 
-            $photoPath = $avatar->store('profile-photos', 'public');
+            $photoPath = $photoFile->store('profile-photos', 'public');
             $data['photo_path'] = $photoPath;
             $data['photo_updated_at'] = now();
         }
 
-        if (isset($data['preferred_language'])) {
-            $data['language'] = $data['preferred_language'];
-            unset($data['preferred_language']);
-        }
-
-        if (isset($data['avatar'])) {
-            unset($data['avatar']);
-        }
-
-        if (isset($data['photo'])) {
-            unset($data['photo']);
+        if (isset($data['photo_file'])) {
+            unset($data['photo_file']);
         }
 
         $result = $this->repository->updateProfile($userId, $data);
@@ -78,7 +69,7 @@ class UserService extends BaseService implements UserServiceInterface
         return $this->repository->updatePassword($userId, $hashedPassword);
     }
 
-    public function updatePhoto(UploadedFile $photo, $userId)
+    public function updatePhoto(UploadedFile $photoFile, $userId)
     {
         $user = $this->repository->find($userId);
 
@@ -86,7 +77,7 @@ class UserService extends BaseService implements UserServiceInterface
             Storage::disk('public')->delete($user->photo_path);
         }
 
-        $photoPath = $photo->store('profile-photos', 'public');
+        $photoPath = $photoFile->store('profile-photos', 'public');
         $result = $this->repository->updatePhoto($userId, $photoPath);
 
         if ($this->useCache()) {
@@ -142,7 +133,7 @@ class UserService extends BaseService implements UserServiceInterface
             throw new \Exception('You can\'t ban other admin user.');
         }
 
-        $result = $this->repository->update($userId, 'banned');
+        $result = $this->repository->updateStatus($userId, 'banned');
 
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
@@ -172,7 +163,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function unbanUser($userId)
     {
-        $result = $this->repository->updateStatus($userId, 'banned');
+        $result = $this->repository->updateStatus($userId, 'active');
         $this->repository->resetReportCount($userId);
 
         if ($this->useCache()) {
@@ -186,7 +177,7 @@ class UserService extends BaseService implements UserServiceInterface
 
     public function makeAdmin($userId)
     {
-        $result = $this->repository->updateStatus($userId, 'admin');
+        $result = $this->repository->updateRole($userId, 'admin');
 
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
@@ -202,7 +193,8 @@ class UserService extends BaseService implements UserServiceInterface
             throw new \Exception('You can\'t take away admin privileges yourself.');
         }
 
-        $result = $this->repository->updateStatus($userId, 'user');
+        $result = $this->repository->updateRole($userId, 'user');
+
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.{$userId}");
             $this->cacheService->flushTags(['users', 'admins']);

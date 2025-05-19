@@ -14,7 +14,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return Event::class;
     }
 
-    public function getWithRelations(array $relations = [], $perPage = 9)
+    public function getWithRelations(array $relations = [], $perPage = 5)
     {
         return $this->model->with($relations)->latest()->paginate($perPage);
     }

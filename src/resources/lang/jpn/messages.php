@@ -49,6 +49,7 @@ return [
         'usersMenagement' => 'ユーザー管理',
         'ridesEdit' => 'ライドの詳細を編集する',
         'ridesCreate' => '新しい乗り物を追加する',
+        'attendeesList' => 'アプリケーションのリスト'
     ],
 
     'navbar' => [
@@ -77,10 +78,13 @@ return [
     ],
 
     'welcome' => [
+        'heroTitle' => 'Failyとは何ですか？',
+        'heroSubtitle' => 'このページでそれがわかります！',
         'mainTitle' => '人と出会い、イベントを作ろう。',
         'mainSubtitle' => '映画からサイクリングまで、共通の外出で他の人と出会おう！',
-        'meetDevelopers' => '開発者を知る',
-        'explore' => '探検する',
+        'meetDevelopers' => 'クリエイターを知りたい？',
+        'meetDevelopersButton' => 'ページをチェックしよう！',
+        'explore' => '人々',
         'events' => 'イベント',
         'rides' => '送迎',
         'meetPeople' => '人々と出会う',

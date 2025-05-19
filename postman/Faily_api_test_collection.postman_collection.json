@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7259397f-4f52-4e7b-8db4-10e50574ee69",
+		"_postman_id": "8113a14a-9f74-4983-b7ae-a20b66be79b0",
 		"name": "Faily_api_test_collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "44286390"
@@ -67,7 +67,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Test Api User\",\r\n    \"email\": \"marek@example.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"first_name\": \"Marek\",\r\n    \"last_name\": \"Marucha\",\r\n    \"age\": \"15\",\r\n    \"phone\": \"+48 213719990\",\r\n    \"description\": \"użytkonik stworzony do testowania api\",\r\n    \"language\": \"pl\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Test Api User\",\r\n    \"email\": \"pieczarek@example.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"first_name\": \"Marek\",\r\n    \"last_name\": \"Marucha\",\r\n    \"age\": \"15\",\r\n    \"phone\": \"+48 213719990\",\r\n    \"description\": \"użytkonik stworzony do testowania api\",\r\n    \"language\": \"pl\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -124,7 +124,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"marek@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+					"raw": "{\r\n  \"email\": \"pieczarek@example.com\",\r\n  \"password\": \"password123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -180,9 +180,25 @@
 			"name": "Get Events",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{csrf_token}}",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{base_url}}/events?Authorization=Bearer {{token}}&Accept=application/json&X-XSRF-TOKEN={{csrf_token}}",
+					"raw": "{{base_url}}/events",
 					"host": [
 						"{{base_url}}"
 					],
@@ -191,16 +207,19 @@
 					],
 					"query": [
 						{
-							"key": "Authorization",
-							"value": "Bearer {{token}}"
+							"key": "",
+							"value": "",
+							"disabled": true
 						},
 						{
-							"key": "Accept",
-							"value": "application/json"
+							"key": "",
+							"value": "",
+							"disabled": true
 						},
 						{
-							"key": "X-XSRF-TOKEN",
-							"value": "{{csrf_token}}"
+							"key": "",
+							"value": "",
+							"disabled": true
 						}
 					]
 				}
@@ -220,6 +239,16 @@
 					{
 						"key": "X-XSRF-TOKEN",
 						"value": "{{csrf_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
 						"type": "text"
 					}
 				],
