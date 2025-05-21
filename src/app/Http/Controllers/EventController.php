@@ -161,16 +161,11 @@ class EventController extends Controller
     public function Events_list()
     {
         $events = $this->eventService->getEventsForListing();
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
+        $today = Carbon::now()->startOfDay();
 
-        $upcomingEvents = Event::whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
-            ->orderBy('date', 'asc')
-            ->get();
+        $upcomingEvents = Event::whereDate('date', '>=', $today)->orderBy('date', 'asc')->get();
         return view('events.event_list', compact('events', 'upcomingEvents'));
     }
-
     public function myEvents()
     {
         $events = $this->eventService->getUserEvents(Auth::id());
@@ -178,7 +173,8 @@ class EventController extends Controller
     }
     public function allEvents()
     {
-        $events = Event::latest()->paginate(12);
+        $today = Carbon::now()->startOfDay();
+        $events =  Event::whereDate('date', '>=', $today)->orderBy('date', 'asc')->paginate(12);
         return view('events.all_events', compact('events'));
     }
 

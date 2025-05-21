@@ -115,30 +115,30 @@
             <div class="creator-tabs">
                 <ul class="nav nav-tabs justify-content-center border-0 mb-3" id="creatorTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav text-color_2 dev-desc" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab">
+                        <button class="btn-gradient-nav text-color_2 dev-desc active" id="wodz-tab" data-bs-toggle="tab" data-bs-target="#wodz" type="button" role="tab" aria-controls="wodz" aria-selected="true">
                             {{ __('messages.developers.wodz') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav text-color_2 dev-desc" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab" >
+                        <button class="btn-gradient-nav text-color_2 dev-desc" id="gabi-tab" data-bs-toggle="tab" data-bs-target="#gabi" type="button" role="tab" aria-controls="gabi" aria-selected="false">
                             {{ __('messages.developers.gabi') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="btn-gradient-nav  text-color_2 dev-desc" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab">
+                        <button class="btn-gradient-nav text-color_2 dev-desc" id="chimek-tab" data-bs-toggle="tab" data-bs-target="#chimek" type="button" role="tab" aria-controls="chimek" aria-selected="false">
                             {{ __('messages.developers.chimek') }}
                         </button>
                     </li>
                 </ul>
 
                 <div class="tab-content p-4 rounded-bottom-3 dev-desc" id="creatorTabContent">
-                    <div class="tab-pane fade show active" id="wodz" role="tabpanel">
+                    <div class="tab-pane fade show active" id="wodz" role="tabpanel" aria-labelledby="wodz-tab">
                         <p class="lead">{{ __('messages.developers.wodzDesc') }}</p>
                     </div>
-                    <div class="tab-pane fade" id="gabi" role="tabpanel">
+                    <div class="tab-pane fade" id="gabi" role="tabpanel" aria-labelledby="gabi-tab">
                         <p class="lead">{{ __('messages.developers.gabiDesc') }}</p>
                     </div>
-                    <div class="tab-pane fade" id="chimek" role="tabpanel">
+                    <div class="tab-pane fade" id="chimek" role="tabpanel" aria-labelledby="chimek-tab">
                         <p class="lead">{{ __('messages.developers.chimekDesc') }}</p>
                     </div>
                 </div>
@@ -150,16 +150,47 @@
 @include('includes.footer')
 
 <script>
-    document.querySelectorAll('.team-member').forEach(member => {
-        member.addEventListener('click', function() {
-            const memberName = this.querySelector('.member-name').textContent;
-            const tabId = memberName.includes('Bogacz') ? 'wodz-tab' :
-                memberName.includes('Grabarska') ? 'gabi-tab' : 'chimek-tab';
-            const tab = document.getElementById(tabId);
-            const tabInstance = new bootstrap.Tab(tab);
-            tabInstance.show();
-            document.getElementById('creatorTabContent').scrollIntoView({
-                behavior: 'smooth'
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        document.getElementById('wodz-tab').classList.add('active');
+        document.getElementById('wodz').classList.add('show', 'active');
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('[data-bs-toggle="tab"]').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('show', 'active');
+                });
+                const targetId = this.getAttribute('data-bs-target').substring(1);
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.classList.add('show', 'active');
+                }
+            });
+        });
+        document.querySelectorAll('.team-member').forEach(member => {
+            member.addEventListener('click', function() {
+                const memberName = this.querySelector('.member-name').textContent;
+                let tabId;
+
+                if (memberName.includes('Bogacz')) {
+                    tabId = 'wodz-tab';
+                } else if (memberName.includes('Grabarska')) {
+                    tabId = 'gabi-tab';
+                } else {
+                    tabId = 'chimek-tab';
+                }
+                const tab = document.getElementById(tabId);
+                if (tab) {
+                    tab.click();
+                    document.querySelector('.creator-full-descriptions').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
     });
