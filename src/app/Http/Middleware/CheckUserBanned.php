@@ -16,7 +16,7 @@ class CheckUserBanned
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->status === 'banned') {
-            $allowedRoutes = ['banned', 'logout'];
+            $allowedRoutes = ['banned', 'logout', 'language.change'];
 
             if (in_array($request->route()->getName(), $allowedRoutes)) {
                 return $next($request);
