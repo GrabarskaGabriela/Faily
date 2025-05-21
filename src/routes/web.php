@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::get('/map', [MainMapController::class, 'showMap']);
     Route::get('/help', function () {return view('help');});
     Route::get('/my-attendances', [UserAttendancesController::class, 'index'])->name('user.attendances');
+
+
 });
 
 Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->name('admin.')->group(function ()
@@ -75,9 +77,7 @@ Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->nam
     Route::post('/reports/{id}/reject', [AdminController::class, 'rejectReport'])->name('reports.reject');
 });
 
-Route::get('/banned', [BannedController::class, 'index'])
-    ->name('banned')
-    ->middleware(['locale']);
+Route::middleware(['auth', 'locale', 'banned'])->get('/banned', [BannedController::class, 'index'])->name('banned');
 
 Route::middleware(['auth', 'locale'])->post('/users/{id}/report', [ReportController::class, 'reportUser'])->name('users.report');
 

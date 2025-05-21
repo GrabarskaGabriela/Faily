@@ -636,4 +636,13 @@ return [
         'adminMenu' => 'Menu Administratora',
     ],
 
+    'ban' => [
+      'title' => 'Konto zablokowane',
+      'title2' => 'Twoje konto zostało zablokowane',
+      'messege' => 'Przykro nam, ale Twoje konto zostało zablokowane z powodu naruszenia regulaminu serwisu. Obecnie nie masz dostępu do żadnych funkcji serwisu.',
+      'message2' => 'Jeśli uważasz, że to pomyłka, skontaktuj się z administratorem:',
+      'veryFunnyLink' => 'Proszę kliknąć',
+      'logout' => 'Wyloguj się',
+    ],
+
 ];

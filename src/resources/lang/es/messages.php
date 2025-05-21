@@ -635,4 +635,13 @@ return [
         'close' => 'Cerrar',
         'adminMenu' => 'Menú de Administrador',
     ],
+
+    'ban' => [
+        'title' => 'Cerrar sesión',
+        'title2' => 'Su cuenta ha sido bloqueada',
+        'messege' => 'Lo sentimos, pero su cuenta ha sido bloqueada debido a la violación de las condiciones del servicio. Actualmente no tiene acceso a ninguna función del sitio.',
+        'message2' => 'Si cree que se trata de un error, póngase en contacto con el administrador:',
+        'veryFunnyLink' => 'Haga clic en',
+        'logout' => 'Cerrar sesión',
+    ],
 ];

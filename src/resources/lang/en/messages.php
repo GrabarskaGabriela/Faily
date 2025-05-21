@@ -651,4 +651,12 @@ return [
         'adminMenu' => 'Admin Menu',
     ],
 
+    'ban' => [
+        'title' => 'Account blocked',
+        'title2' => 'Your account has been blocked',
+        'messege' => 'We are sorry, but your account has been blocked due to violation of the terms of service. You currently do not have access to any features of the site.',
+        'message2' => 'If you think this is a mistake, please contact the administrator:',
+        'veryFunnyLink' => 'Please click',
+        'logout' => 'Log out',
+    ],
 ];
