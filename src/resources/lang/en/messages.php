@@ -659,4 +659,8 @@ return [
         'veryFunnyLink' => 'Please click',
         'logout' => 'Log out',
     ],
+
+    'reportusermodal' => [
+        'successReport' => 'Report User',
+    ],
 ];
