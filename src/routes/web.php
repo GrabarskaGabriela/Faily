@@ -11,6 +11,7 @@ use App\Http\Controllers\RideRequestController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BannedController;
 
 Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change')->middleware(['locale']);
 Route::post('/toggle-theme', [ThemeController::class, 'toggleTheme'])->name('toggle.theme');
@@ -73,6 +74,10 @@ Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->nam
     Route::post('/reports/{id}/approve', [AdminController::class, 'approveReport'])->name('reports.approve');
     Route::post('/reports/{id}/reject', [AdminController::class, 'rejectReport'])->name('reports.reject');
 });
+
+Route::get('/banned', [BannedController::class, 'index'])
+    ->name('banned')
+    ->middleware(['locale']);
 
 Route::middleware(['auth', 'locale'])->post('/users/{id}/report', [ReportController::class, 'reportUser'])->name('users.report');
 
