@@ -14,8 +14,11 @@
         @include('includes.filters_menu')
 
         <div class="col-md-6">
-            <h2 class="mb-4 text-color_2" >{{ __('messages.eventlist.newsSectionTitle') }}</h2>
-            @forelse($events as $event)
+            <h2 class="mb-4 text-color_2 text-center fw-bold">
+                {{ __('messages.eventlist.newsSectionTitle') }}
+            </h2>
+
+        @forelse($events as $event)
                 <div class="card shadow-sm mb-4 text-color lift-card">
                     <div class="card-header d-flex align-items-center gap-3">
                         @if($event->user->photo_path)

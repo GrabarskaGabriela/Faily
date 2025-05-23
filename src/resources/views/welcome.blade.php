@@ -30,8 +30,8 @@
           @for($i = 1; $i <= 3; $i++)
             <div class="carousel-item @if($i == 1) active @endif">
               <img src="{{ asset('images/welcome/slide'.$i.'.png') }}" class="d-block w-100" alt="Slide {{ $i }}">
-              <div class="carousel-caption d-none d-md-block">
-                <h1 class="display-4 fw-bold">
+              <div class="carousel-caption">
+                <h1 class="fw-bold">
                   {{ __('messages.welcome.heroTitle') }}
                 </h1>
                 <p class="lead mb-4">{{ __('messages.welcome.heroSubtitle') }}</p>
@@ -87,7 +87,7 @@
                 </div>
             </div>
     </section>
-        
+
 
 
      {{-- GALLERY --}}

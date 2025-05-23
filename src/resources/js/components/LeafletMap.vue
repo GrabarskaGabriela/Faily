@@ -220,7 +220,6 @@ export default {
                 marker.bindPopup(`
             <b>${event.title}</b><br>
             ${event.location_name ?? ''}<br>
-            ${event.date}<br>
         `);
             });
         },
