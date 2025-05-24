@@ -72,6 +72,7 @@ export default {
             map: null,
             currentMarker: null,
             customIcon: null,
+            customIcon2: null,
             events: [],
             searchQuery: '',
             searchResults: [],
@@ -87,6 +88,7 @@ export default {
 
         this.initializeMap();
         this.initializeCustomIcon();
+        this.initializeCustomIcon2();
         this.addEventMarkers();
 
         setTimeout(() => {
@@ -120,7 +122,7 @@ export default {
 
         initializeCustomIcon() {
             this.customIcon = L.icon({
-                iconUrl: '/images/includes/custom_marker.png',
+                iconUrl: '/images/includes/location_11111111111.png',
                 iconSize: [40, 40],
                 iconAnchor: [20, 40],
                 popupAnchor: [0, -40]
@@ -190,9 +192,15 @@ export default {
 
                 if (data && data.display_name && this.currentMarker) {
                     this.currentMarker.bindPopup(`
-                        <strong>${data.display_name}</strong><br>
-                        <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
-                    `).openPopup();
+            <div class="event-popup">
+                <h6><strong>${data.display_name}</strong></h6>
+                <p class="mb-1">
+                    <i class="bi bi-geo-alt"></i> <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
+                </p>
+            </div>
+                    `, {
+                        className: 'dark-popup'
+                    }).openPopup();
                 } else {
                     console.warn('No valid data returned from geocoding services');
                     this.currentMarker.bindPopup(`
