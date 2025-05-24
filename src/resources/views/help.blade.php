@@ -16,7 +16,7 @@
                 <div class="card-body text-color">
                     <h1 class="card-title text-center mb-5 display-5 fw-bold">{{ __('messages.help.text') }}</h1>
                     <div class="mb-5">
-                        <h3 class="mb-4">{{ __('messages.help.faq_title') }}</h3>
+                        <h3 class="mb-4 text-lg-center">{{ __('messages.help.faq_title') }}</h3>
                         <div class="accordion" id="faqAccordion">
                             @foreach ([
                                  ['title' => __('messages.help.faq_1_title') , 'content' => __('messages.help.faq_1_text')],
@@ -30,7 +30,7 @@
                              ] as $index => $faq)
                                 <div class="accordion-item text-color border-0 mb-3 rounded-3 shadow-sm">
                                     <h2 class="accordion-header" id="heading{{ $index }}">
-                                        <button class="accordion-button text-color collapsed" type="button"
+                                        <button class="accordion-button text-color collapsed card-header" type="button"
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#collapse{{ $index }}"
                                                 aria-expanded="false"
@@ -47,18 +47,6 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h3 class="mb-3">{{ __('messages.help.links_title') }}</h3>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item bg-transparent border-secondary">
-                                <a href="#" class="text-decoration-none text-color">{{ __('messages.help.rules') }}</a>
-                            </li>
-                            <li class="list-group-item bg-transparent border-secondary">
-                                <a href="#" class="text-decoration-none color">{{ __('messages.help.terms') }}</a>
-                            </li>
-                        </ul>
                     </div>
                     <div class="text-center mt-5">
                         <h3 class="mb-3">{{ __('messages.help.needHelp') }}</h3>

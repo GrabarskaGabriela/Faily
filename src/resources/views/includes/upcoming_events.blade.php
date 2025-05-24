@@ -1,5 +1,4 @@
 <div class="col-md-3">
-
     <div class="card shadow-sm fade-in-up">
         <div class="card-header text-color_2">
             <h5>{{ __('messages.eventlist.upcomingEventsLabel') }}</h5>

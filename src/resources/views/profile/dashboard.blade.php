@@ -18,7 +18,6 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>{{ __('messages.profiledashboard.summary') }}</h4>
-                    <span class="badge">{{ __('messages.profiledashboard.lastUpdate') }} {{ now()->format('d.m.Y H:i') }}</span>
                 </div>
 
                 <div class="card-body">

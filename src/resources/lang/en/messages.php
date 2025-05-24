@@ -47,7 +47,8 @@ return [
         'rideDetails'=>'Information about the ride',
         'adminDashboard' => 'Admin Panel',
         'usersReports' => 'User Reports',
-        'usersMenagement' => 'User Management'
+        'usersMenagement' => 'User Management',
+        'attendeesList' => 'Attendees List'
     ],
 
     'navbar' => [
@@ -82,7 +83,7 @@ return [
         'mainSubtitle' => 'Meet others for outings - from cinema to cycling!',
         'meetDevelopers' => 'Want to meet the creators?',
         'meetDevelopersButton' => 'Visit the page!',
-        'explore' => 'Explore',
+        'explore' => 'People',
         'events' => 'Events',
         'rides' => 'Rides',
         'meetPeople' => 'Meet People',
@@ -650,4 +651,16 @@ return [
         'adminMenu' => 'Admin Menu',
     ],
 
+    'ban' => [
+        'title' => 'Account blocked',
+        'title2' => 'Your account has been blocked',
+        'messege' => 'We are sorry, but your account has been blocked due to violation of the terms of service. You currently do not have access to any features of the site.',
+        'message2' => 'If you think this is a mistake, please contact the administrator:',
+        'veryFunnyLink' => 'Please click',
+        'logout' => 'Log out',
+    ],
+
+    'reportusermodal' => [
+        'successReport' => 'Report User',
+    ],
 ];

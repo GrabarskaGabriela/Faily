@@ -47,7 +47,8 @@ return [
         'rideDetails'=>'Informacje o przejeździe',
         'adminDashboard' => 'Panel administratora',
         'usersReports' => 'Zgłoszenia użytkowników',
-        'usersMenagement' => 'Zarządzanie użytkownikami'
+        'usersMenagement' => 'Zarządzanie użytkownikami',
+        'attendeesList' => 'Lista zgłoszeń'
 
     ],
 
@@ -83,7 +84,7 @@ return [
         'mainSubtitle' => 'Spotkaj się z innymi na wspólnych wyjściach – od kina po rower!',
         'meetDevelopers' => 'Chcesz poznać twórców?',
         'meetDevelopersButton' => 'Wejdź na tą stronę!',
-        'explore' => 'Poznawaj ludzi!',
+        'explore' => 'Ludzie',
         'events' => 'Wydarzenia',
         'rides' => 'Podwózki',
         'meetPeople' => 'Poznawaj ludzi',
@@ -633,6 +634,15 @@ return [
         'reportReason' => 'Powód zgłoszenia',
         'close' => 'Zamknij',
         'adminMenu' => 'Menu Administratora',
+    ],
+
+    'ban' => [
+      'title' => 'Konto zablokowane',
+      'title2' => 'Twoje konto zostało zablokowane',
+      'messege' => 'Przykro nam, ale Twoje konto zostało zablokowane z powodu naruszenia regulaminu serwisu. Obecnie nie masz dostępu do żadnych funkcji serwisu.',
+      'message2' => 'Jeśli uważasz, że to pomyłka, skontaktuj się z administratorem:',
+      'veryFunnyLink' => 'Proszę kliknąć',
+      'logout' => 'Wyloguj się',
     ],
 
 ];

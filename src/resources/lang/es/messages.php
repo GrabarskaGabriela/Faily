@@ -47,6 +47,7 @@ return [
         'rideDetails'=>'Información sobre la cabalgata',
         'ridesEdit' => 'Editar detalles del viaje',
         'ridesCreate' => 'Añadir nuevo viaje',
+        'attendeesList' => 'Lista de aplicaciones'
     ],
 
     'navbar' => [
@@ -81,7 +82,7 @@ return [
         'mainSubtitle' => 'Encuentra a otros para salidas juntos - ¡desde cine hasta ciclismo!',
         'meetDevelopers' => 'Vuoi conoscere i creatori?',
         'meetDevelopersButton' => 'Visita la pagina!',
-        'explore' => 'Explora',
+        'explore' => 'Personas',
         'events' => 'Eventos',
         'rides' => 'Viajes compartidos',
         'meetPeople' => 'Conoce gente',
@@ -633,5 +634,14 @@ return [
         'reportReason' => 'Motivo del reporte',
         'close' => 'Cerrar',
         'adminMenu' => 'Menú de Administrador',
+    ],
+
+    'ban' => [
+        'title' => 'Cerrar sesión',
+        'title2' => 'Su cuenta ha sido bloqueada',
+        'messege' => 'Lo sentimos, pero su cuenta ha sido bloqueada debido a la violación de las condiciones del servicio. Actualmente no tiene acceso a ninguna función del sitio.',
+        'message2' => 'Si cree que se trata de un error, póngase en contacto con el administrador:',
+        'veryFunnyLink' => 'Haga clic en',
+        'logout' => 'Cerrar sesión',
     ],
 ];

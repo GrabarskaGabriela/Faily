@@ -49,6 +49,7 @@ return [
         'usersMenagement' => 'ユーザー管理',
         'ridesEdit' => 'ライドの詳細を編集する',
         'ridesCreate' => '新しい乗り物を追加する',
+        'attendeesList' => 'アプリケーションのリスト'
     ],
 
     'navbar' => [
@@ -83,7 +84,7 @@ return [
         'mainSubtitle' => '映画からサイクリングまで、共通の外出で他の人と出会おう！',
         'meetDevelopers' => 'クリエイターを知りたい？',
         'meetDevelopersButton' => 'ページをチェックしよう！',
-        'explore' => '探検する',
+        'explore' => '人々',
         'events' => 'イベント',
         'rides' => '送迎',
         'meetPeople' => '人々と出会う',
@@ -644,5 +645,14 @@ return [
         'reportReason' => '報告理由',
         'close' => '閉じる',
         'adminMenu' => '管理者メニュー',
+    ],
+
+    'ban' => [
+        'title' => 'アカウントがブロックされました',
+        'title2' => 'アカウントがブロックされました',
+        'messege' => '申し訳ございませんが、お客様のアカウントは利用規約違反によりブロックされました。現在、サイトのどの機能にもアクセスできません。.',
+        'message2' => '間違いだと思われる方は、管理人までご連絡ください：',
+        'veryFunnyLink' => 'をクリックしてください。',
+        'logout' => 'ログアウト',
     ],
 ];

@@ -18,19 +18,22 @@
             {{ session('success') }}
         </div>
     @endif
-    <div class="col-md-4 text-md-end ">
-        <a href="{{ route('events.show', $event) }}" class="btn text-color btn-gradient border-dark">{{ __('messages.editevent.backToEvent') }}</a>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('events.show', $event) }}" class="btn text-color btn-gradient border-dark">
+            {{ __('messages.editevent.backToEvent') }}
+        </a>
     </div>
+
     <div class="table-responsive mt-3">
         <table class="table table-dark table-striped align-middle">
             <thead>
             <tr>
-                <th>{{ __('messages.eventatendeestable.userLabel') }}</th>
-                <th>{{ __('messages.eventatendeestable.attendeeCountLabel') }}</th>
-                <th>{{ __('messages.eventatendeestable.messageLabel') }}</th>
-                <th>{{ __('messages.eventatendeestable.statusLabel') }}</th>
-                <th>{{ __('messages.eventatendeestable.registrationDateLabel') }}</th>
-                <th>{{ __('messages.eventatendeestable.actionsLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.userLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.attendeeCountLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.messageLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.statusLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.registrationDateLabel') }}</th>
+                <th>{{ __('messages.eventattendeestable.actionsLabel') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -49,11 +52,11 @@
                     <td>{{ $attendee->message }}</td>
                     <td>
                         @if($attendee->status == 'pending')
-                            <span class="badge bg-warning">{{ __('messages.eventatendeestable.pendingStatusLabel') }}</span>
+                            <span class="badge bg-warning">{{ __('messages.eventattendeestable.pendingStatusLabel') }}</span>
                         @elseif($attendee->status == 'accepted')
-                            <span class="badge bg-success">{{ __('messages.eventatendeestable.acceptedStatusLabel') }}</span>
+                            <span class="badge bg-success">{{ __('messages.eventattendeestable.acceptedStatusLabel') }}</span>
                         @elseif($attendee->status == 'rejected')
-                            <span class="badge bg-danger">{{ __('messages.eventatendeestable.rejectedStatusLabel') }}</span>
+                            <span class="badge bg-danger">{{ __('messages.eventattendeestable.rejectedStatusLabel') }}</span>
                         @endif
                     </td>
                     <td>{{ $attendee->created_at->format('d.m.Y H:i') }}</td>
@@ -64,14 +67,14 @@
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="status" value="accepted">
-                                    <button type="submit" class="btn btn-sm btn-success">{{ __('messages.eventatendeestable.acceptButton') }}</button>
+                                    <button type="submit" class="btn btn-sm btn-success">{{ __('messages.eventattendeestable.acceptButton') }}</button>
                                 </form>
 
                                 <form action="{{ route('events.attendees.update', ['event' => $event, 'attendee' => $attendee]) }}" method="POST" class="ms-1">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="status" value="rejected">
-                                    <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.eventatendeestable.rejectButton') }}</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">{{ __('messages.eventattendeestable.rejectButton') }}</button>
                                 </form>
                             </div>
                         @endif
@@ -79,13 +82,13 @@
                         <form action="{{ route('events.attendees.destroy', ['event' => $event, 'attendee' => $attendee]) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger ms-1">{{ __('messages.eventatendeestable.deleteButton') }}</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger ms-1">{{ __('messages.eventattendeestable.deleteButton') }}</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">{{ __('messages.eventatendeestable.noApplicationsLabel') }}</td>
+                    <td colspan="6" class="text-center">{{ __('messages.eventattendeestable.noApplicationsLabel') }}</td>
                 </tr>
             @endforelse
             </tbody>
