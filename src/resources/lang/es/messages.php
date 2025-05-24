@@ -127,7 +127,8 @@ return [
         'gabiDesc' => 'El último bastión de la cordura en el proyecto. Desarrolladora frontend que une las arquitecturas caóticas de Wódz con las visiones artísticas de Chimek, manteniendo siempre la calma. Su código es como una navaja suiza: preparado para todo y siempre funcional. Su colección de figuras y fotos de hámsters es su talismán contra la locura del proyecto, recordándole la simplicidad a la que todos aspiran. Una vez dijo "creo que funciona", y fue un momento histórico.',
         'chimek' => 'Chimek',
         'chimekDesc' => 'Maestro del diseño, artista de alma, y en la práctica, alguien que debate tres horas sobre el tono de un hover y luego vuelve a la primera versión. Entusiasta eterno del manga, anime y todo lo que tenga “ambiente”. Cuando no está diseñando, está jugando a todo lo que pueda con el lema “lo hago mañana”. Tiene mil archivos llamados “final_v3_real”, y cada uno es más hermoso que el anterior. Cuando alguien pregunta “¿por qué no funciona?”, él responde “es una decisión artística”. Y todos asienten.',
-    ],
+        'joke'=>'Por favor, puntúa muy bien (5) :)'
+        ],
 
     'settings' => [
         'settings' => 'Configuración',

@@ -129,7 +129,8 @@ return [
         'gabiDesc' => 'Ostatni bastion zdrowego rozsądku w projekcie. Frontend developerka, która łączy chaotyczne architektury Wodza z artystycznymi wizjami Chimka, zachowując przy tym niezachwianą poczytalność. Jej kod jest jak szwajcarski scyzoryk – przygotowany na każdą ewentualność i zawsze działający. Talizmanem przeciwko szaleństwu projektu jest jej kolekcja figurek i zdjęć chomików, które przypominają jej o prostocie, do której wszyscy dążą. Raz powiedziała „chyba działa" – i to był historyczny moment.',
         'chimek' => 'Chimek',
         'chimekDesc' => 'Mistrz designu, w duszy – artysta, w praktyce – ktoś, kto 3 godziny debatuje nad odcieniem hovera, a potem i tak wraca do pierwszej wersji. Nieśmiertelny entuzjasta mangi, anime i wszystkiego, co można określić słowem „klimacik". Gdy nie kodzi, to gra we wszystko, byle „ogarnąć to jutro". Ma tysiąc plików nazwanych „final_v3_real" i każdy jest piękniejszy od poprzedniego. Gdy ktoś pyta „czemu nie działa?", mówi „to artystyczna decyzja". I wszyscy przytakują.',
-    ],
+        'joke'=>'Pięknie prosimy o piąteczki :)'
+        ],
 
     'settings' => [
         'settings' => 'Ustawienia',

@@ -151,7 +151,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        
+
         document.getElementById('wodz-tab').classList.add('active');
         document.getElementById('wodz').classList.add('show', 'active');
         document.querySelectorAll('[data-bs-toggle="tab"]').forEach(button => {
