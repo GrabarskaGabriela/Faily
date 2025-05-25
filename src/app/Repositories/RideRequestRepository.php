@@ -45,7 +45,7 @@ class RideRequestRepository extends BaseRepository implements RideRequestReposit
     {
         return $this->model
             ->with(['ride.event.photos', 'ride.driver'])
-            ->where('user_id', $userId)
+            ->where('passenger_id', $userId)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }

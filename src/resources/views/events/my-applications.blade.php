@@ -170,17 +170,17 @@
 
                                     @if($request->message)
                                         <p class="text-light"><strong>{{ __('messages.myapplications.message') }}</strong></p>
-                                        <p class="small text-muted">{{ Str::limit($request->message, 100) }}</p>
+                                        <p class="small text-white">{{ Str::limit($request->message, 100) }}</p>
                                     @endif
 
-                                    <p class="small text-muted">{{ __('messages.myapplications.appliedOn') }} {{ $request->created_at->format('d.m.Y H:i') }}</p>
+                                    <p class="small text-white">{{ __('messages.myapplications.appliedOn') }} {{ $request->created_at->format('d.m.Y H:i') }}</p>
 
                                     <div class="d-grid gap-2">
                                         <a href="{{ route('events.show', $request->ride->event->id) }}" class="btn btn-outline-light">
                                             {{ __('messages.myapplications.viewEvent') }}
                                         </a>
                                         @if($request->status === 'pending')
-                                            <form action="{{ route('ride_requests.destroy', $request) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('ride-requests.destroy', $request) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-outline-danger btn-sm w-100"
