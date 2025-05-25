@@ -58,6 +58,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item text-color" href="{{ url('/account') }}">{{ __('messages.navbar.goToAccount') }}</a></li>
+                                <li><a class="dropdown-item text-color" href="{{ route('my-applications') }}">{{ __('messages.navbar.myApplications') }}</a></li>
                                 <li><a class="dropdown-item text-color" href="{{ url('/my_events') }}">{{ __('messages.navbar.myEvents') }}</a></li>
                                 <li><a class="dropdown-item text-color" href="{{ url('/help') }}">{{ __('messages.navbar.help') }}</a></li>
                                 <li><a class="dropdown-item text-color" href="{{ url('/profile/dashboard') }}">{{ __('messages.navbar.settings') }}</a></li>

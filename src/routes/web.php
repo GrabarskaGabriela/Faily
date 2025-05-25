@@ -60,6 +60,9 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::get('/my-attendances', [UserAttendancesController::class, 'index'])->name('user.attendances');
 
 
+    Route::get('/my-applications', [EventAttendeeController::class, 'myApplications'])->name('my-applications');
+
+
 });
 
 Route::middleware(['auth', 'verified', 'locale', 'admin'])->prefix('admin')->name('admin.')->group(function ()

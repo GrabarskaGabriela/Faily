@@ -182,4 +182,19 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
 
         return $result;
     }
+
+    public function getUserRideRequests($userId)
+    {
+        if (!$this->useCache()) {
+            return $this->repository->getUserRideRequests($userId);
+        }
+
+        return $this->cacheService->remember(
+            "user.{$userId}.ride_requests",
+            function () use ($userId) {
+                return $this->repository->getUserRideRequests($userId);
+            },
+            $this->cacheTimes['all'] ?? 900
+        );
+    }
 }
