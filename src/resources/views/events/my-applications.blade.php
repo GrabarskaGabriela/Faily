@@ -84,10 +84,10 @@
 
                                 @if($attendee->message)
                                     <p class="text-light"><strong>{{ __('messages.myapplications.message') }}</strong></p>
-                                    <p class="small text-muted">{{ Str::limit($attendee->message, 100) }}</p>
+                                    <p class="small text-white">{{ Str::limit($attendee->message, 100) }}</p>
                                 @endif
 
-                                <p class="small text-muted">{{ __('messages.myapplications.appliedOn') }} {{ $attendee->created_at->format('d.m.Y H:i') }}</p>
+                                <p class="small text-white">{{ __('messages.myapplications.appliedOn') }} {{ $attendee->created_at->format('d.m.Y H:i') }}</p>
 
                                 <div class="d-grid gap-2">
                                     <a href="{{ route('events.show', $attendee->event->id) }}" class="btn btn-outline-light">
