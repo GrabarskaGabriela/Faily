@@ -36,7 +36,7 @@
 
                         <div class="mb-4">
                             <label for="message" class="form-label">{{ __('messages.eventattendeescreate.messageToOrganizerLabel') }}</label>
-                            <textarea class="form-control text-color" id="message" name="message" rows="3"></textarea>
+                            <textarea class="form-control" id="message" name="message" rows="3"></textarea>
                         </div>
 
                         <div class="d-grid">
