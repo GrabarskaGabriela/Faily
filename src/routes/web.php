@@ -12,6 +12,8 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BannedController;
+use App\Http\Controllers\UserAttendancesController;
+
 
 Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change')->middleware(['locale']);
 
