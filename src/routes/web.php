@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified', 'locale'])->group(function ()
     Route::get('/profile/photo', [ProfileController::class, 'editPhoto'])->name('profile.edit-photo');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
 
+    Route::get('/user/{user}', [ProfileController::class, 'showUserProfile'])->name('user.profile');
+
     Route::get('/events/feed', [EventController::class, 'feed'])->name('events.feed');
 
     Route::resource('events', EventController::class)->names('events');
