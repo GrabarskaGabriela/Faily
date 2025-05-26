@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Ride;
 use App\Models\RideRequest;
 use App\Notifications\RideRequestStatusChanged;
+use App\Notifications\NewRideRequest;
 use App\Repositories\Interfaces\RideRepositoryInterface;
 use App\Repositories\Interfaces\RideRequestRepositoryInterface;
 use App\Services\Interfaces\CacheServiceInterface;
@@ -101,7 +102,7 @@ class RideRequestService extends BaseService implements RideRequestServiceInterf
 
         $rideRequest = $this->repository->create($requestData);
 
-        $ride->driver->notify(new RideRequestStatusChanged($rideRequest, $ride, Auth::user()));
+        $ride->driver->notify(new NewRideRequest($rideRequest, $ride, Auth::user()));
 
         if ($this->useCache()) {
             $this->cacheService->forget("{$this->cachePrefix}.ride.{$data['ride_id']}");
