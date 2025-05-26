@@ -30,12 +30,16 @@
                     </div>
                     <div class="mb-3">
                         <div class="d-flex align-items-center mt-2">
-                            @if($ride->driver->avatar)
-                                <img  src="{{ $ride->driver->avatar }}"
-                                      class="rounded-circle me-3 border border-2 border-light" alt="{{ __('messages.showevent.profilePhoto') }}" width="150" height="150">
+                            @if($ride->driver->photo_path)
+                                <img src="{{ Storage::url($ride->driver->photo_path) }}"
+                                     class="rounded-circle me-3 border border-2 border-light"
+                                     alt="{{ __('messages.showevent.profilePhoto') }}"
+                                     width="150" height="150">
                             @else
                                 <img src="{{ asset('images/includes/default-avatar.png') }}"
-                                     class="rounded-circle me-3 border border-2 border-light" alt="{{ __('messages.showevent.profilePhoto') }}" width="150" height="150">
+                                     class="rounded-circle me-3 border border-2 border-light"
+                                     alt="{{ __('messages.showevent.profilePhoto') }}"
+                                     width="150" height="150">
                             @endif
                             <div>
                                 <h5 class="mb-0 text-color ">{{ __('messages.ridesshow.driver') }} {{ $ride->driver->name }}</h5>
