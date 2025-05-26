@@ -13,8 +13,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BannedController;
 
-Route::get('language/{locale}', [LanguageController::class, 'changeLanguage'])->name('language.change')->middleware(['locale']);
-Route::post('/toggle-theme', [ThemeController::class, 'toggleTheme'])->name('toggle.theme');
 Route::get('/get-theme', [ThemeController::class, 'getTheme'])->name('get.theme');
 
 Route::get('/', function () {return view('welcome');})->name('welcome')->middleware('locale');
